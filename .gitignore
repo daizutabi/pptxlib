@@ -1,0 +1,10 @@
+*.egg
+*.egg-info/
+.coverage
+.hatch/
+.ipynb_checkpoints
+__pycache__/
+build/
+dist/
+lcov.info
+sdist/
