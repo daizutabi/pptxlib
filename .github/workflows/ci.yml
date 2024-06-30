@@ -34,6 +34,7 @@ jobs:
         run: hatch fmt --check
       - name: Install Packages
         run: |
+          pip install --upgrade pytest-cov
           pip install -e .
       - name: Run test
         run: pytest --capture=fd
