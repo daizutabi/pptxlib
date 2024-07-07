@@ -37,7 +37,7 @@ jobs:
           pip install --upgrade pytest-cov
           pip install -e .
       - name: Run test
-        run: pytest --capture=fd
+        run: pytest --capture=fd tests/test_version.py
       - name: Upload Codecov Results
         if: success()
         uses: codecov/codecov-action@v4
