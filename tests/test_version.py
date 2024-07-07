@@ -1,4 +1,5 @@
-def test_version():
-    from pptxlib.__about__ import __version__
+from importlib.metadata import version
 
-    assert __version__.count(".") == 2
+
+def test_pptxlib():
+    assert version("pptxlib").count(".") == 2

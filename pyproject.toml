@@ -20,7 +20,7 @@ classifiers = [
 ]
 dynamic = ["version"]
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["pywin32"]
 
 [project.urls]
 Documentation = "https://daizutabi.github.io/pptxlib"
@@ -39,12 +39,7 @@ exclude = ["/.github", "/docs"]
 packages = ["src/pptxlib"]
 
 [tool.hatch.envs.test]
-dependencies = [
-  "pytest-clarity",
-  "pytest-cov",
-  "pytest-randomly",
-  "pytest-xdist",
-]
+dependencies = ["pytest-clarity", "pytest-cov", "pytest-randomly"]
 
 [tool.hatch.envs.test.scripts]
 run = "pytest {args:tests src/pptxlib}"
@@ -75,7 +70,7 @@ exclude_lines = [
 ]
 
 [tool.hatch.envs.docs]
-dependencies = ["mkdocs-material", "mkdocs-typer"]
+dependencies = ["mkdocs-material"]
 python = "3.12"
 
 [tool.hatch.envs.docs.scripts]
