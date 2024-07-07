@@ -143,6 +143,16 @@ def test_set_style(shape: Shape):
     assert shape.line_color == 32768
 
 
+def test_add_shape(shapes: Shapes):
+    shape = shapes.add("Oval", 100, 100, 40, 60)
+    assert shape.text == ""
+    assert shape.left == 100
+    assert shape.top == 100
+    assert shape.width == 40
+    assert shape.height == 60
+    shape.delete()
+
+
 def test_add_label(shapes: Shapes):
     shape = shapes.add_label("ABC", 100, 100)
     assert shape.text == "ABC"
@@ -156,19 +166,15 @@ def test_add_label(shapes: Shapes):
     shape.delete()
 
 
-def test_add_shape(shapes: Shapes):
-    shape = shapes.add_shape("Oval", 100, 100, 40, 60)
-    assert shape.text == ""
-    assert shape.left == 100
-    assert shape.top == 100
-    assert shape.width == 40
-    assert shape.height == 60
-    shape.delete()
-
-
 def test_repr_slides(shapes: Shapes):
     assert repr(shapes) == "<Shapes>"
 
 
 def test_repr_slide(shape: Shape):
     assert repr(shape) == "<Shape [Title 1]>"
+
+
+def test_repr_slide_oval(shapes: Shapes):
+    shape = shapes.add("Oval", 100, 100, 40, 60)
+    assert repr(shape) == "<Shape [Oval 2]>"
+    shape.delete()

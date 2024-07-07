@@ -9,6 +9,7 @@ from win32com.client import constants
 from pptxlib.client import ensure_modules
 from pptxlib.core import Base, Collection, Element
 from pptxlib.shapes import Shapes
+from pptxlib.tables import Tables
 
 
 @dataclass(repr=False)
@@ -75,6 +76,10 @@ class Slide(Element):
         return Shapes(self)
 
     @property
+    def tables(self) -> Tables:
+        return Tables(self)
+
+    @property
     def title(self) -> str:
         return self.shapes.title.text if len(self.shapes) else ""
 
@@ -90,10 +95,6 @@ class Slide(Element):
     @property
     def height(self) -> float:
         return self.parent.parent.height
-
-    # @property
-    # def tables(self):
-    #     return Tables(self)
 
 
 class Slides(Collection[Slide]):

@@ -53,13 +53,14 @@ def test_presentations_active(prs: Presentations):
 def test_presentations_call(prs: Presentations, pr_list: list[Presentation]):
     for i in range(3):
         assert prs(i + 1).name == pr_list[i].name
+    assert prs().name == pr_list[2].name
 
 
 def test_presentations_iter(prs: Presentations, pr_list: list[Presentation]):
     assert len(list(prs)) == 3
     names = [pr.name for pr in pr_list]
-    for pr in prs:
-        assert pr.name in names
+    for k, pr in enumerate(prs):
+        assert pr.name == names[k]
 
 
 def test_presentations_getitem(prs: Presentations, pr_list: list[Presentation]):

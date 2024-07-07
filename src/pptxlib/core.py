@@ -63,7 +63,7 @@ class Collection(Base, Generic[SomeElement]):
 
     def __call__(self, index: int | None = None) -> SomeElement:
         if index is None:
-            index = len(self) + 1
+            index = len(self)
 
         return self.type(self.api(index), self)  # type: ignore
 

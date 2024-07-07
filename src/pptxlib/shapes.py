@@ -23,10 +23,7 @@ class Shape(Element):
 
     @property
     def text(self) -> str:
-        try:
-            return self.text_range.Text
-        except AttributeError:
-            return ""
+        return self.text_range.Text
 
     @text.setter
     def text(self, text: str) -> None:
@@ -180,11 +177,6 @@ class Shape(Element):
         if line_color is not None:
             self.line_color = line_color
 
-    #     @property
-    #     def table(self):
-    #         if self.api.HasTable:
-    #             return Table(self.api.Table, parent=self)
-
 
 @dataclass(repr=False)
 class Shapes(Collection[Shape]):
@@ -194,6 +186,26 @@ class Shapes(Collection[Shape]):
     @property
     def title(self) -> Shape:
         return Shape(self.api.Title, self)
+
+    def add(
+        self,
+        kind: int | str,
+        left: float,
+        top: float,
+        width: float,
+        height: float,
+        text: str = "",
+        **kwargs,
+    ) -> Shape:
+        if isinstance(kind, str):
+            kind = getattr(constants, f"msoShape{kind}")
+
+        api = self.api.AddShape(kind, left, top, width, height)
+        shape = Shape(api, self)
+        shape.text = text
+        shape.set_style(**kwargs)
+
+        return shape
 
     def add_label(
         self,
@@ -218,26 +230,17 @@ class Shapes(Collection[Shape]):
 
         return shape
 
-    def add_shape(
+    def add_table(
         self,
-        kind: int | str,
-        left: float,
-        top: float,
-        width: float,
-        height: float,
-        text: str = "",
-        **kwargs,
-    ):
-        if isinstance(kind, str):
-            kind = getattr(constants, f"msoShape{kind}")
-
-        api = self.api.AddShape(kind, left, top, width, height)
-        shape = Shape(api, parent=self.parent)
-        shape.text = text
-
-        shape.set_style(**kwargs)
-
-        return shape
+        num_rows: int,
+        num_columns: int,
+        left: float = 100,
+        top: float = 100,
+        width: float = 100,
+        height: float = 100,
+    ) -> Shape:
+        api = self.api.AddTable(num_rows, num_columns, left, top, width, height)
+        return Shape(api, self)
 
 
 #     def add_picture(self, path=None, left=0, top=0, width=None, height=None, scale=1, **kwargs):
