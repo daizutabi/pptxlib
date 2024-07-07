@@ -49,5 +49,5 @@ def shapes(slide: Slide):
 
 
 @pytest.fixture
-def title_shape(shapes: Shapes):
-    return shapes(1)
+def shape(shapes: Shapes):
+    return shapes.title

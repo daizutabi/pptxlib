@@ -1,14 +1,21 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import ClassVar
+from typing import TYPE_CHECKING, ClassVar, Literal
 
-from win32com.client import DispatchBaseClass, constants
+from win32com.client import constants
 
 from pptxlib.core import Collection, Element
 
+if TYPE_CHECKING:
+    from win32com.client import DispatchBaseClass
+
+    from pptxlib.app import Slide
+
 
 class Shape(Element):
+    parent: Shapes
+
     @property
     def text_range(self) -> DispatchBaseClass:
         return self.api.TextFrame.TextRange
@@ -21,58 +28,61 @@ class Shape(Element):
             return ""
 
     @text.setter
-    def text(self, value):
-        self.text_range.Text = value
+    def text(self, text: str) -> None:
+        self.text_range.Text = text
 
-    # def __repr__(self):
-    #     parent = repr(self.parent)
-    #     if " " in parent:
-    #         parent = parent[parent.index(" ") + 1 : -1]
-    #     name = self.text[:20] or f"({self.name})"
-    #     return f"<Shape {parent}!{name}>"
+    @property
+    def slide(self) -> Slide:
+        return self.parent.parent
 
+    @property
+    def left(self) -> float:
+        return self.api.Left
 
-#     @property
-#     def left(self):
-#         return self.api.Left
+    @property
+    def top(self) -> float:
+        return self.api.Top
 
-#     @left.setter
-#     def left(self, value):
-#         prs = self.parent.parent
-#         if value == "center":
-#             value = (prs.api.PageSetup.SlideWidth - self.width) // 2
-#         elif value < 0:
-#             value = prs.api.PageSetup.SlideWidth - self.width + value
-#         self.api.Left = value
+    @property
+    def width(self) -> float:
+        return self.api.Width
 
-#     @property
-#     def top(self):
-#         return self.api.Top
+    @property
+    def height(self) -> float:
+        return self.api.Height
 
-#     @top.setter
-#     def top(self, value):
-#         prs = self.parent.parent
-#         if value == "center":
-#             value = (prs.api.PageSetup.SlideHeight - self.height) // 2
-#         elif value < 0:
-#             value = prs.api.PageSetup.SlideHeight - self.height + value
-#         self.api.Top = value
+    @left.setter
+    def left(self, value: float | Literal["center"]) -> float:
+        slide = self.parent.parent
 
-#     @property
-#     def width(self):
-#         return self.api.Width
+        if value == "center":
+            value = (slide.width - self.width) / 2
+        elif value < 0:
+            value = slide.width - self.width + value
 
-#     @width.setter
-#     def width(self, value):
-#         self.api.Width = value
+        self.api.Left = value
+        return value
 
-#     @property
-#     def height(self):
-#         return self.api.Height
+    @top.setter
+    def top(self, value: float | Literal["center"]) -> float:
+        slide = self.parent.parent
 
-#     @height.setter
-#     def height(self, value):
-#         self.api.Height = value
+        if value == "center":
+            value = (slide.height - self.height) / 2
+        elif value < 0:
+            value = slide.height - self.height + value
+
+        self.api.Top = value
+        return value
+
+    @width.setter
+    def width(self, value):
+        self.api.Width = value
+
+    @height.setter
+    def height(self, value):
+        self.api.Height = value
+
 
 #     @property
 #     def table(self):
@@ -168,7 +178,12 @@ class Shape(Element):
 
 @dataclass(repr=False)
 class Shapes(Collection[Shape]):
+    parent: Slide
     type: ClassVar[type[Element]] = Shape
+
+    @property
+    def title(self) -> Shape:
+        return Shape(self.api.Title, self)
 
 
 #     def __init__(self, parent):

@@ -30,7 +30,7 @@ class Base:
 @dataclass(repr=False)
 class Element(Base):
     api: CoClassBaseClass
-    parent: Collection
+    parent: Base
 
     def __post_init__(self):
         self.app = self.parent.app
@@ -46,11 +46,11 @@ class Element(Base):
         self.api.Delete()
 
 
-T = TypeVar("T", bound=Element)
+SomeElement = TypeVar("SomeElement", bound=Element)
 
 
 @dataclass(repr=False)
-class Collection(Base, Generic[T]):
+class Collection(Base, Generic[SomeElement]):
     parent: Base
     type: ClassVar[type[Element]] = field(init=False)
 
@@ -61,17 +61,17 @@ class Collection(Base, Generic[T]):
     def __len__(self) -> int:
         return self.api.Count
 
-    def __call__(self, index: int | None = None) -> T:
+    def __call__(self, index: int | None = None) -> SomeElement:
         if index is None:
             index = len(self) + 1
 
         return self.type(self.api(index), self)  # type: ignore
 
-    def __iter__(self) -> Iterator[T]:
+    def __iter__(self) -> Iterator[SomeElement]:
         for index in range(len(self)):
             yield self(index + 1)
 
-    def __getitem__(self, index) -> T | list[T]:
+    def __getitem__(self, index) -> SomeElement | list[SomeElement]:
         if isinstance(index, slice):
             return list(self)[index]
 

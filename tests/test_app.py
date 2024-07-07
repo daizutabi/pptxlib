@@ -82,6 +82,11 @@ def test_presentations_getitem_neg(prs: Presentations, pr_list: list[Presentatio
     assert pr.name == pr_list[1].name
 
 
+def test_presentation_size(pr: Presentation):
+    assert pr.width > 100
+    assert pr.height > 100
+
+
 def test_slides(slides: Slides):
     assert isinstance(slides, Collection)
     assert isinstance(slides, Slides)

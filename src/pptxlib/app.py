@@ -28,6 +28,8 @@ class PowerPoint(Base):
 
 @dataclass(repr=False)
 class Presentation(Element):
+    parent: Presentations
+
     def close(self):
         self.api.Close()
 
@@ -35,9 +37,18 @@ class Presentation(Element):
     def slides(self):
         return Slides(self)
 
+    @property
+    def width(self) -> float:
+        return self.api.PageSetup.SlideWidth
+
+    @property
+    def height(self) -> float:
+        return self.api.PageSetup.SlideHeight
+
 
 @dataclass(repr=False)
 class Presentations(Collection[Presentation]):
+    parent: PowerPoint
     type: ClassVar[type[Element]] = Presentation
 
     def add(self) -> Presentation:
@@ -57,18 +68,28 @@ class Presentations(Collection[Presentation]):
 
 @dataclass(repr=False)
 class Slide(Element):
+    parent: Slides
+
     @property
     def shapes(self) -> Shapes:
         return Shapes(self)
 
     @property
     def title(self) -> str:
-        return self.shapes(1).text if len(self.shapes) else ""
+        return self.shapes.title.text if len(self.shapes) else ""
 
     @title.setter
     def title(self, text):
         if len(self.shapes):
-            self.shapes(1).text = text
+            self.shapes.title.text = text
+
+    @property
+    def width(self) -> float:
+        return self.parent.parent.width
+
+    @property
+    def height(self) -> float:
+        return self.parent.parent.height
 
     # @property
     # def tables(self):
@@ -76,6 +97,7 @@ class Slide(Element):
 
 
 class Slides(Collection[Slide]):
+    parent: Presentation
     type: ClassVar[type[Element]] = Slide
 
     def add(self, index: int | None = None, layout=None):
