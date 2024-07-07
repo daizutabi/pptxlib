@@ -45,6 +45,10 @@ class Element(Base):
     def delete(self):
         self.api.Delete()
 
+    @classmethod
+    def get_parent(cls, parent: Collection) -> Base:
+        return parent
+
 
 SomeElement = TypeVar("SomeElement", bound=Element)
 
@@ -65,7 +69,8 @@ class Collection(Base, Generic[SomeElement]):
         if index is None:
             index = len(self)
 
-        return self.type(self.api(index), self)  # type: ignore
+        parent = self.type.get_parent(self)
+        return self.type(self.api(index), parent)  # type: ignore
 
     def __iter__(self) -> Iterator[SomeElement]:
         for index in range(len(self)):

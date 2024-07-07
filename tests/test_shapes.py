@@ -41,7 +41,7 @@ def test_left(shape: Shape):
 
 def test_left_center(shape: Shape):
     shape.left = "center"
-    assert round(shape.left + shape.width / 2) == round(shape.slide.width / 2)
+    assert round(shape.left + shape.width / 2) == round(shape.slide.width / 2)  # type: ignore
 
 
 def test_left_neg(shape: Shape):
@@ -143,13 +143,15 @@ def test_set_style(shape: Shape):
     assert shape.line_color == 32768
 
 
-def test_add_shape(shapes: Shapes):
+def test_add(shapes: Shapes):
     shape = shapes.add("Oval", 100, 100, 40, 60)
     assert shape.text == ""
     assert shape.left == 100
     assert shape.top == 100
     assert shape.width == 40
     assert shape.height == 60
+    assert shape.api.Parent.__class__.__name__ == "_Slide"
+    assert shape.parent.__class__.__name__ == "Slide"
     shape.delete()
 
 
@@ -163,18 +165,41 @@ def test_add_label(shapes: Shapes):
     shape.text = "ABC ABC"
     assert width < shape.width
     assert height == shape.height
+    assert shape.api.Parent.__class__.__name__ == "_Slide"
+    assert shape.parent.__class__.__name__ == "Slide"
     shape.delete()
 
 
-def test_repr_slides(shapes: Shapes):
+def test_add_table(shapes: Shapes):
+    shape = shapes.add_table(2, 3, 100, 100, 240, 360)
+    assert isinstance(shape, Shape)
+    assert shape.api.Parent.__class__.__name__ == "_Slide"
+    assert shape.parent.__class__.__name__ == "Slide"
+    assert shape.api.Table.__class__.__name__ == "Table"
+    assert shape.api.Table.Parent.__class__.__name__ == "Shape"
+    shape.delete()
+
+
+def test_slides_repr(shapes: Shapes):
     assert repr(shapes) == "<Shapes>"
 
 
-def test_repr_slide(shape: Shape):
+def test_slide_repr(shape: Shape):
     assert repr(shape) == "<Shape [Title 1]>"
 
 
-def test_repr_slide_oval(shapes: Shapes):
+def test_slide_oval_repr(shapes: Shapes):
     shape = shapes.add("Oval", 100, 100, 40, 60)
     assert repr(shape) == "<Shape [Oval 2]>"
     shape.delete()
+
+
+def test_slides_parent(shapes: Shapes):
+    assert shapes.api.Parent.__class__.__name__ == "_Slide"
+    assert shapes.parent.__class__.__name__ == "Slide"
+
+
+def test_slide_parent(shape: Shape, shapes: Shapes):
+    assert shape.api.Parent.__class__.__name__ == "_Slide"
+    assert shape.parent.__class__.__name__ == "Slide"
+    assert shapes(1).parent.__class__.__name__ == "Slide"

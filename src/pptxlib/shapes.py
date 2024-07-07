@@ -16,7 +16,11 @@ if TYPE_CHECKING:
 
 
 class Shape(Element):
-    parent: Shapes | Cell
+    parent: Slide | Cell
+
+    @classmethod
+    def get_parent(cls, parent: Shapes) -> Slide:
+        return parent.parent
 
     @property
     def text_range(self) -> DispatchBaseClass:
@@ -32,8 +36,10 @@ class Shape(Element):
 
     @property
     def slide(self) -> Slide:
-        if isinstance(self.parent, Shapes):
-            return self.parent.parent
+        from pptxlib.app import Slide
+
+        if isinstance(self.parent, Slide):
+            return self.parent
 
         raise NotImplementedError
 
@@ -189,7 +195,7 @@ class Shapes(Collection[Shape]):
 
     @property
     def title(self) -> Shape:
-        return Shape(self.api.Title, self)
+        return Shape(self.api.Title, Shape.get_parent(self))
 
     def add(
         self,
@@ -205,7 +211,7 @@ class Shapes(Collection[Shape]):
             kind = getattr(constants, f"msoShape{kind}")
 
         api = self.api.AddShape(kind, left, top, width, height)
-        shape = Shape(api, self)
+        shape = Shape(api, Shape.get_parent(self))
         shape.text = text
         shape.set_style(**kwargs)
 
@@ -228,7 +234,7 @@ class Shapes(Collection[Shape]):
         if auto_size is False:
             api.TextFrame.AutoSize = False
 
-        shape = Shape(api, self)
+        shape = Shape(api, Shape.get_parent(self))
         shape.text = text
         shape.set_style(**kwargs)
 
@@ -244,7 +250,7 @@ class Shapes(Collection[Shape]):
         height: float = 100,
     ) -> Shape:
         api = self.api.AddTable(num_rows, num_columns, left, top, width, height)
-        return Shape(api, self)
+        return Shape(api, Shape.get_parent(self))
 
 
 #     def add_picture(self, path=None, left=0, top=0, width=None, height=None, scale=1, **kwargs):

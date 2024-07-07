@@ -1,7 +1,7 @@
 import pytest
 
 from pptxlib.shapes import Shapes
-from pptxlib.tables import Columns, Rows, Table, Tables
+from pptxlib.tables import Cell, CellRange, Columns, Rows, Table, Tables
 
 
 def test_add(tables: Tables, shapes: Shapes):
@@ -123,12 +123,130 @@ def test_minimize_height(table: Table):
         assert x > y
 
 
-def test_repr_tables(tables: Tables):
+def test_cells(columns: Columns):
+    cells = columns(1).cells
+    assert cells.api.__class__.__name__ == "CellRange"
+    assert cells.__class__.__name__ == "CellRange"
+
+
+def test_tables_repr(tables: Tables):
     assert repr(tables) == "<Tables>"
 
 
-def test_repr_table(table: Table):
+def test_table_repr(table: Table):
     assert repr(table) == "<Table [Table]>"
+
+
+def test_rows_repr(rows: Rows):
+    assert repr(rows) == "<Rows>"
+
+
+def test_row_repr(rows: Rows):
+    assert repr(rows(1)) == "<Row [Row]>"
+
+
+def test_columns_repr(columns: Columns):
+    assert repr(columns) == "<Columns>"
+
+
+def test_column_repr(columns: Columns):
+    assert repr(columns(1)) == "<Column [Column]>"
+
+
+def test_cell_repr(table: Table):
+    assert repr(table.cell(1)) == "<Cell [Cell]>"
+
+
+def test_cells_repr(rows: Rows, columns: Columns):
+    assert repr(rows(1).cells) == "<CellRange [CellRange]>"
+    assert repr(columns(1).cells) == "<CellRange [CellRange]>"
+
+
+def test_tables_parent(tables: Tables):
+    assert tables.api.Parent.__class__.__name__ == "_Slide"
+    assert tables.parent.__class__.__name__ == "Slide"
+
+
+def test_table_parent(table: Table, tables: Tables):
+    assert table.api.Parent.__class__.__name__ == "Shape"
+    assert table.parent.__class__.__name__ == "Shape"
+    assert tables(1).parent.__class__.__name__ == "Shape"
+
+
+def test_rows_parent(rows: Rows):
+    assert rows.api.Parent.__class__.__name__ == "Table"
+    assert rows.parent.__class__.__name__ == "Table"
+
+
+def test_row_parent(rows: Rows):
+    assert rows(1).api.Parent.__class__.__name__ == "Table"
+    assert rows(1).parent.__class__.__name__ == "Table"
+
+
+def test_columns_parent(columns: Columns):
+    assert columns.api.Parent.__class__.__name__ == "Table"
+    assert columns.parent.__class__.__name__ == "Table"
+
+
+def test_column_parent(columns: Columns):
+    assert columns(1).api.Parent.__class__.__name__ == "Table"
+    assert columns(1).parent.__class__.__name__ == "Table"
+
+
+def test_cell_parent(table: Table):
+    cell = table.cell(1, 1)
+    assert cell.api.Parent.__class__.__name__ == "Table"
+    assert cell.parent.__class__.__name__ == "Table"
+
+
+def test_cells_parent(rows: Rows, columns: Columns):
+    assert rows(1).cells.api.Parent.__class__.__name__ == "Row"
+    assert rows(1).cells.parent.__class__.__name__ == "Row"
+    assert columns(1).cells.api.Parent.__class__.__name__ == "Column"
+    assert columns(1).cells.parent.__class__.__name__ == "Column"
+
+
+def test_cell_borders(cell: Cell):
+    assert isinstance(cell, Cell)
+    assert cell.borders.api.__class__.__name__ == "Borders"
+    assert cell.borders.__class__.__name__ == "Borders"
+
+
+def test_cell_range_borders(cell_range: CellRange):
+    assert isinstance(cell_range, CellRange)
+    assert cell_range.borders.api.__class__.__name__ == "Borders"
+    assert cell_range.borders.__class__.__name__ == "Borders"
+
+
+def test_cell_borders_parent(cell: Cell):
+    assert cell.borders.api.Parent.__class__.__name__ == "Table"
+    assert cell.borders.parent.__class__.__name__ == "Table"
+
+
+def test_cell_range_borders_parent(cell_range: CellRange):
+    assert isinstance(cell_range, CellRange)
+    assert cell_range.borders.api.Parent.__class__.__name__ == "Table"
+    assert cell_range.borders.parent.__class__.__name__ == "Table"
+
+
+# def test_table_repr(table: Table):
+#     assert repr(table) == "<Table [Table]>"
+
+
+# def test_rows_repr(rows: Rows):
+#     assert repr(rows) == "<Rows>"
+
+
+# def test_row_repr(rows: Rows):
+#     assert repr(rows(1)) == "<Row [Row]>"
+
+
+# def test_columns_repr(columns: Columns):
+#     assert repr(columns) == "<Columns>"
+
+
+# def test_column_repr(columns: Columns):
+#     assert repr(columns(1)) == "<Column [Column]>"
 
 
 # a = 1

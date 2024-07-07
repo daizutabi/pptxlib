@@ -2,7 +2,7 @@ import pytest
 
 from pptxlib.app import PowerPoint, Presentation, Presentations, Slide, Slides
 from pptxlib.shapes import Shapes
-from pptxlib.tables import Table, Tables
+from pptxlib.tables import Rows, Table, Tables
 
 
 @pytest.fixture(scope="session")
@@ -74,3 +74,13 @@ def rows(table: Table):
 @pytest.fixture
 def columns(table: Table):
     return table.columns
+
+
+@pytest.fixture
+def cell(table: Table):
+    return table.cell(1, 1)
+
+
+@pytest.fixture
+def cell_range(rows: Rows):
+    return rows(1).cells

@@ -69,7 +69,11 @@ class Presentations(Collection[Presentation]):
 
 @dataclass(repr=False)
 class Slide(Element):
-    parent: Slides
+    parent: Presentation
+
+    @classmethod
+    def get_parent(cls, parent: Slides) -> Presentation:
+        return parent.parent
 
     @property
     def shapes(self) -> Shapes:
@@ -90,11 +94,11 @@ class Slide(Element):
 
     @property
     def width(self) -> float:
-        return self.parent.parent.width
+        return self.parent.width
 
     @property
     def height(self) -> float:
-        return self.parent.parent.height
+        return self.parent.height
 
 
 class Slides(Collection[Slide]):
@@ -120,7 +124,7 @@ class Slides(Collection[Slide]):
         else:
             slide = self.api.AddSlide(index, layout)
 
-        return Slide(slide, self)
+        return Slide(slide, self.parent)
 
     @property
     def active(self):

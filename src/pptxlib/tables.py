@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 from win32com.client import constants
 
 from pptxlib.core import Collection, Element
+from pptxlib.lines import LineFormat
 from pptxlib.shapes import Shape
 
 if TYPE_CHECKING:
@@ -109,7 +110,7 @@ class Tables(Collection[Table]):
             api = self.api(index + 1)  # type: ignore
 
             if api.HasTable:
-                yield Table(api.Table, Shape(api, self.parent.shapes))
+                yield Table(api.Table, Shape(api, self.parent))
 
     def __len__(self) -> int:
         return len(list(iter(self)))
@@ -131,12 +132,16 @@ class Tables(Collection[Table]):
         height: float = 100,
     ) -> Table:
         api = self.api.AddTable(num_rows, num_columns, left, top, width, height)
-        return Table(api.Table, Shape(api, self.parent.shapes))
+        return Table(api.Table, Shape(api, self.parent))
 
 
 @dataclass(repr=False)
 class Row(Element):
-    parent: Rows
+    parent: Table
+
+    @classmethod
+    def get_parent(cls, parent: Rows) -> Table:
+        return parent.parent
 
     @property
     def height(self) -> float:
@@ -145,6 +150,10 @@ class Row(Element):
     @height.setter
     def height(self, value: float) -> None:
         self.api.Height = value
+
+    @property
+    def cells(self) -> CellRange:
+        return CellRange(self.api.Cells, self)
 
 
 @dataclass(repr=False)
@@ -164,7 +173,11 @@ class Rows(Collection[Row]):
 
 @dataclass(repr=False)
 class Column(Element):
-    parent: Columns
+    parent: Table
+
+    @classmethod
+    def get_parent(cls, parent: Columns) -> Table:
+        return parent.parent
 
     @property
     def width(self) -> float:
@@ -173,6 +186,10 @@ class Column(Element):
     @width.setter
     def width(self, value: float) -> None:
         self.api.Width = value
+
+    @property
+    def cells(self) -> CellRange:
+        return CellRange(self.api.Cells, self)
 
 
 @dataclass(repr=False)
@@ -230,27 +247,33 @@ class Cell(Element):
     def value(self, value):
         self.text = value
 
-    def set_border(
-        self,
-        pos: str,
-        width: float = 1,
-        color: int | str | tuple[int, int, int] = 0,
-        line_style: Literal["-", "--"] = "-",
-        *,
-        visible: bool = True,
-    ):
-        pos = getattr(constants, "ppBorder" + pos[0].upper() + pos[1:])
-        border = self.api.Borders(pos)
-        border.Visible = visible
+    @property
+    def borders(self) -> Borders:
+        borders = Borders(self)  # type: ignore
+        borders.parent = self.parent
+        return borders
 
-        if not visible:
-            return
 
-        border.Weight = width
-        border.ForeColor.RGB = color
+@dataclass(repr=False)
+class CellRange(Element):
+    parent: Row | Column
 
-        if line_style == "--":
-            border.DashStyle = constants.msoLineDash
+    @property
+    def borders(self) -> Borders:
+        borders = Borders(self)  # type: ignore
+        borders.parent = self.parent.parent
+        return borders
+
+
+@dataclass(repr=False)
+class Borders(Collection[LineFormat]):
+    parent: Table
+    type: ClassVar[type[Element]] = LineFormat
+
+    def __call__(self, type: Literal["bottom", "left", "right", "top"]) -> LineFormat:  # noqa: A002
+        type_int = getattr(constants, "ppBorder" + type[0].upper() + type[1:])
+        api = self.api(type_int)  # type: ignore
+        return LineFormat(api, self)
 
 
 # from win32com.client import constants

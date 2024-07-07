@@ -125,21 +125,43 @@ def test_slide_title(slide: Slide):
     assert slide.title == "Slide Title"
 
 
-def test_repr_powerpoint(pp: PowerPoint):
+def test_powerpoint_repr(pp: PowerPoint):
     assert repr(pp) == "<PowerPoint>"
 
 
-def test_repr_presentations(prs: Presentations):
+def test_presentations_repr(prs: Presentations):
     assert repr(prs) == "<Presentations>"
 
 
-def test_repr_presentation(pr: Presentation):
+def test_presentation_repr(pr: Presentation):
     assert repr(pr).startswith("<Presentation [")
 
 
-def test_repr_slides(slides: Slides):
+def test_slides_repr(slides: Slides):
     assert repr(slides) == "<Slides>"
 
 
-def test_repr_slide(slide: Slide):
+def test_slide_repr(slide: Slide):
     assert repr(slide) == "<Slide [Slide1]>"
+
+
+def test_presentations_parent(prs: Presentations):
+    assert prs.api.Parent.__class__.__name__ == "_Application"
+    assert prs.parent.__class__.__name__ == "PowerPoint"
+
+
+def test_presentation_parent(pr: Presentation, prs: Presentations):
+    assert pr.api.Parent.__class__.__name__ == "Presentations"
+    assert pr.parent.__class__.__name__ == "Presentations"
+    assert prs(1).parent.__class__.__name__ == "Presentations"
+
+
+def test_slides_parent(slides: Slides):
+    assert slides.api.Parent.__class__.__name__ == "_Presentation"
+    assert slides.parent.__class__.__name__ == "Presentation"
+
+
+def test_slide_parent(slide: Slide, slides: Slides):
+    assert slide.api.Parent.__class__.__name__ == "_Presentation"
+    assert slide.parent.__class__.__name__ == "Presentation"
+    assert slides(1).parent.__class__.__name__ == "Presentation"
