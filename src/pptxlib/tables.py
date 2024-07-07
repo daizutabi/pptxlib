@@ -3,8 +3,6 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
-from win32com.client import constants
-
 from pptxlib.core import Collection, Element
 from pptxlib.shapes import Shape
 
@@ -22,28 +20,59 @@ class Table(Element):
         self.parent.delete()
 
     @property
-    def left(self):
+    def left(self) -> float:
         return self.parent.left
 
     @left.setter
-    def left(self, value):
+    def left(self, value) -> None:
         self.parent.left = value
 
     @property
-    def top(self):
+    def top(self) -> float:
         return self.parent.top
 
     @top.setter
-    def top(self, value):
+    def top(self, value) -> None:
         self.parent.top = value
 
     @property
-    def rows(self):
+    def width(self) -> float:
+        return self.parent.width
+
+    @width.setter
+    def width(self, value: float) -> None:
+        self.parent.width = value
+
+    @property
+    def height(self) -> float:
+        return self.parent.height
+
+    @height.setter
+    def height(self, value: float) -> None:
+        self.parent.height = value
+
+    def minimize_height(self) -> None:
+        for row in self.rows:
+            row.height = 1
+
+    @property
+    def rows(self) -> Rows:
         return Rows(self)
 
     @property
-    def columns(self):
+    def columns(self) -> Columns:
         return Columns(self)
+
+    @property
+    def shape(self) -> tuple[int, int]:
+        return len(self.rows), len(self.columns)
+
+    def cell(self, row: int, column: int | None = None) -> Cell:
+        if column is None:
+            n = len(self.columns)
+            row, column = (row - 1) // n + 1, (row - 1) % n + 1
+
+        return Cell(self.api.Cell(row, column), self)
 
 
 @dataclass(repr=False)
@@ -85,19 +114,126 @@ class Tables(Collection[Table]):
         return Table(api.Table, Shape(api, self.parent.shapes))
 
 
-# # #     def cell(self, i, j=None):
-# # #         if j is None:
-# # #             n = len(self.columns)
-# # #             i, j = (i - 1) // n + 1, (i - 1) % n + 1
-# # #         return Cell(self.api.Cell(i, j), parent=self)
+@dataclass(repr=False)
+class Row(Element):
+    parent: Rows
+
+    @property
+    def height(self) -> float:
+        return self.api.Height
+
+    @height.setter
+    def height(self, value: float) -> None:
+        self.api.Height = value
+
+
+@dataclass(repr=False)
+class Rows(Collection[Row]):
+    parent: Table
+    type: ClassVar[type[Element]] = Row
+
+    @property
+    def height(self) -> list[float]:
+        return [row.height for row in self]
+
+    @height.setter
+    def height(self, value: list[float]) -> None:
+        for row, height in zip(self, value, strict=True):
+            row.height = height
+
+
+@dataclass(repr=False)
+class Column(Element):
+    parent: Columns
+
+    @property
+    def width(self) -> float:
+        return self.api.Width
+
+    @width.setter
+    def width(self, value: float) -> None:
+        self.api.Width = value
+
+
+@dataclass(repr=False)
+class Columns(Collection[Column]):
+    parent: Table
+    type: ClassVar[type[Element]] = Column
+
+    @property
+    def width(self) -> list[float]:
+        return [column.width for column in self]
+
+    @width.setter
+    def width(self, value: list[float]) -> None:
+        for column, width in zip(self, value, strict=True):
+            column.width = width
+
+
+@dataclass(repr=False)
+class Cell(Element):
+    parent: Table
+
+    @property
+    def shape(self):
+        return Shape(self.api.Shape, parent=self)
+
+    @property
+    def left(self):
+        return self.shape.left
+
+    @property
+    def top(self):
+        return self.shape.top
+
+    @property
+    def width(self):
+        return self.shape.width
+
+    @property
+    def height(self):
+        return self.shape.height
+
+    @property
+    def text(self):
+        return self.shape.text
+
+    @text.setter
+    def text(self, value):
+        self.shape.text = value
+
+    @property
+    def value(self):
+        return self.text
+
+    @value.setter
+    def value(self, value):
+        self.text = value
+
+
+# # #     def align(self, shape, pos=(0, 0)):
+# # #         x, y = pos
+# # #         shape.left = (2 * self.left + (self.width - shape.width) * (1 + x)) / 2
+# # #         shape.top = (2 * self.top + (self.height - shape.height) * (1 - y)) / 2
+
+# # #     def add_label(self, text, pos=(-0.98, 0.98), **kwargs):
+# # #         shapes = self.parent.parent.parent.shapes
+# # #         shape = shapes.add_label(text, 100, 100, **kwargs)
+# # #         self.align(shape, pos=pos)
+
+# # #     def add_picture(self, fig=None, scale=0.98, pos=(0, 0), **kwargs):
+# # #         slide = self.parent.parent.parent
+# # #         shape = slide.shapes.add_picture(fig=fig, width=self.width * scale, **kwargs)
+# # #         self.align(shape, pos=pos)
+
+# # #     def add_frame(self, df, pos=(0, 0), font_size=7, **kwargs):
+# # #         slide = self.parent.parent.parent
+# # #         shape = slide.shapes.add_frames(df, font_size=font_size, **kwargs)
+# # #         self.align(shape, pos=pos)
 
 # # #     def options(self, type):
 # # #         self.type = type
 # # #         return self
-
-# # #     @property
-# # #     def shape(self):
-# # #         return len(self.rows), len(self.columns)
 
 
 # # #     @property
@@ -218,150 +354,3 @@ class Tables(Collection[Table]):
 # # #                 cell = self.cell(row + 1, column + 1)
 # # #                 if cell.text == "\u3000":
 # # #                     cell.text = ""
-
-# # #     def minimize_height(self):
-# # #         for row in self.rows:
-# # #             row.height = 1
-
-# # #     @property
-# # #     def rows(self):
-# # #         return Rows(self)
-
-# # #     @property
-# # #     def width(self):
-# # #         return [column.width for column in self.columns]
-
-# # #     @width.setter
-# # #     def width(self, value):
-# # #         if isinstance(value, list):
-# # #             for column, width in zip(self.columns, value, strict=False):
-# # #                 column.width = width
-# # #         else:
-# # #             self.parent.width = value
-
-# # #     @property
-# # #     def height(self):
-# # #         return [row.height for row in self.rows]
-
-# # #     @height.setter
-# # #     def height(self, value):
-# # #         if isinstance(value, list):
-# # #             for row, height in zip(self.rows, value, strict=False):
-# # #                 row.height = value
-# # #         else:
-# # #             self.parent.height = value
-
-
-@dataclass(repr=False)
-class Row(Element):
-    parent: Rows
-
-
-@dataclass(repr=False)
-class Rows(Collection[Row]):
-    parent: Table
-    type: ClassVar[type[Element]] = Row
-
-
-@dataclass(repr=False)
-class Column(Element):
-    parent: Columns
-
-
-@dataclass(repr=False)
-class Columns(Collection[Column]):
-    parent: Table
-    type: ClassVar[type[Element]] = Column
-
-
-# # # class Columns(Collection):
-# # #     def __init__(self, parent):
-# # #         super().__init__(parent, Column)
-
-
-# # # class Column(Element):
-# # #     @property
-# # #     def width(self):
-# # #         return self.api.Width
-
-# # #     @width.setter
-# # #     def width(self, value):
-# # #         self.api.Width = value
-
-
-# # # class Rows(Collection):
-# # #     def __init__(self, parent):
-# # #         super().__init__(parent, Row)
-
-
-# # # class Row(Element):
-# # #     @property
-# # #     def height(self):
-# # #         return self.api.Height
-
-# # #     @height.setter
-# # #     def height(self, value):
-# # #         self.api.Height = value
-
-
-# # # class Cell(Element):
-# # #     def __repr__(self):
-# # #         parent = repr(self.parent.parent)
-# # #         parent = parent[parent.index(" ") + 1 : -1]
-# # #         return f"<Cell {parent}>"
-
-# # #     @property
-# # #     def shape(self):
-# # #         return Shape(self.api.Shape, parent=self)
-
-# # #     @property
-# # #     def text(self):
-# # #         return self.shape.text
-
-# # #     @text.setter
-# # #     def text(self, value):
-# # #         self.shape.text = value
-
-# # #     @property
-# # #     def value(self):
-# # #         return self.text
-
-# # #     @value.setter
-# # #     def value(self, value):
-# # #         self.text = value
-
-# # #     @property
-# # #     def left(self):
-# # #         return self.shape.left
-
-# # #     @property
-# # #     def top(self):
-# # #         return self.shape.top
-
-# # #     @property
-# # #     def width(self):
-# # #         return self.shape.width
-
-# # #     @property
-# # #     def height(self):
-# # #         return self.shape.height
-
-# # #     def align(self, shape, pos=(0, 0)):
-# # #         x, y = pos
-# # #         shape.left = (2 * self.left + (self.width - shape.width) * (1 + x)) / 2
-# # #         shape.top = (2 * self.top + (self.height - shape.height) * (1 - y)) / 2
-
-# # #     def add_label(self, text, pos=(-0.98, 0.98), **kwargs):
-# # #         shapes = self.parent.parent.parent.shapes
-# # #         shape = shapes.add_label(text, 100, 100, **kwargs)
-# # #         self.align(shape, pos=pos)
-
-# # #     def add_picture(self, fig=None, scale=0.98, pos=(0, 0), **kwargs):
-# # #         slide = self.parent.parent.parent
-# # #         shape = slide.shapes.add_picture(fig=fig, width=self.width * scale, **kwargs)
-# # #         self.align(shape, pos=pos)
-
-# # #     def add_frame(self, df, pos=(0, 0), font_size=7, **kwargs):
-# # #         slide = self.parent.parent.parent
-# # #         shape = slide.shapes.add_frames(df, font_size=font_size, **kwargs)
-# # #         self.align(shape, pos=pos)

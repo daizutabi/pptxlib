@@ -12,10 +12,11 @@ if TYPE_CHECKING:
     from win32com.client import DispatchBaseClass
 
     from pptxlib.app import Slide
+    from pptxlib.tables import Cell
 
 
 class Shape(Element):
-    parent: Shapes
+    parent: Shapes | Cell
 
     @property
     def text_range(self) -> DispatchBaseClass:
@@ -31,7 +32,10 @@ class Shape(Element):
 
     @property
     def slide(self) -> Slide:
-        return self.parent.parent
+        if isinstance(self.parent, Shapes):
+            return self.parent.parent
+
+        raise NotImplementedError
 
     @property
     def left(self) -> float:
@@ -51,7 +55,7 @@ class Shape(Element):
 
     @left.setter
     def left(self, value: float | Literal["center"]) -> float:
-        slide = self.parent.parent
+        slide = self.slide
 
         if value == "center":
             value = (slide.width - self.width) / 2
@@ -63,7 +67,7 @@ class Shape(Element):
 
     @top.setter
     def top(self, value: float | Literal["center"]) -> float:
-        slide = self.parent.parent
+        slide = self.slide
 
         if value == "center":
             value = (slide.height - self.height) / 2
