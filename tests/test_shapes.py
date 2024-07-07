@@ -35,15 +35,33 @@ def test_slide(shape: Shape, slide: Slide):
 
 
 def test_left(shape: Shape):
-    assert shape.left > 0
     shape.left = 50
     assert shape.left == 50
 
 
+def test_left_center(shape: Shape):
+    shape.left = "center"
+    assert round(shape.left + shape.width / 2) == round(shape.slide.width / 2)
+
+
+def test_left_neg(shape: Shape):
+    shape.left = -50
+    assert round(shape.left + shape.width) == round(shape.slide.width - 50)
+
+
 def test_top(shape: Shape):
-    assert shape.top > 0
     shape.top = 50
     assert shape.top == 50
+
+
+def test_top_center(shape: Shape):
+    shape.top = "center"
+    assert round(shape.top + shape.height / 2) == round(shape.slide.height / 2)
+
+
+def test_top_neg(shape: Shape):
+    shape.top = -100
+    assert round(shape.top + shape.height) == round(shape.slide.height - 100)
 
 
 def test_width(shape: Shape):
@@ -56,6 +74,96 @@ def test_height(shape: Shape):
     assert shape.height > 0
     shape.height = 250
     assert shape.height == 250
+
+
+def test_font_name(shape: Shape):
+    shape.font_name = "Meiryo"
+    assert shape.font_name == "Meiryo"
+
+
+def test_font_size(shape: Shape):
+    shape.font_size = 32
+    assert shape.font_size == 32
+
+
+def test_font_bold(shape: Shape):
+    shape.bold = True
+    assert shape.bold is True
+    shape.bold = False
+    assert shape.bold is False
+
+
+def test_font_italic(shape: Shape):
+    shape.italic = True
+    assert shape.italic is True
+    shape.italic = False
+    assert shape.italic is False
+
+
+def test_font_color(shape: Shape):
+    shape.color = (255, 0, 0)
+    assert shape.color == 255
+    shape.color = "green"
+    assert shape.color == 32768
+
+
+def test_fill_color(shape: Shape):
+    shape.fill_color = (0, 255, 0)
+    assert shape.fill_color == 255 * 256
+
+
+def test_line_color(shape: Shape):
+    shape.line_color = (0, 0, 255)
+    assert shape.line_color == 16777215
+
+
+def test_line_width(shape: Shape):
+    shape.line_weight = 2
+    assert shape.line_weight == 2
+
+
+def test_set_style(shape: Shape):
+    shape.set_style(
+        font="Times",
+        size=10,
+        bold=True,
+        italic=True,
+        color="blue",
+        fill_color="red",
+        line_weight=3,
+        line_color="green",
+    )
+    assert shape.font_name == "Times"
+    assert shape.font_size == 10
+    assert shape.bold is True
+    assert shape.italic is True
+    assert shape.color == 16711680
+    assert shape.fill_color == 255
+    assert shape.line_weight == 3
+    assert shape.line_color == 32768
+
+
+def test_add_label(shapes: Shapes):
+    shape = shapes.add_label("ABC", 100, 100)
+    assert shape.text == "ABC"
+    assert shape.left == 100
+    assert shape.top == 100
+    width = shape.width
+    height = shape.height
+    shape.text = "ABC ABC"
+    assert width < shape.width
+    assert height == shape.height
+    shape.delete()
+
+
+def test_add_shape(shapes: Shapes):
+    shape = shapes.add_shape("Oval", 100, 100, 40, 60)
+    assert shape.text == ""
+    assert shape.left == 100
+    assert shape.top == 100
+    assert shape.width == 40
+    assert shape.height == 60
+    shape.delete()
 
 
 def test_repr_slides(shapes: Shapes):

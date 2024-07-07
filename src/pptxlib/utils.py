@@ -1,33 +1,31 @@
 import matplotlib.colors
+from win32com.client import constants
 
 
-def rgb(color, green=None, blue=None):
+def to_bool(x: int) -> bool:
+    return x == constants.msoTrue
+
+
+def rgb(color: int | str | tuple[int, int, int]):
     """Color function.
 
     Args:
-        color : int, list, or str
-        green: int
-        blue: int
+        color: Color.
 
     Examples:
         >>> rgb(4)
         4
-        >>> rgb(100, 200, 40)
-        2672740
-        >>> rgb([100, 200, 40])
+        >>> rgb((100, 200, 40))
         2672740
         >>> rgb("pink")
         13353215
         >>> rgb("#123456")
         5649426
     """
-    if green is not None and blue is not None:
-        red = color
-
-    elif isinstance(color, int):
+    if isinstance(color, int):
         return color
 
-    elif isinstance(color, str):
+    if isinstance(color, str):
         color = str(matplotlib.colors.cnames.get(color, color))
 
         if not color.startswith("#") or len(color) != 7:  # noqa: PLR2004

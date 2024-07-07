@@ -1,7 +1,7 @@
 import pytest
 
 from pptxlib.app import PowerPoint, Presentation, Presentations, Slide, Slides
-from pptxlib.shapes import Shape, Shapes
+from pptxlib.shapes import Shapes
 
 
 @pytest.fixture(scope="session")

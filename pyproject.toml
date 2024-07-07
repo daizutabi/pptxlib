@@ -87,7 +87,7 @@ target-version = "py312"
 extend = "ruff_defaults.toml"
 
 [tool.ruff.lint]
-ignore = ['RUF001']
+ignore = ["RUF001", "RUF003", "A003"]
 unfixable = [
   "F401",   # Don't touch unused imports
   "RUF100", # Don't touch noqa lines
