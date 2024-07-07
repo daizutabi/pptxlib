@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, ClassVar
+from typing import TYPE_CHECKING, ClassVar, Literal
+
+from win32com.client import constants
 
 from pptxlib.core import Collection, Element
 from pptxlib.shapes import Shape
@@ -73,6 +75,24 @@ class Table(Element):
             row, column = (row - 1) // n + 1, (row - 1) % n + 1
 
         return Cell(self.api.Cell(row, column), self)
+
+
+# def clear(table):
+#     table.FirstCol = False
+#     table.FirstRow = False
+#     table.HorizBanding = False
+
+#     nrows = len(table.Columns(1).Cells)
+#     ncols = len(table.Rows(1).Cells)
+#     for row, column in product(range(nrows), range(ncols)):
+#         cell = table.Cell(row + 1, column + 1)
+#         if row == 0:
+#             set_border_cell(cell, 'top', visible=False)
+#         if column == 0:
+#             set_border_cell(cell, 'left', visible=False)
+#         set_border_cell(cell, 'right', visible=False)
+#         set_border_cell(cell, 'bottom', visible=False)
+#         cell.Shape.Fill.Visible = False
 
 
 @dataclass(repr=False)
@@ -209,6 +229,90 @@ class Cell(Element):
     @value.setter
     def value(self, value):
         self.text = value
+
+    def set_border(
+        self,
+        pos: str,
+        width: float = 1,
+        color: int | str | tuple[int, int, int] = 0,
+        line_style: Literal["-", "--"] = "-",
+        *,
+        visible: bool = True,
+    ):
+        pos = getattr(constants, "ppBorder" + pos[0].upper() + pos[1:])
+        border = self.api.Borders(pos)
+        border.Visible = visible
+
+        if not visible:
+            return
+
+        border.Weight = width
+        border.ForeColor.RGB = color
+
+        if line_style == "--":
+            border.DashStyle = constants.msoLineDash
+
+
+# from win32com.client import constants
+
+# from xlviews.utils import rgb
+
+
+# def set_border(table, start, end, edge_width=2, inside_width=1, edge_color=0,
+#                inside_color=rgb(140, 140, 140), edge_line_style='-',
+#                inside_line_style='-'):
+
+#     if inside_width:
+#         kwargs = dict(width=inside_width, color=inside_color,
+#                       line_style=inside_line_style)
+#         for row in range(start[0], end[0] + 1):
+#             for column in range(start[1], end[1]):
+#                 cell = table.Cell(row, column)
+#                 set_border_cell(cell, 'right', **kwargs)
+#         for column in range(start[1], end[1] + 1):
+#             for row in range(start[0], end[0]):
+#                 cell = table.Cell(row, column)
+#                 set_border_cell(cell, 'bottom', **kwargs)
+
+#     if edge_width:
+#         kwargs = dict(width=edge_width, color=edge_color,
+#                       line_style=edge_line_style)
+#         for row in range(start[0], end[0] + 1):
+#             cell = table.Cell(row, start[1])
+#             set_border_cell(cell, 'left', **kwargs)
+#             cell = table.Cell(row, end[1])
+#             set_border_cell(cell, 'right', **kwargs)
+#         for column in range(start[1], end[1] + 1):
+#             cell = table.Cell(start[0], column)
+#             set_border_cell(cell, 'top', **kwargs)
+#             cell = table.Cell(end[0], column)
+#             set_border_cell(cell, 'bottom', **kwargs)
+
+
+# def set_fill(table, start, end, fill):
+#     for row in range(start[0], end[0] + 1):
+#         for column in range(start[1], end[1] + 1):
+#             cell = table.Cell(row, column)
+#             cell.Shape.Fill.ForeColor.RGB = fill
+
+
+# def set_font(table, start, end, size=10):
+#     for row in range(start[0], end[0] + 1):
+#         for column in range(start[1], end[1] + 1):
+#             cell = table.cell(row, column)
+#             print(cell)
+
+
+# def main():
+#     import xlviews.powerpoint.table
+
+#     table = xlviews.powerpoint.table.main()
+#     set_border(table, (4, 1), (7, 2))
+#     return table
+
+
+# if __name__ == '__main__':
+#     table = main()
 
 
 # # #     def align(self, shape, pos=(0, 0)):

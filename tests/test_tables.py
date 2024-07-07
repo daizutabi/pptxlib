@@ -129,3 +129,18 @@ def test_repr_tables(tables: Tables):
 
 def test_repr_table(table: Table):
     assert repr(table) == "<Table [Table]>"
+
+
+# a = 1
+
+# from pptxlib import PowerPoint
+
+# pp = PowerPoint()
+# pr = pp.presentations.add()
+# slide = pr.slides.add()
+# table = slide.tables.add(2, 3, 10, 10)
+# table.api.FirstRow = False
+# table.api.HorizBanding = False
+
+# cell = table.cell(1, 1)
+# cell.set_border("left", 2)
