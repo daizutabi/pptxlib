@@ -15,12 +15,13 @@ if TYPE_CHECKING:
     from pptxlib.tables import Cell
 
 
+@dataclass(repr=False)
 class Shape(Element):
     parent: Slide | Cell
 
     @classmethod
-    def get_parent(cls, parent: Shapes) -> Slide:
-        return parent.parent
+    def get_parent(cls, collection: Shapes) -> Slide:
+        return collection.parent
 
     @property
     def text_range(self) -> DispatchBaseClass:
@@ -195,7 +196,7 @@ class Shapes(Collection[Shape]):
 
     @property
     def title(self) -> Shape:
-        return Shape(self.api.Title, Shape.get_parent(self))
+        return Shape(self.api.Title, self.parent)
 
     def add(
         self,
@@ -211,7 +212,7 @@ class Shapes(Collection[Shape]):
             kind = getattr(constants, f"msoShape{kind}")
 
         api = self.api.AddShape(kind, left, top, width, height)
-        shape = Shape(api, Shape.get_parent(self))
+        shape = Shape(api, self.parent)
         shape.text = text
         shape.set_style(**kwargs)
 
@@ -234,7 +235,7 @@ class Shapes(Collection[Shape]):
         if auto_size is False:
             api.TextFrame.AutoSize = False
 
-        shape = Shape(api, Shape.get_parent(self))
+        shape = Shape(api, self.parent)
         shape.text = text
         shape.set_style(**kwargs)
 
@@ -250,7 +251,7 @@ class Shapes(Collection[Shape]):
         height: float = 100,
     ) -> Shape:
         api = self.api.AddTable(num_rows, num_columns, left, top, width, height)
-        return Shape(api, Shape.get_parent(self))
+        return Shape(api, self.parent)
 
 
 #     def add_picture(self, path=None, left=0, top=0, width=None, height=None, scale=1, **kwargs):
