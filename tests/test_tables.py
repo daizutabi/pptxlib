@@ -123,7 +123,15 @@ def test_minimize_height(table: Table):
         assert x > y
 
 
-def test_cells(rows: Rows, columns: Columns):
+def test_rows_cells(rows: Rows):
+    cells = rows(1).cells
+    assert cells.api.__class__.__name__ == "CellRange"
+    assert cells.__class__.__name__ == "CellRange"
+    assert cells.api.Count == 3
+    assert len(rows) == 2
+
+
+def test_colums_cells(columns: Columns):
     cells = columns(1).cells
     assert cells.api.__class__.__name__ == "CellRange"
     assert cells.__class__.__name__ == "CellRange"
