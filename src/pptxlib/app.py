@@ -77,8 +77,8 @@ class Slide(Element):
     parent: Presentation
 
     @classmethod
-    def get_parent(cls, parent: Slides) -> Presentation:
-        return parent.parent
+    def get_parent(cls, collection: Slides) -> Presentation:
+        return collection.parent
 
     @property
     def shapes(self) -> Shapes:
@@ -106,6 +106,7 @@ class Slide(Element):
         return self.parent.height
 
 
+@dataclass(repr=False)
 class Slides(Collection[Slide]):
     parent: Presentation
     type: ClassVar[type[Element]] = Slide

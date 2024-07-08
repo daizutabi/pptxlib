@@ -127,7 +127,7 @@ def test_rows_cells(rows: Rows):
     cells = rows(1).cells
     assert cells.api.__class__.__name__ == "CellRange"
     assert cells.__class__.__name__ == "CellRange"
-    assert cells.api.Count == 3
+    assert len(cells) == 3
     assert len(rows) == 2
 
 
@@ -135,8 +135,14 @@ def test_colums_cells(columns: Columns):
     cells = columns(1).cells
     assert cells.api.__class__.__name__ == "CellRange"
     assert cells.__class__.__name__ == "CellRange"
-    assert cells.api.Count == 2
+    assert len(cells) == 2
     assert len(columns) == 3
+
+
+def test_cell_from_cells(cell_range: CellRange):
+    cell = cell_range(1)
+    assert isinstance(cell, Cell)
+    assert isinstance(cell.parent, Table)
 
 
 def test_tables_repr(tables: Tables):
@@ -168,8 +174,8 @@ def test_cell_repr(table: Table):
 
 
 def test_cells_repr(rows: Rows, columns: Columns):
-    assert repr(rows(1).cells) == "<CellRange [CellRange]>"
-    assert repr(columns(1).cells) == "<CellRange [CellRange]>"
+    assert repr(rows(1).cells) == "<CellRange>"
+    assert repr(columns(1).cells) == "<CellRange>"
 
 
 def test_tables_parent(tables: Tables):
@@ -203,8 +209,7 @@ def test_column_parent(columns: Columns):
     assert columns(1).parent.__class__.__name__ == "Table"
 
 
-def test_cell_parent(table: Table):
-    cell = table.cell(1, 1)
+def test_cell_parent(cell: Cell):
     assert cell.api.Parent.__class__.__name__ == "Table"
     assert cell.parent.__class__.__name__ == "Table"
 

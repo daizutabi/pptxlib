@@ -29,7 +29,7 @@ class Base:
 
 @dataclass(repr=False)
 class Element(Base):
-    parent: Base  # Use InitVar
+    parent: Base
 
     def __post_init__(self):
         self.app = self.parent.app
@@ -45,8 +45,8 @@ class Element(Base):
         self.api.Delete()
 
     @classmethod
-    def get_parent(cls, parent: Collection) -> Base:
-        return parent
+    def get_parent(cls, collection: Collection) -> Base:
+        return collection
 
 
 SomeElement = TypeVar("SomeElement", bound=Element)

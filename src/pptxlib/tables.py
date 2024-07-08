@@ -136,8 +136,8 @@ class Row(Element):
     parent: Table
 
     @classmethod
-    def get_parent(cls, parent: Rows) -> Table:
-        return parent.parent
+    def get_parent(cls, collection: Rows) -> Table:
+        return collection.parent
 
     @property
     def height(self) -> float:
@@ -172,8 +172,8 @@ class Column(Element):
     parent: Table
 
     @classmethod
-    def get_parent(cls, parent: Columns) -> Table:
-        return parent.parent
+    def get_parent(cls, collection: Columns) -> Table:
+        return collection.parent
 
     @property
     def width(self) -> float:
@@ -207,9 +207,16 @@ class Columns(Collection[Column]):
 class Cell(Element):
     parent: Table
 
+    @classmethod
+    def get_parent(cls, collection: CellRange) -> Table:
+        if not isinstance(collection, CellRange):
+            raise NotImplementedError
+
+        return collection.parent.parent
+
     @property
     def shape(self):
-        return Shape(self.api.Shape, parent=self)
+        return Shape(self.api.Shape, self)
 
     @property
     def left(self):
@@ -249,8 +256,9 @@ class Cell(Element):
 
 
 @dataclass(repr=False)
-class CellRange(Element):
+class CellRange(Collection[Cell]):
     parent: Row | Column
+    type: ClassVar[type[Element]] = Cell
 
     @property
     def borders(self) -> Borders:
@@ -264,8 +272,7 @@ class Borders(Collection[LineFormat]):
 
     def __call__(self, type: Literal["bottom", "left", "right", "top"]) -> LineFormat:  # noqa: A002
         type_int = getattr(constants, "ppBorder" + type[0].upper() + type[1:])
-        api = self.api(type_int)  # type: ignore
-        return LineFormat(api, self)
+        return LineFormat(self.api(type_int), self)  # type: ignore
 
 
 # from win32com.client import constants
