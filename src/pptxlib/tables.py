@@ -60,11 +60,11 @@ class Table(Element):
 
     @property
     def rows(self) -> Rows:
-        return Rows(self)
+        return Rows(self.api.Rows, self)
 
     @property
     def columns(self) -> Columns:
-        return Columns(self)
+        return Columns(self.api.Columns, self)
 
     @property
     def shape(self) -> tuple[int, int]:
@@ -100,10 +100,6 @@ class Table(Element):
 class Tables(Collection[Table]):
     parent: Slide
     type: ClassVar[type[Element]] = Table
-
-    def __post_init__(self):
-        self.api = self.parent.api.Shapes
-        self.app = self.parent.app
 
     def __iter__(self) -> Iterator[Table]:
         for index in range(self.api.Count):
@@ -249,9 +245,7 @@ class Cell(Element):
 
     @property
     def borders(self) -> Borders:
-        borders = Borders(self)  # type: ignore
-        borders.parent = self.parent
-        return borders
+        return Borders(self.api.Borders, self.parent)
 
 
 @dataclass(repr=False)
@@ -260,9 +254,7 @@ class CellRange(Element):
 
     @property
     def borders(self) -> Borders:
-        borders = Borders(self)  # type: ignore
-        borders.parent = self.parent.parent
-        return borders
+        return Borders(self.api.Borders, self.parent.parent)
 
 
 @dataclass(repr=False)
