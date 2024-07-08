@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 @dataclass(repr=False)
 class Base:
-    api: DispatchBaseClass = field(init=False)
+    api: DispatchBaseClass | CoClassBaseClass
     app: DispatchBaseClass = field(init=False)
 
     def __repr__(self):
@@ -29,8 +29,7 @@ class Base:
 
 @dataclass(repr=False)
 class Element(Base):
-    api: CoClassBaseClass
-    parent: Base
+    parent: Base  # Use InitVar
 
     def __post_init__(self):
         self.app = self.parent.app
@@ -56,10 +55,9 @@ SomeElement = TypeVar("SomeElement", bound=Element)
 @dataclass(repr=False)
 class Collection(Base, Generic[SomeElement]):
     parent: Base
-    type: ClassVar[type[Element]] = field(init=False)
+    type: ClassVar[type[Element]]
 
     def __post_init__(self):
-        self.api = getattr(self.parent.api, self.__class__.__name__)
         self.app = self.parent.app
 
     def __len__(self) -> int:

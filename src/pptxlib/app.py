@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import ClassVar
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, ClassVar
 
 import win32com.client
 from win32com.client import constants
@@ -11,9 +11,14 @@ from pptxlib.core import Base, Collection, Element
 from pptxlib.shapes import Shapes
 from pptxlib.tables import Tables
 
+if TYPE_CHECKING:
+    from win32com.client import DispatchBaseClass
+
 
 @dataclass(repr=False)
 class PowerPoint(Base):
+    api: DispatchBaseClass = field(init=False)
+
     def __post_init__(self):
         ensure_modules()
         self.api = win32com.client.Dispatch("PowerPoint.Application")  # type: ignore
@@ -21,7 +26,7 @@ class PowerPoint(Base):
 
     @property
     def presentations(self):
-        return Presentations(self)
+        return Presentations(self.api.Presentations, self)
 
     def quit(self):
         self.api.Quit()
@@ -36,7 +41,7 @@ class Presentation(Element):
 
     @property
     def slides(self):
-        return Slides(self)
+        return Slides(self.api.Slides, self)
 
     @property
     def width(self) -> float:
@@ -77,11 +82,11 @@ class Slide(Element):
 
     @property
     def shapes(self) -> Shapes:
-        return Shapes(self)
+        return Shapes(self.api.Shapes, self)
 
     @property
     def tables(self) -> Tables:
-        return Tables(self)
+        return Tables(self.api.Shapes, self)
 
     @property
     def title(self) -> str:
