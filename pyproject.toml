@@ -22,6 +22,9 @@ dynamic = ["version"]
 requires-python = ">=3.10"
 dependencies = ["pywin32", "matplotlib"]
 
+[tool.hatch.version]
+path = "src/pptxlib/__about__.py"
+
 [project.urls]
 Documentation = "https://daizutabi.github.io/pptxlib"
 Source = "https://github.com/daizutabi/pptxlib"
@@ -30,15 +33,13 @@ Issues = "https://github.com/daizutabi/pptxlib/issues"
 [project.scripts]
 pptxlib = "pptxlib.main:app"
 
-[tool.hatch.version]
-path = "src/pptxlib/__about__.py"
-
 [tool.hatch.build.targets.sdist]
 exclude = ["/.github", "/docs"]
 [tool.hatch.build.targets.wheel]
 packages = ["src/pptxlib"]
 
 [tool.hatch.envs.test]
+installer = "uv"
 dependencies = ["pytest-clarity", "pytest-cov", "pytest-randomly"]
 
 [tool.hatch.envs.test.scripts]
@@ -88,10 +89,7 @@ extend = "ruff_defaults.toml"
 
 [tool.ruff.lint]
 ignore = ["RUF001", "RUF003", "A003"]
-unfixable = [
-  "F401",   # Don't touch unused imports
-  "RUF100", # Don't touch noqa lines
-]
+unfixable = ["F401", "RUF100"]
 
 [tool.ruff.lint.extend-per-file-ignores]
 "main.py" = ["ARG001", "UP007"]
