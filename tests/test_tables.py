@@ -40,6 +40,16 @@ def test_top(table: Table):
     assert table.top == 10
 
 
+def test_width(table: Table):
+    table.width = 200
+    assert round(table.width) == 200
+
+
+def test_height(table: Table):
+    table.height = 300
+    assert round(table.height) == 300
+
+
 def test_rows(rows: Rows):
     assert len(rows) == 2
 

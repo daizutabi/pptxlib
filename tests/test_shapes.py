@@ -170,6 +170,13 @@ def test_add_label(shapes: Shapes):
     shape.delete()
 
 
+def test_add_label_auto_size_false(shapes: Shapes):
+    shape = shapes.add_label("ABC", 100, 100, 200, 300, auto_size=False)
+    assert shape.width == 200
+    assert shape.height == 300
+    shape.delete()
+
+
 def test_add_table(shapes: Shapes):
     shape = shapes.add_table(2, 3, 100, 100, 240, 360)
     assert isinstance(shape, Shape)
