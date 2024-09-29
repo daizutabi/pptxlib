@@ -28,19 +28,23 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install Hatch
-        run: pip install --upgrade hatch
-      - name: Check format
-        run: hatch fmt --check
-      - name: Install Packages
-        run: |
-          pip install --upgrade pytest-cov
-          pip install -e .
+          allow-prereleases: true
+      - name: Install uv
+        run: pip install uv
+      - name: Install the project
+        run: uv sync
+      # - name: Ruff check
+      # run: uv run ruff check .
       - name: Run test
-        run: pytest --capture=fd tests/test_version.py
+        run: uv run pytest tests/test_version.py --junitxml=junit.xml
       - name: Upload Codecov Results
         if: success()
         uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: lcov.info
+      - name: Upload test results to Codecov
+        if: ${{ !cancelled() }}
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
