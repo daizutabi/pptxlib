@@ -24,8 +24,8 @@ Documentation = "https://github.com/daizutabi/pptxlib"
 Source = "https://github.com/daizutabi/pptxlib"
 Issues = "https://github.com/daizutabi/pptxlib/issues"
 
-[tool.uv]
-dev-dependencies = [
+[dependency-groups]
+dev = [
   "matplotlib>=3.10",
   "pytest-clarity>=1",
   "pytest-cov>=6",
@@ -34,8 +34,6 @@ dev-dependencies = [
 
 [tool.pytest.ini_options]
 addopts = ["--cov-report=lcov:lcov.info", "--cov=pptxlib", "--doctest-modules"]
-doctest_optionflags = []
-filterwarnings = ['ignore:setDaemon\(\) is deprecated:DeprecationWarning']
 
 [tool.coverage.report]
 exclude_lines = ["no cov", "raise NotImplementedError", "if TYPE_CHECKING:"]
