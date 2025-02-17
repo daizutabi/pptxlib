@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 from win32com.client import constants
 
 from pptxlib.colors import rgb
-from pptxlib.core.base import Collection, Element
+from pptxlib.core.base import Base, Collection, Element
 from pptxlib.core.font import Font
 
 if TYPE_CHECKING:
@@ -17,6 +17,58 @@ if TYPE_CHECKING:
     from .label import Label
     from .slide import Slide
     from .table import Table
+
+
+@dataclass(repr=False)
+class Color(Base):
+    @property
+    def color(self) -> int:
+        return self.api.ForeColor.RGB
+
+    @color.setter
+    def color(self, value: int | str | tuple[int, int, int]) -> None:
+        self.api.ForeColor.RGB = rgb(value)
+
+    def set(self, color: int | str | tuple[int, int, int] | None = None) -> Self:
+        if color is not None:
+            self.color = color
+
+        return self
+
+    def assign_from(self, other: Color) -> None:
+        self.color = other.color
+
+
+@dataclass(repr=False)
+class Fill(Color):
+    pass
+
+
+@dataclass(repr=False)
+class Line(Color):
+    @property
+    def weight(self) -> float:
+        return self.api.Weight
+
+    @weight.setter
+    def weight(self, value: float) -> None:
+        self.api.Weight = value
+
+    def set(
+        self,
+        color: int | str | tuple[int, int, int] | None = None,
+        weight: float | None = None,
+    ) -> Self:
+        if color is not None:
+            self.color = color
+        if weight is not None:
+            self.weight = weight
+
+        return self
+
+    def assign_from(self, other: Line) -> None:
+        self.color = other.color
+        self.weight = other.weight
 
 
 @dataclass(repr=False)
@@ -85,54 +137,46 @@ class Shape(Element):
         self.text_range.Text = text
 
     @property
-    def fill_color(self) -> int:
-        return self.api.Fill.ForeColor.RGB
-
-    @fill_color.setter
-    def fill_color(self, value: int | str | tuple[int, int, int]) -> None:
-        self.api.Fill.ForeColor.RGB = rgb(value)
-
-    @property
-    def line_color(self) -> int:
-        return self.api.Line.ForeColor.RGB
-
-    @line_color.setter
-    def line_color(self, value: int | str | tuple[int, int, int]) -> None:
-        self.api.Line.ForeColor.RGB = rgb(value)
-
-    @property
-    def line_weight(self) -> float:
-        return self.api.Line.Weight
-
-    @line_weight.setter
-    def line_weight(self, value: float) -> None:
-        self.api.Line.Weight = value
-
-    def set(
-        self,
-        text: str | None = None,
-        fill_color: int | str | tuple[int, int, int] | None = None,
-        line_weight: float | None = None,
-        line_color: int | str | tuple[int, int, int] | None = None,
-    ) -> Self:
-        if text is not None:
-            self.text = text
-        if fill_color is not None:
-            self.fill_color = fill_color
-        if line_weight is not None:
-            self.line_weight = line_weight
-        if line_color is not None:
-            self.line_color = line_color
-
-        return self
-
-    @property
     def font(self) -> Font:
         return Font(self.text_range.Font)
 
     @font.setter
     def font(self, value: Font) -> None:
         self.font.assign_from(value)
+
+    @property
+    def fill(self) -> Fill:
+        return Fill(self.api.Fill)
+
+    @fill.setter
+    def fill(self, value: Fill) -> None:
+        self.fill.assign_from(value)
+
+    @property
+    def line(self) -> Line:
+        return Line(self.api.Line)
+
+    @line.setter
+    def line(self, value: Line) -> None:
+        self.line.assign_from(value)
+
+    # def set(
+    #     self,
+    #     text: str | None = None,
+    #     fill_color: int | str | tuple[int, int, int] | None = None,
+    #     line_weight: float | None = None,
+    #     line_color: int | str | tuple[int, int, int] | None = None,
+    # ) -> Self:
+    #     if text is not None:
+    #         self.text = text
+    #     if fill_color is not None:
+    #         self.fill_color = fill_color
+    #     if line_weight is not None:
+    #         self.line_weight = line_weight
+    #     if line_color is not None:
+    #         self.line_color = line_color
+
+    #     return self
 
 
 @dataclass(repr=False)

@@ -13,11 +13,21 @@ if TYPE_CHECKING:
 
 def main():
     slide = create_slide()
-    table = slide.shapes.add_table(2, 3, 100, 100, 100, 100)
-    print(table[0].cells[0].borders)
-    table.fill("red", (0, 0), (1, 2))
-    print(table[0, 0].shape.api.Fill.Transparency)
-    table[0, 0].shape.api.Fill.Transparency = 1
+    s = slide.shapes.add("Rectangle", 100, 100, 100, 100)
+    s.text = "abc"
+    s.font.size = 16
+    s.font.name = "Times New Roman"
+    print(s.font)
+    # s.font.color = "red"
+    # s.font.bold = True
+    # s.font.italic = True
+    # s.font.underline = True
+    # s.font.strikethrough = True
+    # table = slide.shapes.add_table(2, 3, 100, 100, 100, 100)
+    # print(table[0].cells[0].borders)
+    # table.fill("red", (0, 0), (1, 2))
+    # print(table[0, 0].shape.api.Fill.Transparency)
+    # table[0, 0].shape.api.Fill.Transparency = 1
 
 
 if __name__ == "__main__":

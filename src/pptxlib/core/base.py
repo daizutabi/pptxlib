@@ -14,8 +14,7 @@ class Base:
     api: DispatchBaseClass | CoClassBaseClass
 
     def __repr__(self) -> str:
-        clsname = self.__class__.__name__
-        return f"<{clsname}>"
+        return f"<{self.__class__.__name__}>"
 
 
 @dataclass(repr=False)
@@ -28,8 +27,7 @@ class Element(Base):
         self.app = self.parent.app
 
     def __repr__(self) -> str:
-        clsname = self.__class__.__name__
-        return f"<{clsname} [{self.name}]>"
+        return f"<{self.__class__.__name__} [{self.name}]>"
 
     @property
     def name(self) -> str:
@@ -58,12 +56,11 @@ class Collection(Base, Generic[E]):
     def __post_init__(self) -> None:
         self.app = self.parent.app
 
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__} ({len(self)})>"
+
     def __len__(self) -> int:
         return self.api.Count
-
-    def __repr__(self) -> str:
-        clsname = self.__class__.__name__
-        return f"<{clsname} ({len(self)})>"
 
     def __getitem__(self, index: int) -> E:
         if index < 0:

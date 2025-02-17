@@ -16,6 +16,14 @@ class Font(Base):
         return f"<{clsname} {self.name!r}>"
 
     @property
+    def name(self) -> str:
+        return self.api.Name
+
+    @name.setter
+    def name(self, value: str) -> None:
+        self.api.Name = value
+
+    @property
     def size(self) -> float:
         return self.api.Size
 
