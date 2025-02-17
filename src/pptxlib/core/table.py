@@ -5,9 +5,8 @@ from typing import TYPE_CHECKING, ClassVar, Literal, overload
 
 from win32com.client import constants
 
-from pptxlib.colors import rgb
 from pptxlib.core.base import Collection, Element
-from pptxlib.core.shape import Shape
+from pptxlib.core.shape import Line, Shape
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -76,13 +75,10 @@ class Table(Shape):
     def fill(
         self,
         color: int | str | tuple[int, int, int],
-        start: tuple[int, int],
-        end: tuple[int, int],
+        alpha: float | None = None,
     ) -> Self:
-        for row in range(start[0], end[0] + 1):
-            for column in range(start[1], end[1] + 1):
-                cell = self[row, column]
-                cell.shape.fill_color = color
+        for row in self:
+            row.fill(color=color, alpha=alpha)
 
         return self
 
@@ -92,24 +88,20 @@ class Table(Shape):
 
 
 @dataclass(repr=False)
-class Row(Element):
+class Axis(Element):
     parent: Table
-    collection: Rows
+    collection: Rows | Columns
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}>"
 
     @property
-    def height(self) -> float:
-        return self.api.Height
-
-    @height.setter
-    def height(self, value: float) -> None:
-        self.api.Height = value
-
-    @property
     def cells(self) -> CellRange:
         return CellRange(self.api.Cells, self)
+
+    @property
+    def borders(self) -> Borders:
+        return self.cells.borders
 
     def __len__(self) -> int:
         return len(self.cells)
@@ -120,6 +112,44 @@ class Row(Element):
     def __iter__(self) -> Iterator[Cell]:
         for i in range(len(self)):
             yield self[i]
+
+    def fill(
+        self,
+        color: int | str | tuple[int, int, int],
+        alpha: float | None = None,
+    ) -> Self:
+        for cell in self:
+            cell.shape.fill.set(color=color, alpha=alpha)
+
+        return self
+
+
+@dataclass(repr=False)
+class Row(Axis):
+    parent: Table
+    collection: Rows
+
+    @property
+    def height(self) -> float:
+        return self.api.Height
+
+    @height.setter
+    def height(self, value: float) -> None:
+        self.api.Height = value
+
+
+@dataclass(repr=False)
+class Column(Axis):
+    parent: Table
+    collection: Columns
+
+    @property
+    def width(self) -> float:
+        return self.api.Width
+
+    @width.setter
+    def width(self, value: float) -> None:
+        self.api.Width = value
 
 
 @dataclass(repr=False)
@@ -136,36 +166,9 @@ class Rows(Collection[Row]):
         for row, height in zip(self, value, strict=True):
             row.height = height
 
-
-@dataclass(repr=False)
-class Column(Element):
-    parent: Table
-    collection: Columns
-
-    def __repr__(self) -> str:
-        return f"<{self.__class__.__name__}>"
-
     @property
-    def width(self) -> float:
-        return self.api.Width
-
-    @width.setter
-    def width(self, value: float) -> None:
-        self.api.Width = value
-
-    @property
-    def cells(self) -> CellRange:
-        return CellRange(self.api.Cells, self)
-
-    def __len__(self) -> int:
-        return len(self.cells)
-
-    def __getitem__(self, index: int) -> Cell:
-        return self.cells[index]
-
-    def __iter__(self) -> Iterator[Cell]:
-        for i in range(len(self)):
-            yield self[i]
+    def borders(self) -> BordersCollection:
+        return BordersCollection([row.borders for row in self])
 
 
 @dataclass(repr=False)
@@ -181,6 +184,10 @@ class Columns(Collection[Column]):
     def width(self, value: list[float]) -> None:
         for column, width in zip(self, value, strict=True):
             column.width = width
+
+    @property
+    def borders(self) -> BordersCollection:
+        return BordersCollection([column.borders for column in self])
 
 
 @dataclass(repr=False)
@@ -210,7 +217,7 @@ class Cell(Element):
 
 @dataclass(repr=False)
 class CellRange(Collection[Cell]):
-    parent: Row | Column
+    parent: Axis
     type: ClassVar[type[Element]] = Cell
 
     @property
@@ -219,12 +226,28 @@ class CellRange(Collection[Cell]):
 
 
 @dataclass(repr=False)
-class LineFormat(Element):
+class LineFormat(Element, Line):
     parent: Table
     collection: Borders
 
     def __repr__(self) -> str:
         return f"<{self.__class__.__name__}>"
+
+
+@dataclass(repr=False)
+class LineFormatCollection:
+    items: list[LineFormat]
+
+    def set(
+        self,
+        color: int | str | tuple[int, int, int],
+        alpha: float | None = None,
+        weight: float | None = None,
+    ) -> Self:
+        for item in self.items:
+            item.set(color=color, alpha=alpha, weight=weight)
+
+        return self
 
 
 @dataclass(repr=False)
@@ -241,6 +264,17 @@ class Borders(Collection[LineFormat]):
 
         index = getattr(constants, "ppBorder" + index[0].upper() + index[1:])
         return LineFormat(self.api(index), self.parent, self)  # type: ignore
+
+
+@dataclass(repr=False)
+class BordersCollection:
+    items: list[Borders]
+
+    def __getitem__(
+        self,
+        index: int | Literal["bottom", "left", "right", "top"],
+    ) -> LineFormatCollection:
+        return LineFormatCollection([item[index] for item in self.items])
 
 
 # from win32com.client import constants

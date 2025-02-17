@@ -29,14 +29,29 @@ class Color(Base):
     def color(self, value: int | str | tuple[int, int, int]) -> None:
         self.api.ForeColor.RGB = rgb(value)
 
-    def set(self, color: int | str | tuple[int, int, int] | None = None) -> Self:
+    @property
+    def alpha(self) -> float:
+        return self.api.Transparency
+
+    @alpha.setter
+    def alpha(self, value: float) -> None:
+        self.api.Transparency = value
+
+    def set(
+        self,
+        color: int | str | tuple[int, int, int] | None = None,
+        alpha: float | None = None,
+    ) -> Self:
         if color is not None:
             self.color = color
+        if alpha is not None:
+            self.alpha = alpha
 
         return self
 
     def assign_from(self, other: Color) -> None:
         self.color = other.color
+        self.alpha = other.alpha
 
 
 @dataclass(repr=False)
@@ -57,10 +72,13 @@ class Line(Color):
     def set(
         self,
         color: int | str | tuple[int, int, int] | None = None,
+        alpha: float | None = None,
         weight: float | None = None,
     ) -> Self:
         if color is not None:
             self.color = color
+        if alpha is not None:
+            self.alpha = alpha
         if weight is not None:
             self.weight = weight
 
@@ -68,6 +86,7 @@ class Line(Color):
 
     def assign_from(self, other: Line) -> None:
         self.color = other.color
+        self.alpha = other.alpha
         self.weight = other.weight
 
 
@@ -159,24 +178,6 @@ class Shape(Element):
     @line.setter
     def line(self, value: Line) -> None:
         self.line.assign_from(value)
-
-    # def set(
-    #     self,
-    #     text: str | None = None,
-    #     fill_color: int | str | tuple[int, int, int] | None = None,
-    #     line_weight: float | None = None,
-    #     line_color: int | str | tuple[int, int, int] | None = None,
-    # ) -> Self:
-    #     if text is not None:
-    #         self.text = text
-    #     if fill_color is not None:
-    #         self.fill_color = fill_color
-    #     if line_weight is not None:
-    #         self.line_weight = line_weight
-    #     if line_color is not None:
-    #         self.line_color = line_color
-
-    #     return self
 
 
 @dataclass(repr=False)
