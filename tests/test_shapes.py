@@ -122,8 +122,8 @@ def test_line_width(shape: Shape):
     assert shape.line_weight == 2
 
 
-def test_set_style(shape: Shape):
-    shape.set_style(
+def test_set(shape: Shape):
+    shape.set(
         font="Times",
         size=10,
         bold=True,

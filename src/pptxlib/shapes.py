@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 from win32com.client import constants
 
 from pptxlib.base import Collection, Element
-from pptxlib.utils import rgb
+from pptxlib.colors import rgb
 
 if TYPE_CHECKING:
     from win32com.client import DispatchBaseClass
@@ -85,11 +85,11 @@ class Shape(Element):
         return value
 
     @width.setter
-    def width(self, value):
+    def width(self, value: float) -> None:
         self.api.Width = value
 
     @height.setter
-    def height(self, value):
+    def height(self, value: float) -> None:
         self.api.Height = value
 
     @property
@@ -109,7 +109,7 @@ class Shape(Element):
         return self.font.Size
 
     @font_size.setter
-    def font_size(self, size: float):
+    def font_size(self, size: float) -> None:
         self.font.Size = size
 
     @property
@@ -117,7 +117,7 @@ class Shape(Element):
         return self.font.Bold == constants.msoTrue
 
     @bold.setter
-    def bold(self, value: bool):
+    def bold(self, value: bool) -> None:
         self.font.Bold = value
 
     @property
@@ -125,52 +125,53 @@ class Shape(Element):
         return self.font.Italic == constants.msoTrue
 
     @italic.setter
-    def italic(self, value: bool):
+    def italic(self, value: bool) -> None:
         self.font.Italic = value
 
     @property
-    def color(self):
+    def color(self) -> int:
         return self.font.Color.RGB
 
     @color.setter
-    def color(self, value: int | str | tuple[int, int, int]):
+    def color(self, value: int | str | tuple[int, int, int]) -> None:
         self.font.Color.RGB = rgb(value)
 
     @property
-    def fill_color(self):
+    def fill_color(self) -> int:
         return self.api.Fill.ForeColor.RGB
 
     @fill_color.setter
-    def fill_color(self, value):
+    def fill_color(self, value: int | str | tuple[int, int, int]) -> None:
         self.api.Fill.ForeColor.RGB = rgb(value)
 
     @property
-    def line_color(self):
+    def line_color(self) -> int:
         return self.api.Line.ForeColor.RGB
 
     @line_color.setter
-    def line_color(self, value):
+    def line_color(self, value: int | str | tuple[int, int, int]) -> None:
         self.api.Line.ForeColor.RGB = rgb(value)
 
     @property
-    def line_weight(self):
+    def line_weight(self) -> float:
         return self.api.Line.Weight
 
     @line_weight.setter
-    def line_weight(self, value):
+    def line_weight(self, value: float) -> None:
         self.api.Line.Weight = value
 
-    def set_style(
+    def set(
         self,
-        font=None,
-        size=None,
-        bold=None,
-        italic=None,
-        color=None,
-        fill_color=None,
-        line_weight=None,
-        line_color=None,
-    ):
+        *,
+        font: str | None = None,
+        size: float | None = None,
+        bold: bool | None = None,
+        italic: bool | None = None,
+        color: int | str | tuple[int, int, int] | None = None,
+        fill_color: int | str | tuple[int, int, int] | None = None,
+        line_weight: float | None = None,
+        line_color: int | str | tuple[int, int, int] | None = None,
+    ) -> None:
         if font is not None:
             self.font_name = font
         if size is not None:
@@ -214,7 +215,7 @@ class Shapes(Collection[Shape]):
         api = self.api.AddShape(kind, left, top, width, height)
         shape = Shape(api, self.parent)
         shape.text = text
-        shape.set_style(**kwargs)
+        shape.set(**kwargs)
 
         return shape
 
@@ -237,7 +238,7 @@ class Shapes(Collection[Shape]):
 
         shape = Shape(api, self.parent)
         shape.text = text
-        shape.set_style(**kwargs)
+        shape.set(**kwargs)
 
         return shape
 

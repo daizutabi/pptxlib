@@ -14,12 +14,12 @@ class Base:
     api: DispatchBaseClass | CoClassBaseClass
     app: DispatchBaseClass = field(init=False)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         clsname = self.__class__.__name__
         return f"<{clsname}>"
 
     @property
-    def name(self):
+    def name(self) -> str:
         try:
             return self.api.Name
 
@@ -31,17 +31,17 @@ class Base:
 class Element(Base):
     parent: Base
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.app = self.parent.app
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         clsname = self.__class__.__name__
         return f"<{clsname} [{self.name}]>"
 
-    def select(self):
+    def select(self) -> None:
         self.api.Select()
 
-    def delete(self):
+    def delete(self) -> None:
         self.api.Delete()
 
     @classmethod
@@ -57,7 +57,7 @@ class Collection(Base, Generic[SomeElement]):
     parent: Base
     type: ClassVar[type[Element]]
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         self.app = self.parent.app
 
     def __len__(self) -> int:
@@ -74,7 +74,7 @@ class Collection(Base, Generic[SomeElement]):
         for index in range(len(self)):
             yield self(index + 1)
 
-    def __getitem__(self, index) -> SomeElement | list[SomeElement]:
+    def __getitem__(self, index: int | slice) -> SomeElement | list[SomeElement]:
         if isinstance(index, slice):
             return list(self)[index]
 
