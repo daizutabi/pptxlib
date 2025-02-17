@@ -1,19 +1,19 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import ClassVar, Literal
+from typing import TYPE_CHECKING, ClassVar, Literal, overload
+
+from win32com.client import constants
 
 from pptxlib.core.base import Collection, Element
-from pptxlib.core.line import LineFormat
 from pptxlib.core.shape import Shape
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 
 @dataclass(repr=False)
 class Table(Shape):
-    def minimize_height(self) -> None:
-        for row in self.rows:
-            row.height = 1
-
     @property
     def rows(self) -> Rows:
         return Rows(self.api.Table.Rows, self)
@@ -31,7 +31,49 @@ class Table(Shape):
             n = len(self.columns)
             row, column = (row - 1) // n + 1, (row - 1) % n + 1
 
-        return Cell(self.api.Table.Cell(row, column), self)
+        return self.rows[row].cells[column]
+
+    def __len__(self) -> int:
+        return len(self.rows)
+
+    @overload
+    def __getitem__(self, index: int) -> Row: ...
+
+    @overload
+    def __getitem__(self, index: tuple[int, int]) -> Cell: ...
+
+    @overload
+    def __getitem__(self, index: tuple[int, slice]) -> Row: ...
+
+    @overload
+    def __getitem__(self, index: tuple[slice, int]) -> Column: ...
+
+    def __getitem__(
+        self,
+        index: int | tuple[int, int] | tuple[int, slice] | tuple[slice, int],
+    ) -> Cell | Row | Column:
+        if isinstance(index, int):
+            return self.rows[index]
+
+        if isinstance(index, tuple):
+            if isinstance(index[0], int) and isinstance(index[1], int):
+                return self.cell(index[0], index[1])
+
+            if isinstance(index[0], int) and index[1] == slice(None):
+                return self.rows[index[0]]
+
+            if index[0] == slice(None) and isinstance(index[1], int):
+                return self.columns[index[1]]
+
+        raise NotImplementedError
+
+    def __iter__(self) -> Iterator[Row]:
+        for i in range(len(self)):
+            yield self[i]
+
+    def minimize_height(self) -> None:
+        for row in self.rows:
+            row.height = 1
 
 
 @dataclass(repr=False)
@@ -53,6 +95,16 @@ class Row(Element):
     @property
     def cells(self) -> CellRange:
         return CellRange(self.api.Cells, self)
+
+    def __len__(self) -> int:
+        return len(self.cells)
+
+    def __getitem__(self, index: int) -> Cell:
+        return self.cells[index]
+
+    def __iter__(self) -> Iterator[Cell]:
+        for i in range(len(self)):
+            yield self[i]
 
 
 @dataclass(repr=False)
@@ -90,6 +142,16 @@ class Column(Element):
     def cells(self) -> CellRange:
         return CellRange(self.api.Cells, self)
 
+    def __len__(self) -> int:
+        return len(self.cells)
+
+    def __getitem__(self, index: int) -> Cell:
+        return self.cells[index]
+
+    def __iter__(self) -> Iterator[Cell]:
+        for i in range(len(self)):
+            yield self[i]
+
 
 @dataclass(repr=False)
 class Columns(Collection[Column]):
@@ -111,41 +173,20 @@ class Cell(Element):
     parent: Table
     collection: CellRange
 
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}>"
+
     @property
     def shape(self) -> Shape:
-        return Shape(self.api.Shape, self)
+        return Shape(self.api.Shape, self.parent.parent, self.parent.collection)
 
     @property
-    def left(self):
-        return self.shape.left
-
-    @property
-    def top(self):
-        return self.shape.top
-
-    @property
-    def width(self):
-        return self.shape.width
-
-    @property
-    def height(self):
-        return self.shape.height
-
-    @property
-    def text(self):
+    def text(self) -> str:
         return self.shape.text
 
     @text.setter
-    def text(self, value):
+    def text(self, value: str) -> None:
         self.shape.text = value
-
-    @property
-    def value(self):
-        return self.text
-
-    @value.setter
-    def value(self, value):
-        self.text = value
 
     @property
     def borders(self) -> Borders:
@@ -163,13 +204,28 @@ class CellRange(Collection[Cell]):
 
 
 @dataclass(repr=False)
+class LineFormat(Element):
+    parent: Table
+    collection: Borders
+
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__}>"
+
+
+@dataclass(repr=False)
 class Borders(Collection[LineFormat]):
     parent: Table
     type: ClassVar[type[Element]] = LineFormat
 
-    def __call__(self, type: Literal["bottom", "left", "right", "top"]) -> LineFormat:  # noqa: A002
-        type_int = getattr(constants, "ppBorder" + type[0].upper() + type[1:])
-        return LineFormat(self.api(type_int), self)  # type: ignore
+    def __getitem__(
+        self,
+        index: int | Literal["bottom", "left", "right", "top"],
+    ) -> LineFormat:
+        if isinstance(index, int):
+            return super().__getitem__(index)
+
+        index = getattr(constants, "ppBorder" + index[0].upper() + index[1:])
+        return LineFormat(self.api(index), self.parent, self)  # type: ignore
 
 
 # from win32com.client import constants
@@ -222,6 +278,27 @@ class Borders(Collection[LineFormat]):
 #             print(cell)
 
 
+# def get_borders(
+#     cell: Cell | CellRange,
+#     border_type: Literal["bottom","left","right","top"],
+#     width: float = 1,
+#     color: int | str | tuple[int, int, int] = 0,
+#     line_style: Literal["-", "--"] = "-",
+#     *,
+#     visible: bool = True,
+# ):
+#     border_type_int = getattr(constants, "ppBorder" + border_type[0].upper() + border_type[1:])
+#     border = cell.api.Borders(border_type_int)
+#     border.Visible = visible
+
+#     if not visible:
+#         return
+
+#     border.Weight = width
+#     border.ForeColor.RGB = color
+
+#     if line_style == "--":
+#         border.DashStyle = constants.msoLineDash"
 # def main():
 #     import xlviews.powerpoint.table
 

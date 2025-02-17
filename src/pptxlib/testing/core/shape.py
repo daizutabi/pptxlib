@@ -14,11 +14,13 @@ if TYPE_CHECKING:
 def main():
     slide = create_slide()
     table = slide.shapes.add_table(2, 3, 100, 100, 100, 100)
-    print(table)
-    print(table.api.HasTable)
-    print(table.api.Table)
-    print(table.rows)
-    print(table.rows[0])
+    print(table[0].cells[0].borders)
+    b = table[0].cells.borders[0]
+    print(b)
+    print(b.api)
+    print(b.parent)
+    print(b.collection)
+    # print(table[0].cells.borders["bottom"])
 
 
 if __name__ == "__main__":
