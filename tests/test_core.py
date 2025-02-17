@@ -1,10 +1,5 @@
 from win32com.client import CoClassBaseClass, DispatchBaseClass
 
-from pptxlib.base import (
-    Base,
-    Collection,
-    Element,
-)
 from pptxlib.core import (
     App,
     Presentation,
@@ -12,13 +7,18 @@ from pptxlib.core import (
     Slide,
     Slides,
 )
+from pptxlib.core.base import (
+    Base,
+    Collection,
+    Element,
+)
 
 
-def test_app(pp: App):
-    assert isinstance(pp, Base)
-    assert isinstance(pp, App)
-    assert isinstance(pp.api, DispatchBaseClass)
-    assert pp.name == "Microsoft PowerPoint"
+def test_app(app: App):
+    assert isinstance(app, Base)
+    assert isinstance(app, App)
+    assert isinstance(app.api, DispatchBaseClass)
+    assert app.name == "Microsoft PowerPoint"
 
 
 def test_presentations(prs: Presentations):
@@ -125,8 +125,8 @@ def test_slide_title(slide: Slide):
     assert slide.title == "Slide Title"
 
 
-def test_powerpoint_repr(pp: App):
-    assert repr(pp) == "<App>"
+def test_powerpoint_repr(app: App):
+    assert repr(app) == "<App>"
 
 
 def test_presentations_repr(prs: Presentations):

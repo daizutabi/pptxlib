@@ -20,16 +20,17 @@ class Base:
 
     @property
     def name(self) -> str:
-        try:
-            return self.api.Name
+        return self.api.Name
 
-        except AttributeError:
-            return self.__class__.__name__
+    @name.setter
+    def name(self, value: str) -> None:
+        self.api.Name = value
 
 
 @dataclass(repr=False)
 class Element(Base):
-    parent: Base
+    parent: Element
+    collection: Collection
 
     def __post_init__(self) -> None:
         self.app = self.parent.app
@@ -44,17 +45,13 @@ class Element(Base):
     def delete(self) -> None:
         self.api.Delete()
 
-    @classmethod
-    def get_parent(cls, collection: Collection) -> Base:
-        return collection
 
-
-SomeElement = TypeVar("SomeElement", bound=Element)
+E = TypeVar("E", bound=Element)
 
 
 @dataclass(repr=False)
-class Collection(Base, Generic[SomeElement]):
-    parent: Base
+class Collection(Base, Generic[E]):
+    parent: Element
     type: ClassVar[type[Element]]
 
     def __post_init__(self) -> None:
@@ -63,22 +60,15 @@ class Collection(Base, Generic[SomeElement]):
     def __len__(self) -> int:
         return self.api.Count
 
-    def __call__(self, index: int | None = None) -> SomeElement:
-        if index is None:
-            index = len(self)
+    def __repr__(self) -> str:
+        clsname = self.__class__.__name__
+        return f"<{clsname} ({len(self)})>"
 
-        parent = self.type.get_parent(self)
-        return self.type(self.api(index), parent)  # type: ignore
-
-    def __iter__(self) -> Iterator[SomeElement]:
-        for index in range(len(self)):
-            yield self(index + 1)
-
-    def __getitem__(self, index: int | slice) -> SomeElement | list[SomeElement]:
-        if isinstance(index, slice):
-            return list(self)[index]
-
+    def __getitem__(self, index: int) -> E:
         if index < 0:
             index = len(self) + index
 
-        return self(index + 1)
+        return self.type(self.api(index + 1), self.parent, self)  # type: ignore
+
+    def __iter__(self) -> Iterator[E]:
+        yield from [self[index] for index in range(len(self))]  # list due to deletion

@@ -1,4 +1,4 @@
-from pptxlib.tables import Cell, CellRange
+from pptxlib.core.table import Cell, CellRange
 
 
 def test_cell_line_format(cell: Cell):

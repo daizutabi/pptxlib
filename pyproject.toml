@@ -57,6 +57,7 @@ ignore = [
   "D203",
   "D213",
   "EM101",
+  "ERA001",
   "PLR",
   "PGH003",
   "TRY003",
@@ -76,3 +77,4 @@ ignore = [
   "SIM117",
   "SLF",
 ]
+"src/pptxlib/testing/*" = ["ANN", "T"]
