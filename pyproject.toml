@@ -7,16 +7,16 @@ name = "pptxlib"
 version = '0.1.1'
 description = "PowerPoint lib"
 readme = "README.md"
-license = "MIT"
+license = { file = "LICENSE" }
 authors = [{ name = "daizutabi", email = "daizutabi@gmail.com" }]
 classifiers = [
   "Development Status :: 4 - Beta",
   "Programming Language :: Python",
-  "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
 ]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = ["matplotlib", "pywin32"]
 
 [project.urls]
@@ -29,10 +29,9 @@ dev-dependencies = [
   "mkapi",
   "mkdocs-material",
   "mkdocs>=1.6",
-  "pytest-clarity",
-  "pytest-cov",
-  "pytest-randomly",
-  "ruff",
+  "pytest-clarity>=1",
+  "pytest-cov>=6",
+  "pytest-randomly>=3",
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -43,7 +42,7 @@ packages = ["src/pptxlib"]
 
 [tool.pytest.ini_options]
 addopts = ["--cov-report=lcov:lcov.info", "--cov=pptxlib", "--doctest-modules"]
-doctest_optionflags = ["NORMALIZE_WHITESPACE", "IGNORE_EXCEPTION_DETAIL"]
+doctest_optionflags = []
 filterwarnings = ['ignore:setDaemon\(\) is deprecated:DeprecationWarning']
 
 [tool.coverage.report]
