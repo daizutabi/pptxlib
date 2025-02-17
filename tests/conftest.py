@@ -1,19 +1,19 @@
 import pytest
 
-from pptxlib.app import PowerPoint, Presentation, Presentations, Slide, Slides
+from pptxlib.core import App, Presentation, Presentations, Slide, Slides
 from pptxlib.shapes import Shapes
 from pptxlib.tables import Rows, Table, Tables
 
 
 @pytest.fixture(scope="session")
 def pp():
-    pp = PowerPoint()
+    pp = App()
     yield pp
     pp.quit()
 
 
 @pytest.fixture(scope="session")
-def prs(pp: PowerPoint):
+def prs(pp: App):
     return pp.presentations
 
 

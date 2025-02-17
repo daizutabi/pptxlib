@@ -1,7 +1,7 @@
 from win32com.client import DispatchBaseClass
 
-from pptxlib.app import Slide
-from pptxlib.core import Collection, Element
+from pptxlib.base import Collection, Element
+from pptxlib.core import Slide
 from pptxlib.shapes import Shape, Shapes
 
 

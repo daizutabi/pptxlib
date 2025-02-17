@@ -5,13 +5,13 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 
 from win32com.client import constants
 
-from pptxlib.core import Collection, Element
+from pptxlib.base import Collection, Element
 from pptxlib.utils import rgb
 
 if TYPE_CHECKING:
     from win32com.client import DispatchBaseClass
 
-    from pptxlib.app import Slide
+    from pptxlib.core import Slide
     from pptxlib.tables import Cell
 
 
@@ -37,7 +37,7 @@ class Shape(Element):
 
     @property
     def slide(self) -> Slide:
-        from pptxlib.app import Slide
+        from pptxlib.core import Slide
 
         if isinstance(self.parent, Slide):
             return self.parent

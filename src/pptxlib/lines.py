@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING
 
-from pptxlib.core import Element
+from pptxlib.base import Element
 
 if TYPE_CHECKING:
     from pptxlib.tables import Borders

@@ -1,84 +1,220 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
+from typing import TYPE_CHECKING, ClassVar
+
+import win32com.client
+from win32com.client import constants
+
+from pptxlib.base import Base, Collection, Element
+from pptxlib.client import ensure_modules
+from pptxlib.shapes import Shapes
+from pptxlib.tables import Tables
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
-
-    from win32com.client import CoClassBaseClass, DispatchBaseClass
+    from win32com.client import DispatchBaseClass
 
 
 @dataclass(repr=False)
-class Base:
-    api: DispatchBaseClass | CoClassBaseClass
-    app: DispatchBaseClass = field(init=False)
+class App(Base):
+    api: DispatchBaseClass = field(init=False)
 
-    def __repr__(self):
-        clsname = self.__class__.__name__
-        return f"<{clsname}>"
+    def __post_init__(self):
+        ensure_modules()
+        self.api = win32com.client.Dispatch("PowerPoint.Application")  # type: ignore
+        self.app = self.api
 
     @property
-    def name(self):
-        try:
-            return self.api.Name
+    def presentations(self):
+        return Presentations(self.api.Presentations, self)
 
-        except AttributeError:
-            return self.__class__.__name__
+    def quit(self):
+        self.api.Quit()
 
 
 @dataclass(repr=False)
-class Element(Base):
-    parent: Base
+class Presentation(Element):
+    parent: Presentations
 
-    def __post_init__(self):
-        self.app = self.parent.app
+    def close(self):
+        self.api.Close()
 
-    def __repr__(self):
-        clsname = self.__class__.__name__
-        return f"<{clsname} [{self.name}]>"
+    @property
+    def slides(self):
+        return Slides(self.api.Slides, self)
 
-    def select(self):
-        self.api.Select()
+    @property
+    def width(self) -> float:
+        return self.api.PageSetup.SlideWidth
 
-    def delete(self):
-        self.api.Delete()
+    @property
+    def height(self) -> float:
+        return self.api.PageSetup.SlideHeight
+
+
+@dataclass(repr=False)
+class Presentations(Collection[Presentation]):
+    parent: App
+    type: ClassVar[type[Element]] = Presentation
+
+    def add(self) -> Presentation:
+        api = self.api.Add()
+        return Presentation(api, self)
+
+    @property
+    def active(self) -> Presentation:
+        api = self.app.ActivePresentation
+        return Presentation(api, self)
+
+    # def open(self, filename):
+    #     filename = os.path.abspath(filename)
+    #     prs = self.api.Open(filename)
+    #     return Presentation(prs, parent=self.parent)
+
+
+@dataclass(repr=False)
+class Slide(Element):
+    parent: Presentation
 
     @classmethod
-    def get_parent(cls, collection: Collection) -> Base:
-        return collection
+    def get_parent(cls, collection: Slides) -> Presentation:
+        return collection.parent
 
+    @property
+    def shapes(self) -> Shapes:
+        return Shapes(self.api.Shapes, self)
 
-SomeElement = TypeVar("SomeElement", bound=Element)
+    @property
+    def tables(self) -> Tables:
+        return Tables(self.api.Shapes, self)
+
+    @property
+    def title(self) -> str:
+        return self.shapes.title.text if len(self.shapes) else ""
+
+    @title.setter
+    def title(self, text):
+        if len(self.shapes):
+            self.shapes.title.text = text
+
+    @property
+    def width(self) -> float:
+        return self.parent.width
+
+    @property
+    def height(self) -> float:
+        return self.parent.height
 
 
 @dataclass(repr=False)
-class Collection(Base, Generic[SomeElement]):
-    parent: Base
-    type: ClassVar[type[Element]]
+class Slides(Collection[Slide]):
+    parent: Presentation
+    type: ClassVar[type[Element]] = Slide
 
-    def __post_init__(self):
-        self.app = self.parent.app
-
-    def __len__(self) -> int:
-        return self.api.Count
-
-    def __call__(self, index: int | None = None) -> SomeElement:
+    def add(self, index: int | None = None, layout=None):
         if index is None:
-            index = len(self)
+            index = len(self) + 1
 
-        parent = self.type.get_parent(self)
-        return self.type(self.api(index), parent)  # type: ignore
+        if layout is None:
+            if index == 1:
+                layout = constants.ppLayoutTitleOnly
+            else:
+                slide = self(index - 1)
+                try:
+                    layout = slide.CustomLayout  # type: ignore
+                except AttributeError:
+                    layout = constants.ppLayoutTitleOnly
 
-    def __iter__(self) -> Iterator[SomeElement]:
-        for index in range(len(self)):
-            yield self(index + 1)
+        if isinstance(layout, int):
+            slide = self.api.Add(index, layout)
+        else:
+            slide = self.api.AddSlide(index, layout)
 
-    def __getitem__(self, index) -> SomeElement | list[SomeElement]:
-        if isinstance(index, slice):
-            return list(self)[index]
+        return Slide(slide, self.parent)
 
-        if index < 0:
-            index = len(self) + index
+    @property
+    def active(self):
+        index = self.app.ActiveWindow.Selection.SlideRange.SlideIndex
+        return self(index)
 
-        return self(index + 1)
+
+# @dataclass(repr=False)
+# class PowerPoint(Base):
+#     def __post_init__(self):
+#         self.obj = win32com.client.Dispatch("PowerPoint.Application")
+#         ensure_modules()
+
+#     @property
+#     def presentations(self):
+#         return Presentations(self)
+
+#     @property
+#     def presentation(self):
+#         return self.presentations.active
+
+#     @property
+#     def slides(self):
+#         return self.presentation.slides
+
+#     @property
+#     def slide(self):
+#         return self.slides.active
+
+#     @property
+#     def shapes(self):
+#         return self.slide.shapes
+
+#     @property
+#     def tables(self):
+#         return self.slide.tables
+
+#     def add_picture(self, *args, **kwargs):
+#         return self.slide.shapes.add_picture(*args, **kwargs)
+
+#     def add_frame(self, *args, **kwargs):
+#         return self.slide.shapes.add_frame(*args, **kwargs)
+
+#     def add_range(self, *args, **kwargs):
+#         return self.slide.shapes.add_range(*args, **kwargs)
+
+#     def add_chart(self, *args, **kwargs):
+#         return self.slide.shapes.add_chart(*args, **kwargs)
+
+#     def add_label(self, *args, **kwargs):
+#         return self.slide.shapes.add_label(*args, **kwargs)
+
+#     def add_shape(self, *args, **kwargs):
+#         return self.slide.shapes.add_shape(*args, **kwargs)
+
+#     def add_table(self, *args, **kwargs):
+#         return self.slide.shapes.add_table(*args, **kwargs)
+# """
+# CustomLayoutに関連するモジュール
+# """
+
+
+# def copy_layout(slide, name=None, replace=True):
+#     """指定するスライドのCustomLayoutをコピーして返す．
+
+#     Parameters
+#     ----------
+#     slide : xlviews.powerpoint.main.Slide
+#         スライドオブジェクト
+#     name : str, optional
+#         CustomLayoutの名前
+#     replace : bool, optional
+#         スライドのCustomLayoutをコピーしたものに
+#         置き換えるか
+
+#     Returns
+#     -------
+#     layout
+#     """
+#     layouts = slide.parent.api.SlideMaster.CustomLayouts
+#     slide.api.CustomLayout.Copy()
+#     layout = layouts.Paste()
+#     if name:
+#         layout.Name = name
+#     if replace:
+#         slide.api.CustomLayout = layout
+#     return layout

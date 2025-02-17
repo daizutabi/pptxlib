@@ -5,14 +5,14 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 
 from win32com.client import constants
 
-from pptxlib.core import Collection, Element
+from pptxlib.base import Collection, Element
 from pptxlib.lines import LineFormat
 from pptxlib.shapes import Shape
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
-    from pptxlib.app import Slide
+    from pptxlib.core import Slide
 
 
 @dataclass(repr=False)
