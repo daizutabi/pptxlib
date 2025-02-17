@@ -17,28 +17,20 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 requires-python = ">=3.11"
-dependencies = ["matplotlib", "pywin32"]
+dependencies = ["pywin32"]
 
 [project.urls]
-Documentation = "https://daizutabi.github.io/pptxlib"
+Documentation = "https://github.com/daizutabi/pptxlib"
 Source = "https://github.com/daizutabi/pptxlib"
 Issues = "https://github.com/daizutabi/pptxlib/issues"
 
 [tool.uv]
 dev-dependencies = [
-  "mkapi",
-  "mkdocs-material",
-  "mkdocs>=1.6",
+  "matplotlib>=3.10",
   "pytest-clarity>=1",
   "pytest-cov>=6",
   "pytest-randomly>=3",
 ]
-
-[tool.hatch.build.targets.sdist]
-exclude = ["/.github", "/docs"]
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/pptxlib"]
 
 [tool.pytest.ini_options]
 addopts = ["--cov-report=lcov:lcov.info", "--cov=pptxlib", "--doctest-modules"]
@@ -61,11 +53,13 @@ ignore = [
   "ANN401",
   "ARG002",
   "B904",
+  "D",
   "D105",
   "D107",
   "D203",
   "D213",
   "EM101",
+  "PLR",
   "PGH003",
   "TRY003",
 ]
