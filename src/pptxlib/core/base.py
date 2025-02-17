@@ -12,11 +12,24 @@ if TYPE_CHECKING:
 @dataclass(repr=False)
 class Base:
     api: DispatchBaseClass | CoClassBaseClass
-    app: DispatchBaseClass = field(init=False)
 
     def __repr__(self) -> str:
         clsname = self.__class__.__name__
         return f"<{clsname}>"
+
+
+@dataclass(repr=False)
+class Element(Base):
+    parent: Element
+    collection: Collection
+    app: DispatchBaseClass = field(init=False)
+
+    def __post_init__(self) -> None:
+        self.app = self.parent.app
+
+    def __repr__(self) -> str:
+        clsname = self.__class__.__name__
+        return f"<{clsname} [{self.name}]>"
 
     @property
     def name(self) -> str:
@@ -25,19 +38,6 @@ class Base:
     @name.setter
     def name(self, value: str) -> None:
         self.api.Name = value
-
-
-@dataclass(repr=False)
-class Element(Base):
-    parent: Element
-    collection: Collection
-
-    def __post_init__(self) -> None:
-        self.app = self.parent.app
-
-    def __repr__(self) -> str:
-        clsname = self.__class__.__name__
-        return f"<{clsname} [{self.name}]>"
 
     def select(self) -> None:
         self.api.Select()
@@ -53,6 +53,7 @@ E = TypeVar("E", bound=Element)
 class Collection(Base, Generic[E]):
     parent: Element
     type: ClassVar[type[Element]]
+    app: DispatchBaseClass = field(init=False)
 
     def __post_init__(self) -> None:
         self.app = self.parent.app

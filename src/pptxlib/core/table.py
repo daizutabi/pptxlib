@@ -5,11 +5,13 @@ from typing import TYPE_CHECKING, ClassVar, Literal, overload
 
 from win32com.client import constants
 
+from pptxlib.colors import rgb
 from pptxlib.core.base import Collection, Element
 from pptxlib.core.shape import Shape
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
+    from typing import Self
 
 
 @dataclass(repr=False)
@@ -70,6 +72,19 @@ class Table(Shape):
     def __iter__(self) -> Iterator[Row]:
         for i in range(len(self)):
             yield self[i]
+
+    def fill(
+        self,
+        color: int | str | tuple[int, int, int],
+        start: tuple[int, int],
+        end: tuple[int, int],
+    ) -> Self:
+        for row in range(start[0], end[0] + 1):
+            for column in range(start[1], end[1] + 1):
+                cell = self[row, column]
+                cell.shape.fill_color = color
+
+        return self
 
     def minimize_height(self) -> None:
         for row in self.rows:
@@ -262,13 +277,6 @@ class Borders(Collection[LineFormat]):
 #             set_border_cell(cell, 'top', **kwargs)
 #             cell = table.Cell(end[0], column)
 #             set_border_cell(cell, 'bottom', **kwargs)
-
-
-# def set_fill(table, start, end, fill):
-#     for row in range(start[0], end[0] + 1):
-#         for column in range(start[1], end[1] + 1):
-#             cell = table.Cell(row, column)
-#             cell.Shape.Fill.ForeColor.RGB = fill
 
 
 # def set_font(table, start, end, size=10):

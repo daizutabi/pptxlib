@@ -15,12 +15,9 @@ def main():
     slide = create_slide()
     table = slide.shapes.add_table(2, 3, 100, 100, 100, 100)
     print(table[0].cells[0].borders)
-    b = table[0].cells.borders[0]
-    print(b)
-    print(b.api)
-    print(b.parent)
-    print(b.collection)
-    # print(table[0].cells.borders["bottom"])
+    table.fill("red", (0, 0), (1, 2))
+    print(table[0, 0].shape.api.Fill.Transparency)
+    table[0, 0].shape.api.Fill.Transparency = 1
 
 
 if __name__ == "__main__":
