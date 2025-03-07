@@ -1,8 +1,10 @@
 import pytest
 
-from pptxlib.core import App, Presentation, Presentations, Slide, Slides
+from pptxlib.core.app import App
+from pptxlib.core.presentation import Presentation, Presentations
 from pptxlib.core.shape import Shapes
-from pptxlib.core.table import Rows, Table, Tables
+from pptxlib.core.slide import Slide, Slides
+from pptxlib.core.table import Rows, Table
 
 
 @pytest.fixture(scope="session")
@@ -52,18 +54,6 @@ def shapes(slide: Slide):
 @pytest.fixture
 def shape(shapes: Shapes):
     return shapes.title
-
-
-@pytest.fixture
-def tables(slide: Slide):
-    return slide.tables
-
-
-@pytest.fixture
-def table(tables: Tables):
-    table = tables.add(2, 3, 100, 100, 200, 200)
-    yield table
-    table.delete()
 
 
 @pytest.fixture
