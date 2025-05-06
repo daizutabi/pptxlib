@@ -433,20 +433,3 @@ class Shapes(Collection[Shape]):
 #             shape.Height = height
 
 #         return Shape(shape, parent=self.parent)
-
-
-#     def add_table(self, df, left=None, top=None, width=None, height=None, merge=True, **kwargs):
-#         shape = create_table(
-#             self, df, left=100, top=100, width=300, height=300, merge=merge, **kwargs
-#         )
-#         table = shape.table
-#         if width:
-#             table.width = width
-#         if height:
-#             table.height = height
-#         if left is not None:
-#             shape.left = left
-#         if top is not None:
-#             shape.top = top
-
-#         return table

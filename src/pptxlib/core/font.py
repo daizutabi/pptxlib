@@ -76,9 +76,10 @@ class Font(Base):
 
         return self
 
-    def assign_from(self, other: Font) -> None:
-        self.name = other.name
-        self.size = other.size
-        self.bold = other.bold
-        self.italic = other.italic
-        self.color = other.color
+    def update(self, font: Font) -> Self:
+        self.name = font.name
+        self.size = font.size
+        self.bold = font.bold
+        self.italic = font.italic
+        self.color = font.color
+        return self
