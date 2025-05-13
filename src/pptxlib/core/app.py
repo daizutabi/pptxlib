@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from functools import cache
 from typing import TYPE_CHECKING, Self
 
 import win32com.client
+from pywintypes import com_error
 
 from pptxlib.client import ensure_modules
 
@@ -35,3 +37,14 @@ class App(Base):
 
     def __exit__(self, exc_type, exc_value, traceback) -> None:  # noqa: ANN001
         self.quit()
+
+
+@cache
+def is_app_available() -> bool:
+    try:
+        with App():
+            pass
+    except com_error:
+        return False
+
+    return True

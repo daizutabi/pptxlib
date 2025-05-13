@@ -55,14 +55,12 @@ class Slides(Collection[Slide]):
         if isinstance(layout, str):
             layout = getattr(constants, f"ppLayout{layout}")
         elif layout is None:
+            title_only = constants.ppLayoutTitleOnly
             if index == 0:
-                layout = constants.ppLayoutTitleOnly
+                layout = title_only
             else:
                 slide = self[index - 1]
-                try:
-                    layout = slide.api.CustomLayout
-                except AttributeError:
-                    layout = constants.ppLayoutTitleOnly
+                layout = getattr(slide.api, "CustomLayout", title_only)
 
         if isinstance(layout, int):
             slide = self.api.Add(index + 1, layout)

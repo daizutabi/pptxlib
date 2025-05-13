@@ -14,7 +14,6 @@ if TYPE_CHECKING:
 
     from win32com.client import DispatchBaseClass
 
-    from .label import Label
     from .slide import Slide
     from .table import Table
 
@@ -49,9 +48,9 @@ class Color(Base):
 
         return self
 
-    def assign_from(self, other: Color) -> None:
-        self.color = other.color
-        self.alpha = other.alpha
+    def update(self, color: Color) -> None:
+        self.color = color.color
+        self.alpha = color.alpha
 
 
 @dataclass(repr=False)
@@ -84,10 +83,10 @@ class Line(Color):
 
         return self
 
-    def assign_from(self, other: Line) -> None:
-        self.color = other.color
-        self.alpha = other.alpha
-        self.weight = other.weight
+    def update(self, line: Line) -> None:
+        self.color = line.color
+        self.alpha = line.alpha
+        self.weight = line.weight
 
 
 @dataclass(repr=False)
@@ -161,7 +160,7 @@ class Shape(Element):
 
     @font.setter
     def font(self, value: Font) -> None:
-        self.font.assign_from(value)
+        self.font.update(value)
 
     @property
     def fill(self) -> Fill:
@@ -169,7 +168,7 @@ class Shape(Element):
 
     @fill.setter
     def fill(self, value: Fill) -> None:
-        self.fill.assign_from(value)
+        self.fill.update(value)
 
     @property
     def line(self) -> Line:
@@ -177,7 +176,7 @@ class Shape(Element):
 
     @line.setter
     def line(self, value: Line) -> None:
-        self.line.assign_from(value)
+        self.line.update(value)
 
 
 @dataclass(repr=False)
@@ -216,16 +215,14 @@ class Shapes(Collection[Shape]):
         height: float = 72,
         *,
         auto_size: bool = True,
-    ) -> Label:
-        from .label import Label
-
+    ) -> Shape:
         orientation = constants.msoTextOrientationHorizontal
         api = self.api.AddLabel(orientation, left, top, width, height)
 
         if auto_size is False:
             api.TextFrame.AutoSize = False
 
-        label = Label(api, self.parent, self)
+        label = Shape(api, self.parent, self)
         label.text = text
         return label
 

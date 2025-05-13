@@ -1,6 +1,5 @@
 import pytest
 
-from pptxlib.core.app import App
 from pptxlib.core.presentation import Presentation, Presentations
 
 
@@ -13,9 +12,8 @@ def pr(prs: Presentations):
     return prs.add()
 
 
-def test_add(pr: Presentation, app: App):
-    assert isinstance(pr, Presentation)
-    assert app.presentations.active.name == pr.name
+def test_active(prs: Presentations, pr: Presentation):
+    assert prs.active.name == pr.name
 
 
 def test_getitem(prs: Presentations, pr: Presentation):

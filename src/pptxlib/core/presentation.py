@@ -41,6 +41,10 @@ class Presentations(Collection[Presentation]):
         api = self.api.Add()
         return Presentation(api, self.parent, self)
 
+    def close(self) -> None:
+        for pr in self:
+            pr.close()
+
     @property
     def active(self) -> Presentation:
         api = self.app.ActivePresentation

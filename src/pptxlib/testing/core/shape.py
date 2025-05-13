@@ -4,19 +4,22 @@ from typing import TYPE_CHECKING
 
 from win32com.client import constants
 
+from pptxlib.core.app import App
 from pptxlib.core.font import Font
-from pptxlib.testing.common import create_slide
 
 if TYPE_CHECKING:
     from pptxlib.core.presentation import Presentation
 
 
 def main():
-    slide = create_slide()
+    app = App()
+    app.presentations.close()
+    pr = app.presentations.add()
+    slide = pr.slides.add()
+
     s = slide.shapes.add("Rectangle", 100, 100, 100, 100)
     s.text = "abc"
-    s.font.size = 16
-    s.font.name = "Times New Roman"
+    s.font.set("Times New Roman", 16, True, True, "red")
     s.fill.set(color="red", alpha=0.5)
     s.line.set(color="blue", weight=5, alpha=0.5)
 
