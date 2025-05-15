@@ -1,6 +1,12 @@
 import pytest
 
+from pptxlib.core.app import is_app_available
 from pptxlib.core.slide import Slide, Slides
+
+pytestmark = pytest.mark.skipif(
+    not is_app_available(),
+    reason="PowerPoint is not available",
+)
 
 
 @pytest.fixture

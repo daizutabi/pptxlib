@@ -1,10 +1,16 @@
 import pytest
 from win32com.client import DispatchBaseClass
 
+from pptxlib.core.app import is_app_available
 from pptxlib.core.base import Collection, Element
 from pptxlib.core.shape import Shape, Shapes
 from pptxlib.core.slide import Slide
 from pptxlib.core.table import Table
+
+pytestmark = pytest.mark.skipif(
+    not is_app_available(),
+    reason="PowerPoint is not available",
+)
 
 
 def test_shapes(shapes: Shapes):

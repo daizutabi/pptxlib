@@ -1,5 +1,12 @@
-from pptxlib.core.app import App
+import pytest
+
+from pptxlib.core.app import App, is_app_available
 from pptxlib.core.presentation import Presentations
+
+pytestmark = pytest.mark.skipif(
+    not is_app_available(),
+    reason="PowerPoint is not available",
+)
 
 
 def test_repr(app: App):
