@@ -1,289 +1,162 @@
 import pytest
 
-from pptxlib.core.shape import Shapes
-from pptxlib.core.table import Cell, CellRange, Columns, Rows, Table, Tables
+from pptxlib.core.app import is_app_available
+from pptxlib.core.presentation import Presentations
+from pptxlib.core.table import Cell, Column, Row, Table
+
+pytestmark = pytest.mark.skipif(
+    not is_app_available(),
+    reason="PowerPoint is not available",
+)
 
 
-def test_add(tables: Tables, shapes: Shapes):
-    table = tables.add(2, 3, 100, 100, 240, 360)
-    assert table.left == 100
-    assert table.top == 100
-    assert table.parent.width == 240
-    assert table.parent.height == 360
-    assert len(shapes) == 2
-    assert len(tables) == 1
-    table.delete()
-    assert len(shapes) == 1
-    assert len(tables) == 0
-
-
-def test_call_getitem(tables: Tables):
-    t1 = tables.add(2, 3, 100, 100, 200, 200)
-    t2 = tables.add(4, 5, 200, 200, 300, 300)
-    assert len(tables) == 2
-    assert tables(1).left == 100
-    assert tables(2).left == 200
-    assert tables().left == 200
-    assert tables[0].left == 100  # type: ignore
-    assert tables[1].left == 200  # type: ignore
-    t1.delete()
-    t2.delete()
-
-
-def test_left(table: Table):
-    table.left = 10
-    assert table.left == 10
-
-
-def test_top(table: Table):
-    table.top = 10
-    assert table.top == 10
-
-
-def test_width(table: Table):
-    table.width = 200
-    assert round(table.width) == 200
-
-
-def test_height(table: Table):
-    table.height = 300
-    assert round(table.height) == 300
-
-
-def test_rows(rows: Rows):
-    assert len(rows) == 2
-
-
-def test_columns(columns: Columns):
-    assert len(columns) == 3
+@pytest.fixture(scope="module")
+def table(prs: Presentations):
+    pr = prs.add()
+    slide = pr.slides.add()
+    shapes = slide.shapes
+    table = shapes.add_table(2, 3, 100, 250, 100, 100)
+    for i, r in enumerate(table):
+        for j, c in enumerate(r):
+            c.text = f"{i},{j}"
+    yield table
+    pr.delete()
 
 
 def test_shape(table: Table):
     assert table.shape == (2, 3)
 
 
-@pytest.mark.parametrize("height", [None, 400])
-def test_row_height(height, rows: Rows, table: Table):
-    if height:
-        table.height = height
-
-    t = table.parent.height
-    h = table.rows.height
-    n = len(rows)
-    for k, row in enumerate(rows):
-        assert round(row.height) == round(t / n)
-        assert row.height == h[k]
+def test_cell_row_column(table: Table):
+    for i in range(2):
+        for j in range(3):
+            table.cell(i, j).text = f"{i},{j}"
 
 
-@pytest.mark.parametrize("width", [None, 400])
-def test_column_widtht(width, columns: Columns, table: Table):
-    if width:
-        table.width = width
-
-    t = table.parent.width
-    w = table.columns.width
-    n = len(columns)
-    for k, column in enumerate(columns):
-        assert round(column.width) == round(t / n)
-        assert column.width == w[k]
+def test_cell_index(table: Table):
+    assert table.cell(0).text == "0,0"
+    assert table.cell(1).text == "0,1"
+    assert table.cell(2).text == "0,2"
+    assert table.cell(3).text == "1,0"
+    assert table.cell(4).text == "1,1"
+    assert table.cell(5).text == "1,2"
 
 
-def test_row_height_list(rows: Rows, table: Table):
-    table.rows.height = [100, 200]
-    assert rows(1).height == 100
-    assert rows(2).height == 200
-    assert table.parent.height == 300
+def test_getitem_int(table: Table):
+    r = table[0]
+    assert isinstance(r, Row)
+    assert r[0].text == "0,0"
+    assert r[1].text == "0,1"
+    assert r[2].text == "0,2"
 
 
-def test_column_width_list(columns: Columns, table: Table):
-    table.columns.width = [100, 200, 300]
-    assert columns(1).width == 100
-    assert columns(2).width == 200
-    assert columns(3).width == 300
-    assert table.parent.width == 600
+def test_getitem_tuple_int_int(table: Table):
+    c = table[1, 2]
+    assert isinstance(c, Cell)
+    assert c.text == "1,2"
 
 
-def test_cell(table: Table):
-    c1 = table.cell(2, 1)
-    c2 = table.cell(4)
-    assert c1.top == c2.top
-    assert c1.left == c2.left
-    assert c1.width == c2.width
-    assert c1.height == c2.height
-
-    c1 = table.cell(2, 3)
-    c2 = table.cell(6)
-    assert c1.top == c2.top
-    assert c1.left == c2.left
+def test_getitem_tuple_int_slice(table: Table):
+    r = table[1, :]
+    assert isinstance(r, Row)
+    assert len(r) == 3
+    assert r[0].text == "1,0"
+    assert r[1].text == "1,1"
+    assert r[2].text == "1,2"
 
 
-def test_cell_text(table: Table):
-    cell = table.cell(1, 1)
-    cell.text = "a"
-    assert cell.text == "a"
-    cell.value = "a"
-    assert cell.value == "a"
+def test_getitem_tuple_slice_int(table: Table):
+    c = table[:, 2]
+    assert isinstance(c, Column)
+    assert len(c) == 2
+    assert c[0].text == "0,2"
+    assert c[1].text == "1,2"
+
+
+def test_fill(table: Table):
+    table.fill("red", alpha=0.5)
+    assert table[0, 0].shape.fill.color == 255
+    assert table[0, 0].shape.fill.alpha == 0.5
 
 
 def test_minimize_height(table: Table):
-    h1 = table.rows.height
+    for r in table.rows:
+        r.height = 100
+        assert r.height == 100
+    for c in table.columns:
+        c.width = 200
+        assert c.width == 200
     table.minimize_height()
-    h2 = table.rows.height
-    for x, y in zip(h1, h2, strict=True):
-        assert x > y
+    assert table.rows[0].height < 30
+    assert table.rows[1].height < 30
 
 
-def test_rows_cells(rows: Rows):
-    cells = rows(1).cells
-    assert cells.api.__class__.__name__ == "CellRange"
-    assert cells.__class__.__name__ == "CellRange"
-    assert len(cells) == 3
-    assert len(rows) == 2
+def test_axis_repr(table: Table):
+    assert repr(table[0]) == "<Row>"
+    assert repr(table[1, :]) == "<Row>"
+    assert repr(table[:, 2]) == "<Column>"
 
 
-def test_colums_cells(columns: Columns):
-    cells = columns(1).cells
-    assert cells.api.__class__.__name__ == "CellRange"
-    assert cells.__class__.__name__ == "CellRange"
-    assert len(cells) == 2
-    assert len(columns) == 3
+def test_rows_height(table: Table):
+    table.rows[0].height = 100
+    table.rows[1].height = 200
+    assert table.rows.height == [100, 200]
+    table.rows.height = [80, 90]
+    assert table.rows.height == [80, 90]
 
 
-def test_cell_from_cells(cell_range: CellRange):
-    cell = cell_range(1)
-    assert isinstance(cell, Cell)
-    assert isinstance(cell.parent, Table)
-
-
-def test_tables_repr(tables: Tables):
-    assert repr(tables) == "<Tables>"
-
-
-def test_table_repr(table: Table):
-    assert repr(table) == "<Table [Table]>"
-
-
-def test_rows_repr(rows: Rows):
-    assert repr(rows) == "<Rows>"
-
-
-def test_row_repr(rows: Rows):
-    assert repr(rows(1)) == "<Row [Row]>"
-
-
-def test_columns_repr(columns: Columns):
-    assert repr(columns) == "<Columns>"
-
-
-def test_column_repr(columns: Columns):
-    assert repr(columns(1)) == "<Column [Column]>"
+def test_columns_width(table: Table):
+    table.columns[0].width = 100
+    table.columns[1].width = 200
+    table.columns[2].width = 300
+    assert table.columns.width == [100, 200, 300]
+    table.columns.width = [70, 80, 90]
+    assert table.columns.width == [70, 80, 90]
 
 
 def test_cell_repr(table: Table):
-    assert repr(table.cell(1)) == "<Cell [Cell]>"
+    assert repr(table.cell(0, 0)) == "<Cell>"
 
 
-def test_cells_repr(rows: Rows, columns: Columns):
-    assert repr(rows(1).cells) == "<CellRange>"
-    assert repr(columns(1).cells) == "<CellRange>"
+def test_borders_row(table: Table):
+    b = table.rows[0].borders
+    b[0].set("red", alpha=0.5)
+    assert b["top"].color == 255
+    assert b["top"].alpha == 0.5
 
 
-def test_tables_parent(tables: Tables):
-    assert tables.api.Parent.__class__.__name__ == "_Slide"
-    assert tables.parent.__class__.__name__ == "Slide"
+def test_borders_rows(table: Table):
+    b = table.rows.borders
+    b[1].set("blue", alpha=0.2, weight=3)
+    for r in table.rows:
+        b = r.borders["left"]
+        assert b.color == 255 * 256 * 256
+        assert 0.199 <= b.alpha <= 0.2
+        assert b.weight == 3
 
 
-def test_table_parent(table: Table, tables: Tables):
-    assert table.api.Parent.__class__.__name__ == "Shape"
-    assert table.parent.__class__.__name__ == "Shape"
-    assert tables(1).parent.__class__.__name__ == "Shape"
+def test_borders_columns(table: Table):
+    b = table.columns.borders
+    b[2].set("red", alpha=0.3, weight=2)
+    for r in table.columns:
+        b = r.borders["bottom"]
+        assert b.color == 255
+        assert 0.299 <= b.alpha <= 0.301
+        assert b.weight == 2
 
 
-def test_rows_parent(rows: Rows):
-    assert rows.api.Parent.__class__.__name__ == "Table"
-    assert rows.parent.__class__.__name__ == "Table"
+def test_borders_cell(table: Table):
+    b = table[1, 1].borders
+    b[3].set("red", alpha=0.3, weight=4)
+    b = b["right"]
+    assert b.color == 255
+    assert 0.299 <= b.alpha <= 0.301
+    assert b.weight == 4
 
 
-def test_row_parent(rows: Rows):
-    assert rows(1).api.Parent.__class__.__name__ == "Table"
-    assert rows(1).parent.__class__.__name__ == "Table"
+def test_line_format(table: Table):
+    from pptxlib.core.table import LineFormat
 
-
-def test_columns_parent(columns: Columns):
-    assert columns.api.Parent.__class__.__name__ == "Table"
-    assert columns.parent.__class__.__name__ == "Table"
-
-
-def test_column_parent(columns: Columns):
-    assert columns(1).api.Parent.__class__.__name__ == "Table"
-    assert columns(1).parent.__class__.__name__ == "Table"
-
-
-def test_cell_parent(cell: Cell):
-    assert cell.api.Parent.__class__.__name__ == "Table"
-    assert cell.parent.__class__.__name__ == "Table"
-
-
-def test_cells_parent(rows: Rows, columns: Columns):
-    assert rows(1).cells.api.Parent.__class__.__name__ == "Row"
-    assert rows(1).cells.parent.__class__.__name__ == "Row"
-    assert columns(1).cells.api.Parent.__class__.__name__ == "Column"
-    assert columns(1).cells.parent.__class__.__name__ == "Column"
-
-
-def test_cell_borders(cell: Cell):
-    assert isinstance(cell, Cell)
-    assert cell.borders.api.__class__.__name__ == "Borders"
-    assert cell.borders.__class__.__name__ == "Borders"
-
-
-def test_cell_range_borders(cell_range: CellRange):
-    assert isinstance(cell_range, CellRange)
-    assert cell_range.borders.api.__class__.__name__ == "Borders"
-    assert cell_range.borders.__class__.__name__ == "Borders"
-
-
-def test_cell_borders_parent(cell: Cell):
-    assert cell.borders.api.Parent.__class__.__name__ == "Table"
-    assert cell.borders.parent.__class__.__name__ == "Table"
-
-
-def test_cell_range_borders_parent(cell_range: CellRange):
-    assert isinstance(cell_range, CellRange)
-    assert cell_range.borders.api.Parent.__class__.__name__ == "Table"
-    assert cell_range.borders.parent.__class__.__name__ == "Table"
-
-
-# def test_table_repr(table: Table):
-#     assert repr(table) == "<Table [Table]>"
-
-
-# def test_rows_repr(rows: Rows):
-#     assert repr(rows) == "<Rows>"
-
-
-# def test_row_repr(rows: Rows):
-#     assert repr(rows(1)) == "<Row [Row]>"
-
-
-# def test_columns_repr(columns: Columns):
-#     assert repr(columns) == "<Columns>"
-
-
-# def test_column_repr(columns: Columns):
-#     assert repr(columns(1)) == "<Column [Column]>"
-
-
-# a = 1
-
-# from pptxlib import PowerPoint
-
-# pp = PowerPoint()
-# pr = pp.presentations.add()
-# slide = pr.slides.add()
-# table = slide.tables.add(2, 3, 10, 10)
-# table.api.FirstRow = False
-# table.api.HorizBanding = False
-
-# cell = table.cell(1, 1)
-# cell.set_border("left", 2)
+    lf = table[1, 1].borders["top"]
+    assert isinstance(lf, LineFormat)
+    assert repr(lf) == "<LineFormat>"

@@ -32,6 +32,11 @@ def main():
     table[1, 1].borders[0].set(color="red", weight=5, alpha=0.5)
     table.columns.borders["bottom"].set(color="green", weight=5, alpha=0.5)
     table[1].borders["left"].set(color="green", weight=5, alpha=0.5)
+
+    c = table[0, 0]
+    c.text = "abc"
+    for c in table.columns:
+        c.width = 100
     # table.fill("red", (0, 0), (1, 2))
     # print(table[0, 0].shape.api.Fill.Transparency)
     # table[0, 0].shape.api.Fill.Transparency = 1

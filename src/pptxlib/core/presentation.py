@@ -19,6 +19,9 @@ class Presentation(Element):
     def close(self) -> None:
         self.api.Close()
 
+    def delete(self) -> None:
+        self.close()
+
     @property
     def slides(self) -> Slides:
         return Slides(self.api.Slides, self)
