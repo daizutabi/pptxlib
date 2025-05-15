@@ -6,8 +6,9 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 from win32com.client import constants
 
 from pptxlib.colors import rgb
-from pptxlib.core.base import Base, Collection, Element
-from pptxlib.core.font import Font
+
+from .base import Base, Collection, Element
+from .font import Font
 
 if TYPE_CHECKING:
     from typing import Self

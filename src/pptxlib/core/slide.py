@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING, ClassVar
 
 from win32com.client import constants
 
-from pptxlib.core.base import Collection, Element
-from pptxlib.core.shape import Shapes
+from .base import Collection, Element
+from .shape import Shapes
 
 if TYPE_CHECKING:
     from .presentation import Presentation

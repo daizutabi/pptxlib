@@ -3,8 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
-from pptxlib.core.base import Collection, Element
-
+from .base import Collection, Element
 from .slide import Slides
 
 if TYPE_CHECKING:

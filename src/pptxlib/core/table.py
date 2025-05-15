@@ -5,8 +5,8 @@ from typing import TYPE_CHECKING, ClassVar, Literal, overload
 
 from win32com.client import constants
 
-from pptxlib.core.base import Collection, Element
-from pptxlib.core.shape import Line, Shape
+from .base import Collection, Element
+from .shape import Line, Shape
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
