@@ -1,6 +1,13 @@
 import pytest
 from win32com.client import constants
 
+from pptxlib.core.app import is_app_available
+
+pytestmark = pytest.mark.skipif(
+    not is_app_available(),
+    reason="PowerPoint is not available",
+)
+
 
 @pytest.fixture(scope="module")
 def tlbs():
