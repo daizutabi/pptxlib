@@ -1,14 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-from win32com.client import constants
-
 from pptxlib.core.app import App
-from pptxlib.core.font import Font
-
-if TYPE_CHECKING:
-    from pptxlib.core.presentation import Presentation
 
 
 def main():

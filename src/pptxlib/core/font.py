@@ -5,9 +5,8 @@ from typing import Self
 
 from win32com.client import constants
 
-from pptxlib.colors import rgb
-
 from .base import Base
+from .color import rgb
 
 
 @dataclass(repr=False)

@@ -5,9 +5,8 @@ from typing import TYPE_CHECKING, ClassVar, Literal
 
 from win32com.client import constants
 
-from pptxlib.colors import rgb
-
 from .base import Base, Collection, Element
+from .color import rgb
 from .font import Font
 
 if TYPE_CHECKING:

@@ -2,6 +2,7 @@ import pytest
 
 from pptxlib.core.app import is_app_available
 from pptxlib.core.font import Font
+from pptxlib.core.presentation import Presentations
 from pptxlib.core.shape import Shape, Shapes
 
 pytestmark = pytest.mark.skipif(
@@ -10,9 +11,12 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-@pytest.fixture
-def shape(shapes: Shapes):
-    return shapes[0]
+@pytest.fixture(scope="module")
+def shape(prs: Presentations):
+    pr = prs.add()
+    slide = pr.slides.add()
+    yield slide.shapes[0]
+    pr.delete()
 
 
 @pytest.fixture
