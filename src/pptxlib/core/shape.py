@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, ClassVar, Literal
 
 from win32com.client import constants
@@ -12,6 +14,8 @@ from .font import Font
 if TYPE_CHECKING:
     from typing import Self
 
+    from matplotlib.figure import Figure
+    from PIL.Image import Image
     from win32com.client import DispatchBaseClass
 
     from .slide import Slide
@@ -166,6 +170,9 @@ class Shape(Element):
     def line(self) -> Line:
         return Line(self.api.Line)
 
+    def copy(self) -> None:
+        self.api.Copy()
+
 
 @dataclass(repr=False)
 class Shapes(Collection[Shape]):
@@ -228,193 +235,130 @@ class Shapes(Collection[Shape]):
         api = self.api.AddTable(num_rows, num_columns, left, top, width, height)
         return Table(api, self.parent, self)
 
+    def add_picture(
+        self,
+        file_name: str | Path,
+        left: float = 0,
+        top: float = 0,
+        width: float = -1,
+        height: float = -1,
+        scale: float | None = None,
+    ) -> Shape:
+        file_name = Path(file_name).absolute()
 
-#     def add_picture(self, path=None, left=0, top=0, width=None, height=None, scale=1, **kwargs):
-#         if not isinstance(path, str):
-#             return self.add_picture_matplotlib(path, left, top, width, scale, **kwargs)
+        api = self.api.AddPicture(
+            FileName=file_name,
+            LinkToFile=False,
+            SaveWithDocument=True,
+            Left=left,
+            Top=top,
+            Width=width,
+            Height=height,
+        )
 
-#         path = os.path.abspath(path)
+        if scale is not None:
+            api.ScaleWidth(scale, 1)
+            api.ScaleHeight(scale, 1)
 
-#         # オリジナルの大きさするために以下のwidth, heightの指定が必要．
-#         # width = 300 を width = 100 等とすると小さく表示される．なぜ？
-#         if width is None:
-#             width_ = 300
-#             scale_ = scale
-#         else:
-#             width_ = width
-#             scale_ = None
-#         with PIL.Image.open(path) as image:
-#             size = image.size
-#         if height is None:
-#             height_ = width_ * size[1] / size[0]
-#         else:
-#             height_ = height
+        return Shape(api, self.parent, self)
 
-#         shape = self.api.AddPicture(
-#             FileName=path,
-#             LinkToFile=False,
-#             SaveWithDocument=True,
-#             Left=left,
-#             Top=top,
-#             Width=width_,
-#             Height=height_,
-#         )
+    def add_image(
+        self,
+        image: Image,
+        left: float = 0,
+        top: float = 0,
+        width: float = -1,
+        height: float = -1,
+        scale: float | None = None,
+    ) -> Shape:
+        with NamedTemporaryFile(suffix=".png", delete=False) as file:
+            file_name = Path(file.name)
+            image.save(file_name)
+            shape = self.add_picture(file_name, left, top, width, height, scale)
 
-#         if scale_:
-#             shape.ScaleWidth(scale, 1)
-#             shape.ScaleHeight(scale, 1)
-#         return Shape(shape, parent=self.parent)
+        file_name.unlink()
+        return shape
 
-#     def add_picture_matplotlib(self, fig=None, left=0, top=0, width=None, scale=1, dpi=None):
-#         if fig is None:
-#             fig = plt.gcf()
-#         elif not hasattr(fig, "savefig"):
-#             fig = fig.figure
+    def add_figure(
+        self,
+        fig: Figure,
+        left: float = 0,
+        top: float = 0,
+        width: float = -1,
+        height: float = -1,
+        scale: float | None = None,
+        dpi: int | Literal["figure"] = "figure",
+        transparent: bool | None = None,
+    ) -> Shape:
+        with NamedTemporaryFile(suffix=".png", delete=False) as file:
+            file_name = Path(file.name)
+            fig.savefig(
+                file_name,
+                dpi=dpi,
+                bbox_inches="tight",
+                transparent=transparent,
+            )
+            shape = self.add_picture(file_name, left, top, width, height, scale)
 
-#         with tempfile.TemporaryDirectory() as directory:
-#             path = os.path.join(directory, "a.png")
-#             fig.savefig(path, dpi=dpi, bbox_inches="tight")
-#             return self.add_picture(path, left, top, width, None, scale)
+        file_name.unlink()
+        return shape
 
-#     def add_frame(self, df, left=None, top=None, **kwargs):
-#         excel = xw.App(visible=False)
-#         book = excel.books(1)
-#         sheet = book.sheets(1)
-#         sf = SheetFrame(sheet, 2, 2, data=df, **kwargs)
-#         sf.range().api.Copy()
-#         self.parent.api.Select()
-#         n = len(self)
-#         api = self.parent.parent.parent.api
-#         api.CommandBars.ExecuteMso("PasteSourceFormatting")
-#         while len(self) == n:  # wait for creating a table
-#             pass
-#         book.api.CutCopyMode = False  # Don't show confirm message
-#         excel.quit()
-#         excel.kill()
+    def paste(
+        self,
+        left: float | None = None,
+        top: float | None = None,
+        width: float | None = None,
+        height: float | None = None,
+    ) -> Shape:
+        api = self.api.Paste()
 
-#         shape = Shape.from_collection(self)  # type: Shape
-#         if left:
-#             shape.left = left
-#         if top:
-#             shape.top = top
+        if left is not None:
+            api.Left = left
+        if top is not None:
+            api.Top = top
+        if width is not None:
+            api.Width = width
+        if height is not None:
+            api.Height = height
 
-#         shape.table.clean()
-#         shape.table.minimize_height()
+        return Shape(api, self.parent, self)
 
-#         return shape
+    def paste_special(
+        self,
+        data_type: int | str = 0,
+        left: float | None = None,
+        top: float | None = None,
+        width: float | None = None,
+        height: float | None = None,
+    ) -> Shape:
+        """
+        Args:
+            data_type (int):
+                0: ppPasteDefault
+                1: ppPasteBitmap
+                2: ppPasteEnhancedMetafile
+                4: ppPasteGIF
+                8: ppPasteHTML
+                5: ppPasteJPG
+                3: ppPasteMetafilePicture
+                10: ppPasteOLEObject
+                6: ppPastePNG
+                9: ppPasteRTF
+                11: ppPasteShape
+                7: ppPasteText
+        """
+        if isinstance(data_type, str):
+            data_type = getattr(constants, f"ppPaste{data_type}")
 
-#     def add_range(self, range_, data_type=2, left=None, top=None, width=None, height=None):
-#         """
+        api = self.api.PasteSpecial(data_type)
 
-#         Parameters
-#         ----------
-#         range_ : xlwings.Range
-#         data_type : int
-#             0: ppPasteDefault (既定の内容)
-#             1: ppPasteBitmap (ビットマップ)
-#             2: ppPasteEnhancedMetafile (拡張メタファイル)
-#             4: ppPasteGIF
-#             8: ppPasteHTML
-#             5: ppPasteJPG
-#             3: ppPasteMetafilePicture
-#             10: ppPasteOLEObject
-#             6: ppPastePNG
-#             9: ppPasteRTF
-#             11: ppPasteShape
-#             7: ppPasteText
-#         left, top, width, height: int, optional
-#             図形のディメンジョン
+        if left is not None:
+            api.Left = left
+        if top is not None:
+            api.Top = top
+        if width is not None:
+            api.Width = width
+        if height is not None:
+            api.Height = height
 
-#         Returns
-#         -------
-#         Shape
-#         """
-#         range_.api.Copy()
-#         shape = self.api.PasteSpecial(data_type)
-#         # range.sheet.book.api.CutCopyMode = False
-#         shape.LockAspectRatio = 0
-#         if left:
-#             shape.Left = left
-#         if top:
-#             shape.Top = top
-#         if width:
-#             shape.Width = width
-#         if height:
-#             shape.Height = height
-
-#         return Shape(shape, parent=self.parent)
-
-#     def add_chart(self, chart, left=None, top=None, width=None, height=None, scale=None):
-#         """
-#         Parameters
-#         ----------
-#         chart : xlwings or altairのチャート
-#         left, top, width, height: int, optional
-#             図形のディメンジョン
-
-#         Returns
-#         -------
-#         Shape
-#         """
-#         if isinstance(chart, list):
-#             charts = chart
-#             left_ = charts[0].left
-#             top_ = charts[0].top
-#             shapes = []
-#             for chart in charts:
-#                 shape = self.add_chart(
-#                     chart,
-#                     left=chart.left - left_ + left,
-#                     top=chart.top - top_ + top,
-#                     width=width,
-#                     height=height,
-#                 )
-#                 shapes.append(shape)
-#             return shapes
-
-#         if hasattr(chart, "save"):
-#             return self.add_chart_altair(chart, left, top, width, height, scale)
-#         else:
-#             return self.add_chart_xlwings(chart, left, top, width, height)
-
-#     def add_chart_altair(self, chart, left=None, top=None, width=None, height=None, scale=None):
-#         """
-#         Parameters
-#         ----------
-#         chart : altairのチャート
-#         left, top, width, height: int, optional
-#             図形のディメンジョン
-
-#         Returns
-#         -------
-#         Shape
-#         """
-#         with tempfile.TemporaryDirectory() as directory:
-#             path = os.path.join(directory, "a.png")
-#             chart.save(path)
-#             return self.add_picture(path, left, top, width, height, scale)
-
-#     def add_chart_xlwings(self, chart, left=None, top=None, width=None, height=None):
-#         """
-#         Parameters
-#         ----------
-#         chart : xlwingsのチャート
-#         left, top, width, height: int, optional
-#             図形のディメンジョン
-
-#         Returns
-#         -------
-#         Shape
-#         """
-#         chart.api[0].Copy()
-#         shape = self.api.Paste()
-#         if left:
-#             shape.Left = left
-#         if top:
-#             shape.Top = top
-#         if width:
-#             shape.Width = width
-#         if height:
-#             shape.Height = height
-
-#         return Shape(shape, parent=self.parent)
+        return Shape(api, self.parent, self)

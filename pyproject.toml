@@ -27,6 +27,7 @@ Issues = "https://github.com/daizutabi/pptxlib/issues"
 [dependency-groups]
 dev = [
   "matplotlib>=3.10",
+  "pillow>=11",
   "pytest-clarity>=1",
   "pytest-cov>=6",
   "pytest-randomly>=3",

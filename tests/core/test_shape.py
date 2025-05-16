@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+import numpy as np
+import PIL.Image
 import pytest
 from win32com.client import DispatchBaseClass
 
@@ -80,7 +83,7 @@ def test_top(shape: Shape):
 
 def test_top_center(shape: Shape, slide: Slide):
     shape.top = "center"
-    assert round(shape.top + shape.height / 2) == round(slide.height / 2)
+    assert round(shape.top + shape.height / 2) == round(slide.height / 2)  # type: ignore
 
 
 def test_top_neg(shape: Shape, slide: Slide):
@@ -159,3 +162,62 @@ def test_shape_parent(shape: Shape, shapes: Shapes):
     assert shape.api.Parent.__class__.__name__ == "_Slide"
     assert shape.parent.__class__.__name__ == "Slide"
     assert shapes[0].parent.__class__.__name__ == "Slide"
+
+
+@pytest.fixture(scope="module")
+def image():
+    array = np.random.randint(0, 255, (200, 100, 3), dtype=np.uint8)  # noqa: NPY002
+    return PIL.Image.fromarray(array)
+
+
+def test_add_image(shapes: Shapes, image: PIL.Image.Image):
+    shape = shapes.add_image(image, 20, 30)
+    assert shape.left == 20
+    assert shape.top == 30
+    assert shape.width == image.width * 0.75
+    assert shape.height == image.height * 0.75
+
+
+def test_add_image_scale(shapes: Shapes, image: PIL.Image.Image):
+    shape = shapes.add_image(image, scale=2)
+    assert shape.width == image.width * 0.75 * 2
+    assert shape.height == image.height * 0.75 * 2
+
+
+def test_add_figure(shapes: Shapes):
+    fig, ax = plt.subplots(figsize=(2, 1), dpi=100)
+    ax.plot([1, 2, 3, 4, 5])
+    s1 = shapes.add_figure(fig)
+    s2 = shapes.add_figure(fig, dpi=300)
+    assert abs(s1.width - s2.width) < 1
+    assert abs(s1.height - s2.height) < 1
+
+
+def test_paste(shapes: Shapes, image: PIL.Image.Image):
+    shape = shapes.add_image(image, 20, 30)
+    shape.copy()
+    s = shapes.paste(20, 100, 200)
+    assert round(s.left) == 20
+    assert round(s.top) == 100
+    assert round(s.width) == 200
+    assert round(s.height) == 400
+    s = shapes.paste(20, 100, height=200)
+    assert round(s.left) == 20
+    assert round(s.top) == 100
+    assert round(s.width) == 100
+    assert round(s.height) == 200
+
+
+def test_paste_special(shapes: Shapes, image: PIL.Image.Image):
+    shape = shapes.add_image(image, 20, 30)
+    shape.copy()
+    s = shapes.paste_special("GIF", 20, 100, 200)
+    assert round(s.left) == 20
+    assert round(s.top) == 100
+    assert round(s.width) == 200
+    assert round(s.height) == 400
+    s = shapes.paste_special("PNG", 20, 100, height=200)
+    assert round(s.left) == 20
+    assert round(s.top) == 100
+    assert round(s.width) == 100
+    assert round(s.height) == 200
