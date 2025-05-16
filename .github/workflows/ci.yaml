@@ -33,10 +33,10 @@ jobs:
         run: pip install uv
       - name: Install the project
         run: uv sync
-      # - name: Ruff check
-      # run: uv run ruff check .
-      - name: Run test
-        run: uv run pytest tests/test_version.py --junitxml=junit.xml
+      - name: Ruff check
+        run: uv run ruff check .
+      - name: Run tests
+        run: uv run pytest --junitxml=junit.xml
       - name: Upload Codecov Results
         if: success()
         uses: codecov/codecov-action@v4

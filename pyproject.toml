@@ -17,36 +17,34 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
 ]
 requires-python = ">=3.11"
-dependencies = ["matplotlib", "pywin32"]
+dependencies = ["pywin32"]
 
 [project.urls]
-Documentation = "https://daizutabi.github.io/pptxlib"
+Documentation = "https://github.com/daizutabi/pptxlib"
 Source = "https://github.com/daizutabi/pptxlib"
 Issues = "https://github.com/daizutabi/pptxlib/issues"
 
-[tool.uv]
-dev-dependencies = [
-  "mkapi",
-  "mkdocs-material",
-  "mkdocs>=1.6",
+[dependency-groups]
+dev = [
+  "matplotlib>=3.10",
+  "pillow>=11",
   "pytest-clarity>=1",
   "pytest-cov>=6",
   "pytest-randomly>=3",
+  "ruff>=0.11",
 ]
 
-[tool.hatch.build.targets.sdist]
-exclude = ["/.github", "/docs"]
-
-[tool.hatch.build.targets.wheel]
-packages = ["src/pptxlib"]
-
 [tool.pytest.ini_options]
-addopts = ["--cov-report=lcov:lcov.info", "--cov=pptxlib", "--doctest-modules"]
-doctest_optionflags = []
-filterwarnings = ['ignore:setDaemon\(\) is deprecated:DeprecationWarning']
+addopts = [
+  "--cov-report=lcov:lcov.info",
+  "--cov=pptxlib",
+  "--doctest-modules",
+  "-p no:faulthandler",
+]
 
 [tool.coverage.report]
 exclude_lines = ["no cov", "raise NotImplementedError", "if TYPE_CHECKING:"]
+skip_covered = true
 
 [tool.ruff]
 line-length = 88
@@ -61,11 +59,14 @@ ignore = [
   "ANN401",
   "ARG002",
   "B904",
+  "D",
   "D105",
   "D107",
   "D203",
   "D213",
   "EM101",
+  "ERA001",
+  "PLR",
   "PGH003",
   "TRY003",
 ]
@@ -84,3 +85,10 @@ ignore = [
   "SIM117",
   "SLF",
 ]
+"src/pptxlib/testing/*" = ["ANN", "T"]
+
+[tool.pyright]
+include = ["src", "tests"]
+strictDictionaryInference = true
+strictListInference = true
+strictSetInference = true

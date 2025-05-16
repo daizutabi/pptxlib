@@ -1,6 +1,6 @@
 site_name: pptxlib
 site_url: https://daizutabi.github.io/pptxlib/
-site_description: PDF documentation generator
+site_description: Transform Jupyter Notebooks and Markdown into publication-quality PDF documents with high-fidelity visualizations.
 site_author: daizutabi
 repo_url: https://github.com/daizutabi/pptxlib/
 repo_name: daizutabi/pptxlib
@@ -27,7 +27,6 @@ theme:
     - content.code.annotate
     - navigation.expand
     - navigation.indexes
-    - navigation.instant
     - navigation.sections
     - navigation.tabs
     - navigation.tabs.sticky
@@ -42,7 +41,5 @@ markdown_extensions:
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences
-  - pymdownx.tabbed:
-      alternate_style: true
 nav:
   - index.md

@@ -19,12 +19,12 @@ def iter_typelib_specs() -> Iterator[TypelibSpec]:
             yield tlb
 
 
-def ensure_module(tlb: TypelibSpec):
+def ensure_module(tlb: TypelibSpec) -> None:
     major = int(tlb.major, 16)
     minor = int(tlb.minor, 16)
     gencache.EnsureModule(tlb.clsid, tlb.lcid, major, minor)  # type: ignore
 
 
-def ensure_modules():
+def ensure_modules() -> None:
     for tlb in iter_typelib_specs():
         ensure_module(tlb)

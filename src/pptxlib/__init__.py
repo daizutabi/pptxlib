@@ -1,5 +1,5 @@
 """PowerPoint library."""
 
-from pptxlib.app import PowerPoint
+from pptxlib.core.app import App
 
-__all__ = ["PowerPoint"]
+__all__ = ["App"]
