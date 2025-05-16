@@ -44,7 +44,7 @@ def is_app_available() -> bool:
     try:
         with App():
             pass
-    except com_error:
+    except com_error:  # no cov
         return False
 
     return True

@@ -29,6 +29,8 @@ def main():
     c.text = "abc"
     for c in table.columns:
         c.width = 100
+
+    s.select()
     # table.fill("red", (0, 0), (1, 2))
     # print(table[0, 0].shape.api.Fill.Transparency)
     # table[0, 0].shape.api.Fill.Transparency = 1

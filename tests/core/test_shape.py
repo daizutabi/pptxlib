@@ -29,6 +29,10 @@ def shape(shapes: Shapes):
     return shapes[0]
 
 
+def test_select(shape: Shape):
+    assert shape.select() is None
+
+
 def test_title(shapes: Shapes, shape: Shape):
     assert shapes.title.name == shape.name
 

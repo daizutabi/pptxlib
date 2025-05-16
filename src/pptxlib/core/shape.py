@@ -158,25 +158,13 @@ class Shape(Element):
     def font(self) -> Font:
         return Font(self.text_range.Font)
 
-    @font.setter
-    def font(self, value: Font) -> None:
-        self.font.update(value)
-
     @property
     def fill(self) -> Fill:
         return Fill(self.api.Fill)
 
-    @fill.setter
-    def fill(self, value: Fill) -> None:
-        self.fill.update(value)
-
     @property
     def line(self) -> Line:
         return Line(self.api.Line)
-
-    @line.setter
-    def line(self, value: Line) -> None:
-        self.line.update(value)
 
 
 @dataclass(repr=False)

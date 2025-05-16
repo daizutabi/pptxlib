@@ -13,7 +13,9 @@ def app():
 
 @pytest.fixture(scope="session")
 def prs(app: App):
-    return app.presentations
+    prs = app.presentations
+    yield prs
+    prs.close()
 
 
 @pytest.fixture

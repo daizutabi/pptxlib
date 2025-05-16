@@ -1,4 +1,5 @@
 import pytest
+from win32com.client import constants
 
 from pptxlib.core.app import is_app_available
 from pptxlib.core.slide import Slide, Slides
@@ -29,3 +30,10 @@ def test_height(slide: Slide):
 def test_title(slide: Slide):
     slide.title = "Title"
     assert slide.title == "Title"
+
+
+def test_layout(slides: Slides):
+    slide = slides.add(layout="Blank")
+    assert slide.api.Layout == constants.ppLayoutBlank
+    slide = slides.add()
+    assert slide.api.Layout == constants.ppLayoutBlank
