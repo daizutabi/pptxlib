@@ -7,9 +7,8 @@ from typing import TYPE_CHECKING, Self
 import win32com.client
 from pywintypes import com_error
 
-from pptxlib.client import ensure_modules
-
 from .base import Base
+from .client import ensure_modules
 from .presentation import Presentations
 
 if TYPE_CHECKING:

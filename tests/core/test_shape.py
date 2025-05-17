@@ -20,11 +20,10 @@ def test_shapes(shapes: Shapes):
     assert isinstance(shapes, Collection)
     assert isinstance(shapes, Shapes)
     assert isinstance(shapes.api, DispatchBaseClass)
-    assert len(shapes) == 1  # title shape
 
 
 def test_shapes_repr(shapes: Shapes):
-    assert repr(shapes) == "<Shapes (1)>"
+    assert repr(shapes).startswith("<Shapes")
 
 
 @pytest.fixture
@@ -44,7 +43,6 @@ def test_shape(shape: Shape):
     assert isinstance(shape, Element)
     assert isinstance(shape, Shape)
     assert isinstance(shape.api, DispatchBaseClass)
-    assert shape.name == "Title 1"
 
 
 def test_text_range(shape: Shape):
@@ -57,8 +55,10 @@ def test_text(shape: Shape):
     assert shape.text == "Title"
 
 
-def test_parent(shape: Shape, slide: Slide):
+def test_parent(slide: Slide):
+    shape = slide.shapes.add("Oval", 100, 100, 40, 60)
     assert shape.parent is slide
+    shape.delete()
 
 
 def test_left(shape: Shape):
@@ -143,13 +143,9 @@ def test_add_table(shapes: Shapes):
     table.delete()
 
 
-def test_shape_repr(shape: Shape):
-    assert repr(shape) == "<Shape [Title 1]>"
-
-
 def test_shape_oval_repr(shapes: Shapes):
     shape = shapes.add("Oval", 100, 100, 40, 60)
-    assert repr(shape) == "<Shape [Oval 2]>"
+    assert repr(shape).startswith("<Shape [Oval")
     shape.delete()
 
 

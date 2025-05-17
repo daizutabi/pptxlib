@@ -2,7 +2,7 @@ import pytest
 
 from pptxlib.core.app import App
 from pptxlib.core.presentation import Presentation, Presentations
-from pptxlib.core.slide import Slide, Slides
+from pptxlib.core.slide import Slides
 
 
 @pytest.fixture(scope="session")
@@ -37,6 +37,14 @@ def slide(slides: Slides):
     slide.delete()
 
 
-@pytest.fixture
-def shapes(slide: Slide):
-    return slide.shapes
+# @pytest.fixture
+# def shapes(slide: Slide):
+#     return slide.shapes
+
+
+@pytest.fixture(scope="module")
+def shapes(prs: Presentations):
+    pr = prs.add()
+    slide = pr.slides.add()
+    yield slide.shapes
+    pr.delete()
