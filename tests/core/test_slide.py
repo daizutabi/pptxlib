@@ -1,3 +1,6 @@
+from pathlib import Path
+
+import PIL.Image
 import pytest
 from win32com.client import constants
 
@@ -37,3 +40,12 @@ def test_layout(slides: Slides):
     assert slide.api.Layout == constants.ppLayoutBlank
     slide = slides.add()
     assert slide.api.Layout == constants.ppLayoutBlank
+
+
+def test_png(slide: Slide, tmp_path: Path):
+    data = slide.png()
+    assert data.startswith(b"\x89PNG")
+    path = tmp_path.joinpath("a.png")
+    path.write_bytes(data)
+    image = PIL.Image.open(path)
+    assert image.size == (1280, 720)
