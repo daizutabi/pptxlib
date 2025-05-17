@@ -21,10 +21,6 @@ class Slide(Element):
     def shapes(self) -> Shapes:
         return Shapes(self.api.Shapes, self)
 
-    # @property
-    # def tables(self) -> Tables:
-    #     return Tables(self.api.Shapes, self)
-
     @property
     def title(self) -> str:
         return self.shapes.title.text if len(self.shapes) else ""

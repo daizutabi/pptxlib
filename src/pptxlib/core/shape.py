@@ -12,6 +12,7 @@ from .color import rgb
 from .font import Font
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
     from typing import Self
 
     from matplotlib.figure import Figure
@@ -279,6 +280,31 @@ class Shape(Element):
         shapes = self.collection
         return shapes.add_connector(self, shape, direction)
 
+    def export(self, file_name: str | Path, fmt: str | int | None = None) -> None:
+        if fmt is None:
+            fmt = Path(file_name).suffix[1:]
+        if isinstance(fmt, str):
+            fmt = getattr(constants, f"ppShapeFormat{fmt.upper()}")
+        self.api.Export(str(file_name), fmt)
+
+    def png(self) -> bytes:
+        with NamedTemporaryFile(suffix=".png", delete=False) as file:
+            file_name = Path(file.name)
+
+        self.export(file_name)
+        data = file_name.read_bytes()
+        file_name.unlink()
+        return data
+
+    def svg(self) -> str:
+        with NamedTemporaryFile(suffix=".svg", delete=False) as file:
+            file_name = Path(file.name)
+
+        self.export(file_name)
+        text = file_name.read_text()
+        file_name.unlink()
+        return text
+
 
 @dataclass(repr=False)
 class Shapes(Collection[Shape]):
@@ -389,9 +415,9 @@ class Shapes(Collection[Shape]):
     ) -> Shape:
         with NamedTemporaryFile(suffix=".png", delete=False) as file:
             file_name = Path(file.name)
-            image.save(file_name)
-            shape = self.add_picture(file_name, left, top, width, height, scale)
 
+        image.save(file_name)
+        shape = self.add_picture(file_name, left, top, width, height, scale)
         file_name.unlink()
         return shape
 
@@ -408,14 +434,9 @@ class Shapes(Collection[Shape]):
     ) -> Shape:
         with NamedTemporaryFile(suffix=".png", delete=False) as file:
             file_name = Path(file.name)
-            fig.savefig(
-                file_name,
-                dpi=dpi,
-                bbox_inches="tight",
-                transparent=transparent,
-            )
-            shape = self.add_picture(file_name, left, top, width, height, scale)
 
+        fig.savefig(file_name, dpi=dpi, bbox_inches="tight", transparent=transparent)
+        shape = self.add_picture(file_name, left, top, width, height, scale)
         file_name.unlink()
         return shape
 
@@ -511,3 +532,13 @@ class Shapes(Collection[Shape]):
             api.Height = height
 
         return Shape(api, self.parent, self)
+
+    def range(self, shapes: Iterable[Shape]) -> ShapeRange:
+        names = [s.api.Name for s in shapes]
+        return ShapeRange(self.api.Range(names), self.parent, self)
+
+
+@dataclass(repr=False)
+class ShapeRange(Shape):
+    def __repr__(self) -> str:
+        return f"<{self.__class__.__name__} [{self.api.Count}]>"

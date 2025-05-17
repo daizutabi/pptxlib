@@ -37,8 +37,8 @@ class Element(Base):
     def name(self, value: str) -> None:
         self.api.Name = value
 
-    def select(self) -> None:
-        self.api.Select()
+    def select(self, *, replace: bool = True) -> None:
+        self.api.Select(replace)
 
     def delete(self) -> None:
         self.api.Delete()
