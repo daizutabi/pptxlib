@@ -11,6 +11,10 @@ from .base import Collection, Element
 from .shape import Shapes
 
 if TYPE_CHECKING:
+    from typing import Self
+
+    from win32com.client import DispatchBaseClass
+
     from .presentation import Presentation
 
 
@@ -54,34 +58,102 @@ class Slide(Element):
         file_name.unlink()
         return data
 
+    @property
+    def layout(self) -> Layout:
+        return Layout(self.api.CustomLayout, self.parent, self.parent.layouts)
+
+    @layout.setter
+    def layout(self, layout: int | str | Layout) -> None:
+        layout_ = self.parent.layouts.get_api(layout)
+        if isinstance(layout_, int):
+            self.api.Layout = layout_
+        else:
+            self.api.CustomLayout = layout_
+
+    def set(
+        self,
+        title: str | None = None,
+        layout: int | str | Layout | None = None,
+    ) -> Self:
+        if layout is not None:
+            self.layout = layout
+
+        if title is not None:
+            self.title = title
+
+        return self
+
+
+@dataclass(repr=False)
+class Layout(Slide):
+    parent: Presentation
+    collection: Layouts
+
 
 @dataclass(repr=False)
 class Slides(Collection[Slide]):
     parent: Presentation
     type: ClassVar[type[Element]] = Slide
 
-    def add(self, index: int | None = None, layout: int | str | None = None) -> Slide:
+    def add(
+        self,
+        index: int | None = None,
+        layout: int | str | Layout | None = None,
+    ) -> Slide:
         if index is None:
             index = len(self)
 
-        if isinstance(layout, str):
-            layout = getattr(constants, f"ppLayout{layout}")
-        elif layout is None:
-            title_only = constants.ppLayoutTitleOnly
-            if index == 0:
-                layout = title_only
-            else:
-                slide = self[index - 1]
-                layout = getattr(slide.api, "CustomLayout", title_only)
-
-        if isinstance(layout, int):
-            slide = self.api.Add(index + 1, layout)
+        if layout is None and index:
+            layout_ = self[index - 1].api.CustomLayout
         else:
-            slide = self.api.AddSlide(index + 1, layout)
+            layout_ = self.parent.layouts.get_api(layout)
 
-        return Slide(slide, self.parent, self)
+        if isinstance(layout_, int):
+            api = self.api.Add(index + 1, layout_)
+        else:
+            api = self.api.AddSlide(index + 1, layout_)
+
+        return Slide(api, self.parent, self)
 
     @property
     def active(self) -> Slide:
         index = self.app.ActiveWindow.Selection.SlideRange.SlideIndex - 1
         return self[index]
+
+
+@dataclass(repr=False)
+class Layouts(Collection[Layout]):
+    parent: Presentation
+    type: ClassVar[type[Element]] = Layout
+
+    def add(self, name: str) -> Layout:
+        api = self.api.Add(self.api.Count + 1)
+        api.Name = name
+        return Layout(api, self.parent, self)
+
+    def get(self, name: str) -> Layout | None:
+        for layout in self:
+            if layout.name == name:
+                return layout
+
+        return None
+
+    def get_api(self, layout: int | str | Layout | None) -> int | DispatchBaseClass:
+        if isinstance(layout, int):
+            return layout
+
+        if isinstance(layout, Layout):
+            return layout.api  # type: ignore
+
+        if isinstance(layout, str):
+            if layout_ := self.get(layout):
+                return layout_.api  # type: ignore
+            return getattr(constants, f"ppLayout{layout}")
+
+        return constants.ppLayoutTitleOnly
+
+    def copy_from(self, slide: Slide, name: str) -> Layout:
+        slide.api.CustomLayout.Copy()
+        api = self.api.Paste()
+        api.Name = name
+        return Layout(api, self.parent, self)

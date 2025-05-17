@@ -1,11 +1,14 @@
-# """
-# ガントチャート作成モジュール
-# """
-# import datetime
-# from itertools import product
+from __future__ import annotations
 
+from datetime import datetime
+from enum import Enum
+
+# from itertools import product
 # import pandas as pd
-# from dateutil.relativedelta import relativedelta
+from dateutil.relativedelta import relativedelta
+
+from pptxlib.core.slide import Layout, Slide
+
 # from win32com.client import constants
 
 # import xlviews as xv
@@ -17,111 +20,144 @@
 # from xlviews.utils import rgb
 
 
-# def to_datetime(date):
-#     if isinstance(date, str):
-#         return datetime.datetime.strptime(date, '%Y/%m/%d')
-#     elif isinstance(date, list):
-#         return datetime.datetime(*date)
-#     else:
-#         return date
+def date_index(kind: str, start: datetime, end: datetime) -> list[datetime]:
+    if kind in ["month", "monthly"]:
+        start = datetime(start.year, start.month, 1)
+        end = datetime(end.year, end.month, 1)
+        delta = relativedelta(end, start)
+        n = 12 * delta.years + delta.months
+        return [start + relativedelta(months=k) for k in range(n + 1)]
+
+    if kind in ["week", "weekly"]:
+        start -= relativedelta(days=start.weekday())
+        end -= relativedelta(days=end.weekday())
+        n = (end - start).days // 7
+        return [start + relativedelta(days=7 * k) for k in range(n + 1)]
+
+    if kind in ["day", "daily"]:
+        n = (end - start).days
+        return [start + relativedelta(days=k) for k in range(n + 1)]
+
+    msg = f"Unsupported kind: {kind}"
+    raise ValueError(msg)
 
 
-# def date_index(start, end, how):
-#     if how in ['year', 'yearly']:
-#         start = datetime.datetime(start.year, 4, 1)  # For FY
-#         delta = relativedelta(end, start)
-#         counts = delta.years
-#         step = relativedelta(years=1)
-#     elif how in ['quarterly']:
-#         start = datetime.datetime(start.year, 4, 1)  # For FY
-#         delta = relativedelta(end, start)
-#         counts = (12 * delta.years + delta.months) // 3
-#         step = relativedelta(months=3)
-#     elif how in ['month', 'monthly']:
-#         start = datetime.datetime(start.year, start.month, 1)
-#         delta = relativedelta(end, start)
-#         counts = 12 * delta.years + delta.months
-#         step = relativedelta(months=1)
-#     elif how in ['week', 'weekly']:
-#         start -= relativedelta(days=start.weekday())  # To Monday
-#         end -= relativedelta(days=end.weekday())  # To Monay
-#         counts = (end - start).days // 7
-#         step = relativedelta(days=7)
-#     elif how in ['day', 'daily']:
-#         counts = (end - start).days
-#         step = relativedelta(days=1)
-#     index = [start + k * step for k in range(counts + 2)]
-#     return index
+def fiscal_year(date: datetime) -> str:
+    if 1 <= date.month <= 3:
+        return f"FY{date.year - 1}"
+
+    return f"FY{date.year}"
 
 
-# def fiscal_year(date):
-#     if 1 <= date.month <= 3:
-#         return f'FY{date.year - 1}'
-#     else:
-#         return f'FY{date.year}'
+class GanttKind(Enum):
+    MONTH = "month"
+    WEEK = "week"
+    DAY = "day"
 
 
-# class GanttChart:
-#     def __init__(self, start, end, how='weekly', index=None):
-#         self.date_index = date_index(start, end, how)
-#         self.start = self.date_index[0]
-#         self.end = self.date_index[-1] - relativedelta(days=1)
-#         self.date_index = self.date_index[:-1]
-#         self.how = how
+class GanttFrame:
+    kind: GanttKind
+    date_index: list[datetime]
+    index: list[str]
+    columns: list[list[str]]
 
-#         years = [fiscal_year(date) for date in self.date_index]
-#         months = [date.month for date in self.date_index]
-#         days = [date.day for date in self.date_index]
-#         if how in ['year', 'yearly']:
-#             columns = years
-#         elif how in ['month', 'monthly', 'quarterly']:
-#             columns = [years, months]
-#         else:
-#             columns = [years, months, days]
+    def __init__(
+        self,
+        kind: str,
+        start: datetime,
+        end: datetime,
+        index: list[str] | None = None,
+    ) -> None:
+        self.date_index = date_index(kind, start, end)
 
-#         if index:
-#             length = len(index)
-#         else:
-#             length = 1
-#             index = ['']
+        years = [fiscal_year(date) for date in self.date_index]
+        months = [str(date.month) for date in self.date_index]
+        days = [str(date.day) for date in self.date_index]
 
-#         empty = [[''] * len(self.date_index)] * length
-#         df = pd.DataFrame(empty)
-#         df.index = index
-#         df.columns = columns
-#         self.frame = df
-#         self.name = '-'.join([self.start.strftime('%Y/%m/%d'),
-#                               self.end.strftime('%Y/%m/%d'),
-#                               self.how])
+        if kind in ["month", "monthly"]:
+            self.columns = [years, months]
+            self.kind = GanttKind.MONTH
+        elif kind in ["week", "weekly"]:
+            self.columns = [years, months, days]
+            self.kind = GanttKind.WEEK
+        elif kind in ["day", "daily"]:
+            self.columns = [years, months, days]
+            self.kind = GanttKind.DAY
+        else:
+            raise NotImplementedError
 
-#     def set_slide(self, slide, left_margin=30, right_margin=30,
-#                   top_margin=50, bottom_margin=50, index_width=80):
-#         self.slide = slide
-#         layout = slide.api.CustomLayout
-#         if layout.Name != self.name:
-#             for layout in slide.parent.api.SlideMaster.CustomLayouts:
-#                 if layout.Name == self.name:
-#                     slide.api.CustomLayout = layout
-#                     break
-#             else:
-#                 self.create_frame(slide, left_margin=left_margin,
-#                                   right_margin=right_margin,
-#                                   top_margin=top_margin,
-#                                   bottom_margin=bottom_margin,
-#                                   index_width=index_width)
-#                 return
+        if index:
+            self.index = index
+        else:
+            self.index = [""]
 
-#         for shape in layout.Shapes:
-#             if shape.Name == self.name:
-#                 shape = Shape(shape, parent=None)
-#                 self.table = shape.table
-#                 self.calc_scale()
+    @property
+    def name(self) -> str:
+        start = self.date_index[0].strftime("%Y/%m/%d")
+        end = self.date_index[-1].strftime("%Y/%m/%d")
+        return f"{start}-{end}-{self.kind.value}"
 
-#     def create_frame(self, slide, left_margin=30, right_margin=30,
-#                      top_margin=50, bottom_margin=50, index_width=80):
-#         layout = copy_layout(slide, name=self.name, replace=True)
-#         width = layout.Width - left_margin - right_margin
-#         height = layout.Height - top_margin - bottom_margin
+    def get_layout(self, slide: Slide) -> Layout:
+        layout = slide.set_layout(self.name)
+        if layout.name != self.name:
+            for layout in slide.parent.api.SlideMaster.CustomLayouts:
+                if layout.Name == self.name:
+                    slide.api.CustomLayout = layout
+                    break
+
+
+class GanttChart:
+    frame: GanttFrame
+    slide: Slide
+
+    def __init__(
+        self,
+        frame: GanttFrame,
+        slide: Slide,
+        left_margin: float = 30,
+        right_margin: float = 30,
+        top_margin: float = 50,
+        bottom_margin: float = 50,
+        index_width: float = 80,
+    ) -> None:
+        layout = slide.set_layout(frame.name)
+
+        if layout.Name != frame.name:
+            for layout in slide.parent.api.SlideMaster.CustomLayouts:
+                if layout.Name == frame.name:
+                    slide.api.CustomLayout = layout
+                    break
+            else:
+                layout = slide.to_layout(frame.name)
+                self.create_table(
+                    layout,
+                    left_margin=left_margin,
+                    right_margin=right_margin,
+                    top_margin=top_margin,
+                    bottom_margin=bottom_margin,
+                    index_width=index_width,
+                )
+
+    #         for shape in layout.Shapes:
+    #             if shape.Name == self.name:
+    #                 shape = Shape(shape, parent=None)
+    #                 self.table = shape.table
+    #                 self.calc_scale()
+
+    def create_table(
+        self,
+        layout: Layout,
+        left_margin: float = 30,
+        right_margin: float = 30,
+        top_margin: float = 50,
+        bottom_margin: float = 50,
+        index_width: float = 80,
+    ):
+        layout = copy_layout(slide, name=self.name, replace=True)
+        width = layout.Width - left_margin - right_margin
+        height = layout.Height - top_margin - bottom_margin
+
+
 #         columns_name = self.how in ['year', 'yearly']
 #         shape = create_table(layout.Shapes, self.frame,
 #                              columns_name=columns_name,

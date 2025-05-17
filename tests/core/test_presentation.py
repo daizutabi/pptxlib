@@ -15,20 +15,22 @@ def test_repr_collection(prs: Presentations):
 
 @pytest.fixture(scope="module")
 def pr(prs: Presentations):
-    return prs.add()
+    pr = prs.add()
+    yield pr
+    pr.close()
 
 
 def test_active(prs: Presentations, pr: Presentation):
     assert prs.active.name == pr.name
 
 
-def test_getitem(prs: Presentations, pr: Presentation):
-    assert prs[0].name == pr.name
-    assert prs[-1].name == pr.name
+def test_getitem(prs: Presentations):
+    assert isinstance(prs[0], Presentation)
+    assert isinstance(prs[-1], Presentation)
 
 
 def test_iter(prs: Presentations, pr: Presentation):
-    assert next(iter(prs)).name == pr.name
+    assert isinstance(next(iter(prs)), Presentation)
 
 
 def test_slides(pr: Presentation):

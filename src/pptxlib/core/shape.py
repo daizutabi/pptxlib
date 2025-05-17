@@ -273,6 +273,9 @@ class Shape(Element):
     def line(self) -> Line:
         return Line(self.api.Line)
 
+    def select(self, *, replace: bool = True) -> None:
+        self.api.Select(replace)
+
     def copy(self) -> None:
         self.api.Copy()
 
