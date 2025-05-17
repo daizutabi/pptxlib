@@ -120,14 +120,14 @@ def test_cell_repr(table: Table):
 
 def test_borders_row(table: Table):
     b = table.rows[0].borders
-    b[0].set("red", alpha=0.5)
+    b[0].set(color="red", alpha=0.5)
     assert b["top"].color == 255
     assert b["top"].alpha == 0.5
 
 
 def test_borders_rows(table: Table):
     b = table.rows.borders
-    b[1].set("blue", alpha=0.2, weight=3)
+    b[1].set(color="blue", alpha=0.2, weight=3)
     for r in table.rows:
         b = r.borders["left"]
         assert b.color == 255 * 256 * 256
@@ -137,7 +137,7 @@ def test_borders_rows(table: Table):
 
 def test_borders_columns(table: Table):
     b = table.columns.borders
-    b[2].set("red", alpha=0.3, weight=2)
+    b[2].set(color="red", alpha=0.3, weight=2)
     for r in table.columns:
         b = r.borders["bottom"]
         assert b.color == 255
@@ -147,7 +147,7 @@ def test_borders_columns(table: Table):
 
 def test_borders_cell(table: Table):
     b = table[1, 1].borders
-    b[3].set("red", alpha=0.3, weight=4)
+    b[3].set(color="red", alpha=0.3, weight=4)
     b = b["right"]
     assert b.color == 255
     assert 0.299 <= b.alpha <= 0.301

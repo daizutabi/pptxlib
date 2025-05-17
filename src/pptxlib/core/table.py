@@ -240,12 +240,12 @@ class LineFormatCollection:
 
     def set(
         self,
-        color: int | str | tuple[int, int, int],
-        alpha: float | None = None,
         weight: float | None = None,
+        color: int | str | tuple[int, int, int] | None = None,
+        alpha: float | None = None,
     ) -> Self:
         for item in self.items:
-            item.set(color=color, alpha=alpha, weight=weight)
+            item.set(weight=weight, color=color, alpha=alpha)
 
         return self
 

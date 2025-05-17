@@ -1,7 +1,8 @@
 import pytest
+from win32com.client import constants
 
 from pptxlib.core.app import is_app_available
-from pptxlib.core.shape import Shape, Shapes
+from pptxlib.core.shape import Line, Shape, Shapes
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),
@@ -66,3 +67,27 @@ def test_update_line(shape: Shape, shapes: Shapes):
     assert shape.line.alpha == 0.5
     assert shape.line.weight == 4
     shape.delete()
+
+
+@pytest.fixture
+def line(shapes: Shapes):
+    shape = shapes.add_line(10, 20, 140, 160)
+    yield shape.line
+    shape.delete()
+
+
+def test_line_dash(line: Line):
+    line.dash("DashDot")
+    assert line.dash_style == constants.msoLineDashDot
+
+
+def test_line_arrow(line: Line):
+    line.begin_arrow("Open", "Long", "Wide")
+    assert line.begin_arrowhead_style == constants.msoArrowheadOpen
+    assert line.begin_arrowhead_length == constants.msoArrowheadLong
+    assert line.begin_arrowhead_width == constants.msoArrowheadWide
+
+    line.end_arrow("Stealth", "Short", "Narrow")
+    assert line.end_arrowhead_style == constants.msoArrowheadStealth
+    assert line.end_arrowhead_length == constants.msoArrowheadShort
+    assert line.end_arrowhead_width == constants.msoArrowheadNarrow

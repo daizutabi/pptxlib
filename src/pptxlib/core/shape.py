@@ -74,16 +74,16 @@ class Line(Color):
 
     def set(
         self,
+        weight: float | None = None,
         color: int | str | tuple[int, int, int] | None = None,
         alpha: float | None = None,
-        weight: float | None = None,
     ) -> Self:
         if color is not None:
             self.color = color
-        if alpha is not None:
-            self.alpha = alpha
         if weight is not None:
             self.weight = weight
+        if alpha is not None:
+            self.alpha = alpha
 
         return self
 
@@ -91,6 +91,108 @@ class Line(Color):
         self.color = line.color
         self.alpha = line.alpha
         self.weight = line.weight
+
+    @property
+    def dash_style(self) -> int:
+        return self.api.DashStyle
+
+    @dash_style.setter
+    def dash_style(self, value: int | str) -> None:
+        if isinstance(value, str):
+            value = getattr(constants, f"msoLine{value}")
+        self.api.DashStyle = value
+
+    def dash(self, dash_style: int | str = "Dash") -> Self:
+        self.dash_style = dash_style
+        return self
+
+    @property
+    def begin_arrowhead_style(self) -> int:
+        return self.api.BeginArrowheadStyle
+
+    @begin_arrowhead_style.setter
+    def begin_arrowhead_style(self, value: int | str) -> None:
+        if isinstance(value, str):
+            value = getattr(constants, f"msoArrowhead{value}")
+        self.api.BeginArrowheadStyle = value
+
+    @property
+    def end_arrowhead_style(self) -> int:
+        return self.api.EndArrowheadStyle
+
+    @end_arrowhead_style.setter
+    def end_arrowhead_style(self, value: int | str) -> None:
+        if isinstance(value, str):
+            value = getattr(constants, f"msoArrowhead{value}")
+        self.api.EndArrowheadStyle = value
+
+    @property
+    def begin_arrowhead_length(self) -> int:
+        return self.api.BeginArrowheadLength
+
+    @begin_arrowhead_length.setter
+    def begin_arrowhead_length(self, value: int | str) -> None:
+        if isinstance(value, str):
+            value = getattr(constants, f"msoArrowhead{value}")
+        self.api.BeginArrowheadLength = value
+
+    @property
+    def end_arrowhead_length(self) -> int:
+        return self.api.EndArrowheadLength
+
+    @end_arrowhead_length.setter
+    def end_arrowhead_length(self, value: int | str) -> None:
+        if isinstance(value, str):
+            value = getattr(constants, f"msoArrowhead{value}")
+        self.api.EndArrowheadLength = value
+
+    @property
+    def begin_arrowhead_width(self) -> int:
+        return self.api.BeginArrowheadWidth
+
+    @begin_arrowhead_width.setter
+    def begin_arrowhead_width(self, value: int | str) -> None:
+        if isinstance(value, str):
+            value = getattr(constants, f"msoArrowhead{value}")
+        self.api.BeginArrowheadWidth = value
+
+    @property
+    def end_arrowhead_width(self) -> int:
+        return self.api.EndArrowheadWidth
+
+    @end_arrowhead_width.setter
+    def end_arrowhead_width(self, value: int | str) -> None:
+        if isinstance(value, str):
+            value = getattr(constants, f"msoArrowhead{value}")
+        self.api.EndArrowheadWidth = value
+
+    def begin_arrow(
+        self,
+        style: int | str | None = None,
+        length: int | str | None = None,
+        width: int | str | None = None,
+    ) -> Self:
+        if style is not None:
+            self.begin_arrowhead_style = style
+        if length is not None:
+            self.begin_arrowhead_length = length
+        if width is not None:
+            self.begin_arrowhead_width = width
+        return self
+
+    def end_arrow(
+        self,
+        style: int | str | None = None,
+        length: int | str | None = None,
+        width: int | str | None = None,
+    ) -> Self:
+        if style is not None:
+            self.end_arrowhead_style = style
+        if length is not None:
+            self.end_arrowhead_length = length
+        if width is not None:
+            self.end_arrowhead_width = width
+        return self
 
 
 @dataclass(repr=False)
@@ -173,6 +275,10 @@ class Shape(Element):
     def copy(self) -> None:
         self.api.Copy()
 
+    def connect(self, shape: Shape, direction: str = "horizontal") -> Shape:
+        shapes = self.collection
+        return shapes.add_connector(self, shape, direction)
+
 
 @dataclass(repr=False)
 class Shapes(Collection[Shape]):
@@ -200,6 +306,16 @@ class Shapes(Collection[Shape]):
         shape.text = text
 
         return shape
+
+    def add_line(
+        self,
+        begin_x: float,
+        begin_y: float,
+        end_x: float,
+        end_y: float,
+    ) -> Shape:
+        api = self.api.AddLine(begin_x, begin_y, end_x, end_y)
+        return Shape(api, self.parent, self)
 
     def add_label(
         self,
@@ -302,6 +418,39 @@ class Shapes(Collection[Shape]):
 
         file_name.unlink()
         return shape
+
+    def add_connector(
+        self,
+        shape1: Shape,
+        shape2: Shape,
+        direction: str = "horizontal",
+    ) -> Shape:
+        if shape1.top + shape1.height / 2 == shape2.top + shape2.height / 2:
+            connector_type = constants.msoConnectorStraight
+            begin, end = (4, 2) if shape1.left < shape2.left else (2, 4)
+
+        elif shape1.left + shape1.width / 2 == shape2.left + shape2.width / 2:
+            connector_type = constants.msoConnectorStraight
+            begin, end = (3, 1) if shape1.top < shape2.top else (1, 3)
+
+        else:
+            connector_type = constants.msoConnectorElbow
+            if direction == "horizontal":
+                begin, end = (4, 2) if shape1.left < shape2.left else (2, 4)
+            else:
+                begin, end = (3, 1) if shape1.top < shape2.top else (1, 3)
+
+        if shape1.api.ConnectionSiteCount == 8:
+            begin = 2 * begin - 1
+
+        if shape2.api.ConnectionSiteCount == 8:
+            end = 2 * end - 1
+
+        api = self.api.AddConnector(connector_type, 1, 1, 2, 2)
+        api.ConnectorFormat.BeginConnect(shape1.api, begin)
+        api.ConnectorFormat.EndConnect(shape2.api, end)
+
+        return Shape(api, self.parent, self)
 
     def paste(
         self,
