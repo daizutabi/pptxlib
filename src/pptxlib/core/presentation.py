@@ -7,6 +7,8 @@ from .base import Collection, Element
 from .slide import Slides
 
 if TYPE_CHECKING:
+    from typing import Self
+
     from .app import App
 
 
@@ -29,9 +31,22 @@ class Presentation(Element):
     def width(self) -> float:
         return self.api.PageSetup.SlideWidth
 
+    @width.setter
+    def width(self, value: float) -> None:
+        self.api.PageSetup.SlideWidth = value
+
     @property
     def height(self) -> float:
         return self.api.PageSetup.SlideHeight
+
+    @height.setter
+    def height(self, value: float) -> None:
+        self.api.PageSetup.SlideHeight = value
+
+    def size(self, width: float, height: float) -> Self:
+        self.width = width
+        self.height = height
+        return self
 
 
 @dataclass(repr=False)

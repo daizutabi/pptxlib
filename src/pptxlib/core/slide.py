@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
+from tempfile import NamedTemporaryFile
 from typing import TYPE_CHECKING, ClassVar
 
 from win32com.client import constants
@@ -37,6 +39,20 @@ class Slide(Element):
     @property
     def height(self) -> float:
         return self.parent.height
+
+    def export(self, file_name: str | Path, fmt: str | None = None) -> None:
+        if fmt is None:
+            fmt = Path(file_name).suffix[1:]
+        self.api.Export(str(file_name), fmt.upper())
+
+    def png(self) -> bytes:
+        with NamedTemporaryFile(suffix=".png", delete=False) as file:
+            file_name = Path(file.name)
+
+        self.export(file_name)
+        data = file_name.read_bytes()
+        file_name.unlink()
+        return data
 
 
 @dataclass(repr=False)
