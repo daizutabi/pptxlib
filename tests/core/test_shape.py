@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import matplotlib.pyplot as plt
 import numpy as np
 import PIL.Image
@@ -6,7 +8,7 @@ from win32com.client import DispatchBaseClass
 
 from pptxlib.core.app import is_app_available
 from pptxlib.core.base import Collection, Element
-from pptxlib.core.shape import Shape, Shapes
+from pptxlib.core.shape import Shape, ShapeRange, Shapes
 from pptxlib.core.slide import Slide
 from pptxlib.core.table import Table
 
@@ -217,3 +219,45 @@ def test_paste_special(shapes: Shapes, image: PIL.Image.Image):
     assert round(s.top) == 100
     assert round(s.width) == 100
     assert round(s.height) == 200
+
+
+def test_png(shapes: Shapes, tmp_path: Path):
+    shape = shapes.add("Rectangle", 100, 100, 100, 100)
+    data = shape.png()
+    assert data.startswith(b"\x89PNG")
+    path = tmp_path.joinpath("a.png")
+    path.write_bytes(data)
+    image = PIL.Image.open(path)
+    assert image.size == (136, 136)
+
+
+def test_svg(shapes: Shapes):
+    shape = shapes.add("Rectangle", 100, 100, 100, 100)
+    text = shape.svg()
+    assert text.startswith('<svg width="136" height="136"')
+
+
+@pytest.fixture
+def rng(shapes: Shapes):
+    s1 = shapes.add("Rectangle", 100, 100, 100, 100)
+    s2 = shapes.add("Oval", 150, 150, 90, 80)
+    return shapes.range([s1, s2])
+
+
+def test_range_repr(rng: ShapeRange):
+    assert repr(rng).startswith("<ShapeRange [2]")
+
+
+def test_range_png(rng: ShapeRange, tmp_path: Path):
+    data = rng.png()
+    assert data.startswith(b"\x89PNG")
+    path = tmp_path.joinpath("a.png")
+    path.write_bytes(data)
+    image = PIL.Image.open(path)
+    assert image.size == (189, 176)
+
+
+def test_range_svg(rng: ShapeRange):
+    text = rng.svg()
+    assert "<rect x=" in text
+    assert "<path d=" in text
