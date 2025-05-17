@@ -5,6 +5,7 @@ import pytest
 from win32com.client import constants
 
 from pptxlib.core.app import is_app_available
+from pptxlib.core.presentation import Presentations
 from pptxlib.core.slide import Slide, Slides
 
 pytestmark = pytest.mark.skipif(
@@ -42,10 +43,11 @@ def test_layout(slides: Slides):
     assert slide.api.Layout == constants.ppLayoutBlank
 
 
-def test_png(slide: Slide, tmp_path: Path):
+def test_png(prs: Presentations, tmp_path: Path):
+    slide = prs.add().size(600, 300).slides.add()
     data = slide.png()
     assert data.startswith(b"\x89PNG")
     path = tmp_path.joinpath("a.png")
     path.write_bytes(data)
     image = PIL.Image.open(path)
-    assert image.size == (1280, 720)
+    assert image.size == (600 * 4 / 3, 300 * 4 / 3)
