@@ -13,13 +13,14 @@ def main():
     gc = GanttChart(
         "day",
         datetime(2025, 4, 1),
-        datetime(2025, 4, 10),
+        datetime(2025, 4, 7),
         pr,
         20,
         150,
         bottom=10,
     )
     pr.slides.add(layout=gc.layout)
+    print(gc.frame.columns)
 
 
 if __name__ == "__main__":

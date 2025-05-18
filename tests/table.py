@@ -10,9 +10,14 @@ def main():
     slide = pr.slides.add()
 
     table = slide.shapes.add_table(4, 8, 100, 250, 400, 100)
-    for cell in table.rows[0]:
-        cell.shape.font.set(size=10)
+    # for cell in table.rows[0]:
+    #     cell.shape.font.set(size=10)
     table.reset_style()
+
+    texts = ["", "a", "a", "a", "b", "b", "c", "c", "c"]
+    table.rows[0].text(texts, size=22, bold=True, merge=True)
+    print(table.cell(0, 3).text)
+
     # print(table.api.Table.Range)
 
     # api.Fill.ForeColor.RGB = 255

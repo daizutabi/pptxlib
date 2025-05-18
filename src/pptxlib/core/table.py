@@ -9,7 +9,7 @@ from .base import Collection, Element
 from .shape import Line, Shape
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterable, Iterator
     from typing import Self
 
 
@@ -100,6 +100,28 @@ class Table(Shape):
         self.columns[-1].borders["right"].set(color=color, weight=weight)
 
 
+def set_text(
+    cells: Iterable[Cell],
+    texts: Iterable[str],
+    *,
+    size: float | None = None,
+    bold: bool = False,
+    merge: bool = False,
+) -> None:
+    texts = list(texts)
+    cells = list(cells)
+
+    prev = 0
+    for k, (cell, text) in enumerate(zip(cells, texts, strict=False)):
+        if not merge or k == 0 or text != texts[k - 1]:
+            cell.text = text
+            cell.shape.font.set(size=size, bold=bold)
+            prev = k
+
+        elif text == texts[k - 1]:
+            cell.merge(cells[prev])
+
+
 @dataclass(repr=False)
 class Axis(Element):
     parent: Table
@@ -125,6 +147,16 @@ class Axis(Element):
     def __iter__(self) -> Iterator[Cell]:
         for i in range(len(self)):
             yield self[i]
+
+    def text(
+        self,
+        texts: Iterable[str],
+        *,
+        size: float | None = None,
+        bold: bool = False,
+        merge: bool = False,
+    ) -> None:
+        set_text(self, texts, size=size, bold=bold, merge=merge)
 
 
 @dataclass(repr=False)
@@ -216,6 +248,9 @@ class Cell(Element):
     @property
     def borders(self) -> Borders:
         return Borders(self.api.Borders, self.parent)
+
+    def merge(self, merge_to: Cell) -> None:
+        self.api.Merge(merge_to.api)
 
 
 @dataclass(repr=False)

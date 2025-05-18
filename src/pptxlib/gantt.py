@@ -103,7 +103,7 @@ class GanttChart:
         top: float,
         right: float | None = None,
         bottom: float | None = None,
-        index_width: float = 80,
+        index_width: float = 100,
     ) -> None:
         self.frame = GanttFrame(kind, start, end)
         self.layout = pr.layouts.add(self.frame.name)
@@ -113,36 +113,29 @@ class GanttChart:
         if bottom is None:
             bottom = top
 
-        self.table = self.layout.shapes.add_table(
-            num_rows=len(self.frame.columns),
-            num_columns=len(self.frame.columns[0]) + 1,
+        num_rows = len(self.frame.columns) + 1
+        num_columns = len(self.frame.columns[0]) + 1
+        width = self.layout.width - left - right
+        height = self.layout.height - top - bottom
+
+        table = self.layout.shapes.add_table(
+            num_rows=num_rows,
+            num_columns=num_columns,
             left=left,
             top=top,
-            width=self.layout.width - left - right,
-            height=self.layout.height - top - bottom,
+            width=width,
+            height=height,
         )
-        self.table.reset_style()
 
-        # for cell in row.cells:
-        #     cell.shape.fill.api.Visible = False
+        self.table = table
+        table.reset_style()
+        table.name = self.frame.name
 
+        table.columns[0].width = index_width
+        column_width = (width - index_width) / (num_columns - 1)
+        for k in range(1, num_columns):
+            table.columns[k].width = column_width
 
-#         columns_name = self.how in ['year', 'yearly']
-#         shape = create_table(layout.Shapes, self.frame,
-#                              columns_name=columns_name,
-#                              left=left_margin, top=top_margin,
-#                              width=width, height=height, preclean=False)
-#         shape.api.Name = self.name
-#         self.table = shape.table
-
-#         table = self.table.api
-#         table.FirstRow = False
-#         table.HorizBanding = False
-#         nrows = len(self.frame.columns.names)
-#         ncols = len(self.frame.index.names)
-#         for row, column in product(range(nrows), range(ncols)):
-#             cell = table.Cell(row + 1, column + 1)
-#             cell.Shape.Fill.Visible = False
 
 #         columns_level = len(self.frame.columns.names)
 #         if columns_level >= 2:
@@ -152,10 +145,6 @@ class GanttChart:
 #             for cell in self.table.row(3):
 #                 cell.shape.size = 8
 
-#         self.table.columns(1).width = index_width
-#         column_width = (width - index_width) / len(self.frame.columns)
-#         for k in range(len(self.frame.columns)):
-#             self.table.columns(k + 2).width = column_width
 
 #         columns_height = sum(self.table.rows(k + 1).height
 #                              for k in range(columns_level))
