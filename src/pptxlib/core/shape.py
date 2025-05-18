@@ -285,8 +285,8 @@ class Shape(Element):
 
     def select(self, *, replace: bool = True) -> ShapeRange:
         self.api.Select(replace)
-        rng = self.app.api.ActiveWindow.Selection.ShapeRange
-        return ShapeRange(rng, self.parent, self.collection)
+        api = self.app.api.ActiveWindow.Selection.ShapeRange
+        return ShapeRange(api, self.parent, self.collection)
 
     def copy(self) -> None:
         self.api.Copy()

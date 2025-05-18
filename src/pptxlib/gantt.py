@@ -121,7 +121,7 @@ class GanttChart:
             width=self.layout.width - left - right,
             height=self.layout.height - top - bottom,
         )
-        self.table.clear()
+        self.table.reset_style()
 
         # for cell in row.cells:
         #     cell.shape.fill.api.Visible = False

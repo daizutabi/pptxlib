@@ -3,6 +3,8 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
 
+from pywintypes import com_error
+
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
@@ -33,7 +35,10 @@ class Element(Base):
 
     @property
     def name(self) -> str:
-        return self.api.Name
+        try:
+            return self.api.Name
+        except com_error:
+            return ""
 
     @name.setter
     def name(self, value: str) -> None:

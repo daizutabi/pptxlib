@@ -76,18 +76,28 @@ class Table(Shape):
         for row in self.rows:
             row.height = 1
 
-    def clear(self) -> None:
+    def reset_style(
+        self,
+        weight: float = 2,
+        weight_inside: float = 1,
+        color: int | str | tuple[int, int, int] = "black",
+        color_inside: int | str | tuple[int, int, int] = "black",
+    ) -> None:
         api = self.api.Table
         api.FirstRow = False
         api.HorizBanding = False
-
         self.fill.set(visible=False)
 
-        # self.table.borders["top"].set(color="black", weight=1)
+        for row in self.rows:
+            row.borders["bottom"].set(color=color_inside, weight=weight_inside)
 
-        # for row in self.table.rows:
-        #     row.borders["top"].set(color="black", weight=1)
-        # row.borders["bottom"].set(color="black", weight=1)
+        for column in self.columns:
+            column.borders["right"].set(color=color_inside, weight=weight_inside)
+
+        self.rows[0].borders["top"].set(color=color, weight=weight)
+        self.rows[-1].borders["bottom"].set(color=color, weight=weight)
+        self.columns[0].borders["left"].set(color=color, weight=weight)
+        self.columns[-1].borders["right"].set(color=color, weight=weight)
 
 
 @dataclass(repr=False)

@@ -118,6 +118,10 @@ def test_cell_repr(table: Table):
     assert repr(table.cell(0, 0)) == "<Cell>"
 
 
+def test_cell_shape_name(table: Table):
+    assert table.cell(0, 0).shape.name == ""
+
+
 def test_borders_row(table: Table):
     b = table.rows[0].borders
     b[0].set(color="red", alpha=0.5)
@@ -160,3 +164,12 @@ def test_line_format(table: Table):
     lf = table[1, 1].borders["top"]
     assert isinstance(lf, LineFormat)
     assert repr(lf) == "<LineFormat>"
+
+
+def test_reset_style(prs: Presentations):
+    pr = prs.add()
+    slide = pr.slides.add()
+    shapes = slide.shapes
+    table = shapes.add_table(2, 3, 100, 250, 100, 100)
+    table.reset_style()
+    assert table.cell(0, 0).shape.fill.visible is False

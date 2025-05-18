@@ -10,6 +10,26 @@ def main():
     slide = pr.slides.add()
 
     table = slide.shapes.add_table(4, 8, 100, 250, 400, 100)
+    for cell in table.rows[0]:
+        cell.shape.font.set(size=10)
+    table.reset_style()
+    # print(table.api.Table.Range)
+
+    # api.Fill.ForeColor.RGB = 255
+    # api.Fill.Transparency = 0.5
+    # rng = ShapeRange(api, row.parent.parent, row.parent.collection)
+    # rng.fill.set(color="red", alpha=0.5)
+    # rng.app.unselect()
+
+    # rng = table.select()
+    # table.api.Table.Cells.Select()
+    # api = table.app.api.ActiveWindow.Selection.TextRange
+    # api.Font.Size = 10
+    # print("a", api)
+
+    # rng.font.set(size=10)
+    # rng.fill.set(color="red", alpha=0.5)
+    # rng.app.unselect()
     # table.rows[1].api.Select()
     # table.app.api.ActiveWindow.Selection.ShapeRange.Fill.Transparency = 0.5
     # rng = table.select()
