@@ -117,7 +117,7 @@ class Slides(Collection[Slide]):
 
     @property
     def active(self) -> Slide:
-        index = self.app.ActiveWindow.Selection.SlideRange.SlideIndex - 1
+        index = self.app.api.ActiveWindow.Selection.SlideRange.SlideIndex - 1
         return self[index]
 
 

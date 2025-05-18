@@ -18,11 +18,12 @@ if TYPE_CHECKING:
 @dataclass(repr=False)
 class App(Base):
     api: DispatchBaseClass = field(init=False)
+    app: App = field(init=False)
 
     def __post_init__(self) -> None:
         ensure_modules()
         self.api = win32com.client.Dispatch("PowerPoint.Application")  # type: ignore
-        self.app = self.api
+        self.app = self
 
     @property
     def presentations(self) -> Presentations:
@@ -36,6 +37,9 @@ class App(Base):
 
     def __exit__(self, exc_type, exc_value, traceback) -> None:  # noqa: ANN001
         self.quit()
+
+    def unselect(self) -> None:
+        self.api.ActiveWindow.Selection.Unselect()
 
 
 @cache

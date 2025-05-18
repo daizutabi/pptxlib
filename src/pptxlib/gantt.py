@@ -7,7 +7,9 @@ from enum import Enum
 # import pandas as pd
 from dateutil.relativedelta import relativedelta
 
-from pptxlib.core.slide import Layout, Slide
+from pptxlib.core.presentation import Presentation
+from pptxlib.core.slide import Layout
+from pptxlib.core.table import Table
 
 # from win32com.client import constants
 
@@ -58,16 +60,9 @@ class GanttKind(Enum):
 class GanttFrame:
     kind: GanttKind
     date_index: list[datetime]
-    index: list[str]
     columns: list[list[str]]
 
-    def __init__(
-        self,
-        kind: str,
-        start: datetime,
-        end: datetime,
-        index: list[str] | None = None,
-    ) -> None:
+    def __init__(self, kind: str, start: datetime, end: datetime) -> None:
         self.date_index = date_index(kind, start, end)
 
         years = [fiscal_year(date) for date in self.date_index]
@@ -86,76 +81,50 @@ class GanttFrame:
         else:
             raise NotImplementedError
 
-        if index:
-            self.index = index
-        else:
-            self.index = [""]
-
     @property
     def name(self) -> str:
         start = self.date_index[0].strftime("%Y/%m/%d")
         end = self.date_index[-1].strftime("%Y/%m/%d")
         return f"{start}-{end}-{self.kind.value}"
 
-    def get_layout(self, slide: Slide) -> Layout:
-        layout = slide.set_layout(self.name)
-        if layout.name != self.name:
-            for layout in slide.parent.api.SlideMaster.CustomLayouts:
-                if layout.Name == self.name:
-                    slide.api.CustomLayout = layout
-                    break
-
 
 class GanttChart:
     frame: GanttFrame
-    slide: Slide
+    layout: Layout
+    table: Table
 
     def __init__(
         self,
-        frame: GanttFrame,
-        slide: Slide,
-        left_margin: float = 30,
-        right_margin: float = 30,
-        top_margin: float = 50,
-        bottom_margin: float = 50,
+        kind: str,
+        start: datetime,
+        end: datetime,
+        pr: Presentation,
+        left: float,
+        top: float,
+        right: float | None = None,
+        bottom: float | None = None,
         index_width: float = 80,
     ) -> None:
-        layout = slide.set_layout(frame.name)
+        self.frame = GanttFrame(kind, start, end)
+        self.layout = pr.layouts.add(self.frame.name)
 
-        if layout.Name != frame.name:
-            for layout in slide.parent.api.SlideMaster.CustomLayouts:
-                if layout.Name == frame.name:
-                    slide.api.CustomLayout = layout
-                    break
-            else:
-                layout = slide.to_layout(frame.name)
-                self.create_table(
-                    layout,
-                    left_margin=left_margin,
-                    right_margin=right_margin,
-                    top_margin=top_margin,
-                    bottom_margin=bottom_margin,
-                    index_width=index_width,
-                )
+        if right is None:
+            right = left
+        if bottom is None:
+            bottom = top
 
-    #         for shape in layout.Shapes:
-    #             if shape.Name == self.name:
-    #                 shape = Shape(shape, parent=None)
-    #                 self.table = shape.table
-    #                 self.calc_scale()
+        self.table = self.layout.shapes.add_table(
+            num_rows=len(self.frame.columns),
+            num_columns=len(self.frame.columns[0]) + 1,
+            left=left,
+            top=top,
+            width=self.layout.width - left - right,
+            height=self.layout.height - top - bottom,
+        )
+        self.table.clear()
 
-    def create_table(
-        self,
-        layout: Layout,
-        left_margin: float = 30,
-        right_margin: float = 30,
-        top_margin: float = 50,
-        bottom_margin: float = 50,
-        index_width: float = 80,
-    ):
-        layout = copy_layout(slide, name=self.name, replace=True)
-        width = layout.Width - left_margin - right_margin
-        height = layout.Height - top_margin - bottom_margin
+        # for cell in row.cells:
+        #     cell.shape.fill.api.Visible = False
 
 
 #         columns_name = self.how in ['year', 'yearly']

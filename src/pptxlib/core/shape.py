@@ -41,16 +41,26 @@ class Color(Base):
     def alpha(self, value: float) -> None:
         self.api.Transparency = value
 
+    @property
+    def visible(self) -> bool:
+        return self.api.Visible
+
+    @visible.setter
+    def visible(self, value: bool) -> None:
+        self.api.Visible = value
+
     def set(
         self,
         color: int | str | tuple[int, int, int] | None = None,
         alpha: float | None = None,
+        visible: bool | None = None,
     ) -> Self:
         if color is not None:
             self.color = color
         if alpha is not None:
             self.alpha = alpha
-
+        if visible is not None:
+            self.visible = visible
         return self
 
     def update(self, color: Color) -> None:
@@ -273,8 +283,10 @@ class Shape(Element):
     def line(self) -> Line:
         return Line(self.api.Line)
 
-    def select(self, *, replace: bool = True) -> None:
+    def select(self, *, replace: bool = True) -> ShapeRange:
         self.api.Select(replace)
+        rng = self.app.api.ActiveWindow.Selection.ShapeRange
+        return ShapeRange(rng, self.parent, self.collection)
 
     def copy(self) -> None:
         self.api.Copy()

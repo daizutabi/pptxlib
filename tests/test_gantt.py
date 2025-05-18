@@ -56,15 +56,3 @@ def test_name_day():
 
     gantt = GanttFrame("day", datetime(2025, 4, 1), datetime(2025, 9, 10))
     assert gantt.name == "2025/04/01-2025/09/10-day"
-
-
-def test_index():
-    from pptxlib.gantt import GanttFrame
-
-    gantt = GanttFrame(
-        "week",
-        datetime(2025, 4, 1),
-        datetime(2025, 9, 10),
-        ["a", "b"],
-    )
-    assert gantt.index == ["a", "b"]

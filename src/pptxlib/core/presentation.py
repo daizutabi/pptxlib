@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
 from .base import Collection, Element
-from .slide import Layout, Layouts, Slides
+from .slide import Layouts, Slides
 
 if TYPE_CHECKING:
     from typing import Self
@@ -68,5 +68,5 @@ class Presentations(Collection[Presentation]):
 
     @property
     def active(self) -> Presentation:
-        api = self.app.ActivePresentation
+        api = self.app.api.ActivePresentation
         return Presentation(api, self.parent, self)

@@ -34,7 +34,10 @@ def shape(shapes: Shapes):
 
 
 def test_select(shape: Shape):
-    assert shape.select() is None
+    rng = shape.select()
+    assert isinstance(rng, ShapeRange)
+    assert rng.parent is shape.parent
+    assert rng.collection is shape.collection
 
 
 def test_title(shapes: Shapes, shape: Shape):

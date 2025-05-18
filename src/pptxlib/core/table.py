@@ -72,19 +72,26 @@ class Table(Shape):
         for i in range(len(self)):
             yield self[i]
 
-    def fill(
-        self,
-        color: int | str | tuple[int, int, int],
-        alpha: float | None = None,
-    ) -> Self:
-        for row in self:
-            row.fill(color=color, alpha=alpha)
-
-        return self
+    @property
+    def shapes(self) -> list[Shape]:
+        return [cell.shape for row in self.rows for cell in row.cells]
 
     def minimize_height(self) -> None:
         for row in self.rows:
             row.height = 1
+
+    def clear(self) -> None:
+        api = self.api.Table
+        api.FirstRow = False
+        api.HorizBanding = False
+
+        self.fill.set(visible=False)
+
+        # self.table.borders["top"].set(color="black", weight=1)
+
+        # for row in self.table.rows:
+        #     row.borders["top"].set(color="black", weight=1)
+        # row.borders["bottom"].set(color="black", weight=1)
 
 
 @dataclass(repr=False)
@@ -112,16 +119,6 @@ class Axis(Element):
     def __iter__(self) -> Iterator[Cell]:
         for i in range(len(self)):
             yield self[i]
-
-    def fill(
-        self,
-        color: int | str | tuple[int, int, int],
-        alpha: float | None = None,
-    ) -> Self:
-        for cell in self:
-            cell.shape.fill.set(color=color, alpha=alpha)
-
-        return self
 
 
 @dataclass(repr=False)

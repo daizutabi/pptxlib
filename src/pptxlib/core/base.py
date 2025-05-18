@@ -8,6 +8,8 @@ if TYPE_CHECKING:
 
     from win32com.client import CoClassBaseClass, DispatchBaseClass
 
+    from .app import App
+
 
 @dataclass(repr=False)
 class Base:
@@ -21,7 +23,7 @@ class Base:
 class Element(Base):
     parent: Element
     collection: Collection
-    app: DispatchBaseClass = field(init=False)
+    app: App = field(init=False)
 
     def __post_init__(self) -> None:
         self.app = self.parent.app
@@ -51,7 +53,7 @@ E = TypeVar("E", bound=Element)
 class Collection(Base, Generic[E]):
     parent: Element
     type: ClassVar[type[Element]]
-    app: DispatchBaseClass = field(init=False)
+    app: App = field(init=False)
 
     def __post_init__(self) -> None:
         self.app = self.parent.app

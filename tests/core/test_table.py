@@ -74,7 +74,7 @@ def test_getitem_tuple_slice_int(table: Table):
 
 
 def test_fill(table: Table):
-    table.fill("red", alpha=0.5)
+    table.fill.set(color="red", alpha=0.5)
     assert table[0, 0].shape.fill.color == 255
     assert table[0, 0].shape.fill.alpha == 0.5
 
