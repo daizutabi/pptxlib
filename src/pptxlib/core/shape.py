@@ -43,7 +43,7 @@ class Color(Base):
 
     @property
     def visible(self) -> bool:
-        return self.api.Visible
+        return bool(self.api.Visible)
 
     @visible.setter
     def visible(self, value: bool) -> None:

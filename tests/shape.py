@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from pathlib import Path
-
 from pptxlib.core.app import App
 
 
@@ -12,9 +10,12 @@ def main():
 
     slide = pr.slides.add()
     shapes = slide.shapes
-    shapes.add("Rectangle", 100, 100, 100, 100)
-    shapes.add("Oval", 150, 150, 90, 80)
-    slide.export(Path(__file__).parent / "a.png")
+    s1 = shapes.add("Rectangle", 100, 100, 100, 100)
+    s2 = shapes.add("Oval", 150, 150, 90, 80)
+    s1.select()
+    rng = s2.select(replace=False)
+    rng.app.unselect()
+    rng.fill.set(color="red", alpha=0.5)
 
 
 if __name__ == "__main__":

@@ -43,6 +43,11 @@ def test_set_fill(shape: Shape):
     assert 0.199 < x.alpha <= 0.2
 
 
+def test_set_fill_visible(shape: Shape):
+    x = shape.fill.set(visible=False)
+    assert x.visible is False
+
+
 def test_set_line(shape: Shape):
     x = shape.line.set(color="red", alpha=0.2, weight=3)
     assert x.color == 255

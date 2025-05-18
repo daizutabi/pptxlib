@@ -72,10 +72,6 @@ class Table(Shape):
         for i in range(len(self)):
             yield self[i]
 
-    @property
-    def shapes(self) -> list[Shape]:
-        return [cell.shape for row in self.rows for cell in row.cells]
-
     def minimize_height(self) -> None:
         for row in self.rows:
             row.height = 1

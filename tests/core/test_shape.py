@@ -264,3 +264,16 @@ def test_range_svg(rng: ShapeRange):
     text = rng.svg()
     assert "<rect x=" in text
     assert "<path d=" in text
+
+
+def test_select_unselect(shapes: Shapes):
+    s1 = shapes.add("Rectangle", 100, 100, 100, 100)
+    s2 = shapes.add("Oval", 150, 150, 90, 80)
+    s1.select()
+    rng = s2.select(replace=False)
+    rng.app.unselect()
+    rng.fill.set(color="red", alpha=0.5)
+    assert s1.fill.color == 255
+    assert s1.fill.alpha == 0.5
+    assert s2.fill.color == 255
+    assert s2.fill.alpha == 0.5

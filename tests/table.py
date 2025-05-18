@@ -10,8 +10,8 @@ def main():
     slide = pr.slides.add()
 
     table = slide.shapes.add_table(4, 8, 100, 250, 400, 100)
-    table.rows[1].api.Select()
-    table.app.api.ActiveWindow.Selection.ShapeRange.Fill.Transparency = 0.5
+    # table.rows[1].api.Select()
+    # table.app.api.ActiveWindow.Selection.ShapeRange.Fill.Transparency = 0.5
     # rng = table.select()
     # rng.fill.set(color="red", alpha=0.5)
     # table.app.unselect()
