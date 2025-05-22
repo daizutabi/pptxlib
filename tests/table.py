@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pptxlib.core.app import App
+from pptxlib.app import App
 
 
 def main():

@@ -1,9 +1,9 @@
 import pytest
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.font import Font
-from pptxlib.core.presentation import Presentations
-from pptxlib.core.shape import Shape, Shapes
+from pptxlib.app import is_app_available
+from pptxlib.font import Font
+from pptxlib.presentation import Presentations
+from pptxlib.shape import Shape, Shapes
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),

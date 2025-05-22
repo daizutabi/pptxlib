@@ -4,9 +4,9 @@ import PIL.Image
 import pytest
 from win32com.client import constants
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.presentation import Presentations
-from pptxlib.core.slide import Slide, Slides
+from pptxlib.app import is_app_available
+from pptxlib.presentation import Presentations
+from pptxlib.slide import Slide, Slides
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),

@@ -1,8 +1,8 @@
 import pytest
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.presentation import Presentations
-from pptxlib.core.table import Cell, Column, Row, Table
+from pptxlib.app import is_app_available
+from pptxlib.presentation import Presentations
+from pptxlib.table import Cell, Column, Row, Table
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),
@@ -159,7 +159,7 @@ def test_borders_cell(table: Table):
 
 
 def test_line_format(table: Table):
-    from pptxlib.core.table import LineFormat
+    from pptxlib.table import LineFormat
 
     lf = table[1, 1].borders["top"]
     assert isinstance(lf, LineFormat)

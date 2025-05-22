@@ -1,7 +1,7 @@
 import pytest
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.presentation import Presentation, Presentations
+from pptxlib.app import is_app_available
+from pptxlib.presentation import Presentation, Presentations
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),

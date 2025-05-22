@@ -6,11 +6,11 @@ import PIL.Image
 import pytest
 from win32com.client import DispatchBaseClass
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.base import Collection, Element
-from pptxlib.core.shape import Shape, ShapeRange, Shapes
-from pptxlib.core.slide import Slide
-from pptxlib.core.table import Table
+from pptxlib.app import is_app_available
+from pptxlib.base import Collection, Element
+from pptxlib.shape import Shape, ShapeRange, Shapes
+from pptxlib.slide import Slide
+from pptxlib.table import Table
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),

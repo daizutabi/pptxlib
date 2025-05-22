@@ -1,8 +1,8 @@
 import pytest
 from win32com.client import constants
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.shape import Line, Shape, Shapes
+from pptxlib.app import is_app_available
+from pptxlib.shape import Line, Shape, Shapes
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),
