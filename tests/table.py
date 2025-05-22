@@ -16,7 +16,6 @@ def main():
 
     texts = ["", "a", "a", "a", "b", "b", "c", "c", "c"]
     table.rows[0].text(texts, size=22, bold=True, merge=True)
-    print(table.cell(0, 3).text)
 
     # print(table.api.Table.Range)
 
