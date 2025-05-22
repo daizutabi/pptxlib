@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, ClassVar
 
 from .base import Collection, Element
-from .slide import Slides
+from .slide import Layouts, Slides
 
 if TYPE_CHECKING:
     from typing import Self
@@ -48,6 +48,10 @@ class Presentation(Element):
         self.height = height
         return self
 
+    @property
+    def layouts(self) -> Layouts:
+        return Layouts(self.api.SlideMaster.CustomLayouts, self)
+
 
 @dataclass(repr=False)
 class Presentations(Collection[Presentation]):
@@ -64,5 +68,5 @@ class Presentations(Collection[Presentation]):
 
     @property
     def active(self) -> Presentation:
-        api = self.app.ActivePresentation
+        api = self.app.api.ActivePresentation
         return Presentation(api, self.parent, self)

@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from pptxlib.core.app import App
+from pptxlib.app import App
 
 
 def main():
@@ -9,28 +9,56 @@ def main():
     pr = app.presentations.add()
     slide = pr.slides.add()
 
-    s = slide.shapes.add("Rectangle", 100, 100, 100, 100)
-    s.text = "abc"
-    s.font.set("Times New Roman", 16, True, True, "red")
-    s.fill.set(color="red", alpha=0.5)
-    s.line.set(color="blue", weight=5, alpha=0.5)
+    table = slide.shapes.add_table(4, 8, 100, 250, 400, 100)
+    # for cell in table.rows[0]:
+    #     cell.shape.font.set(size=10)
+    table.reset_style()
 
-    table = slide.shapes.add_table(2, 3, 100, 250, 100, 100)
-    table.fill("red", alpha=0.5)
-    table.columns[1].fill("blue", alpha=0.5)
-    table.rows.height = [40, 40]
-    for i in range(4):
-        table[0].borders[i].set(color="red", weight=5, alpha=0.5)
-    table[1, 1].borders[0].set(color="red", weight=5, alpha=0.5)
-    table.columns.borders["bottom"].set(color="green", weight=5, alpha=0.5)
-    table[1].borders["left"].set(color="green", weight=5, alpha=0.5)
+    texts = ["", "a", "a", "a", "b", "b", "c", "c", "c"]
+    table.rows[0].text(texts, size=22, bold=True, merge=True)
 
-    c = table[0, 0]
-    c.text = "abc"
-    for c in table.columns:
-        c.width = 100
+    # print(table.api.Table.Range)
 
-    s.select()
+    # api.Fill.ForeColor.RGB = 255
+    # api.Fill.Transparency = 0.5
+    # rng = ShapeRange(api, row.parent.parent, row.parent.collection)
+    # rng.fill.set(color="red", alpha=0.5)
+    # rng.app.unselect()
+
+    # rng = table.select()
+    # table.api.Table.Cells.Select()
+    # api = table.app.api.ActiveWindow.Selection.TextRange
+    # api.Font.Size = 10
+    # print("a", api)
+
+    # rng.font.set(size=10)
+    # rng.fill.set(color="red", alpha=0.5)
+    # rng.app.unselect()
+    # table.rows[1].api.Select()
+    # table.app.api.ActiveWindow.Selection.ShapeRange.Fill.Transparency = 0.5
+    # rng = table.select()
+    # rng.fill.set(color="red", alpha=0.5)
+    # table.app.unselect()
+
+    # table.clear()
+    # table.fill.set(color="red", alpha=0.5)
+    # print(table.shapes)
+
+    # table.fill("red", alpha=0.5)
+    # table.columns[1].fill("blue", alpha=0.5)
+    # table.rows.height = [40, 40]
+    # for i in range(4):
+    #     table[0].borders[i].set(color="red", weight=5, alpha=0.5)
+    # table[1, 1].borders[0].set(color="red", weight=5, alpha=0.5)
+    # table.columns.borders["bottom"].set(color="green", weight=5, alpha=0.5)
+    # table[1].borders["left"].set(color="green", weight=5, alpha=0.5)
+
+    # c = table[0, 0]
+    # c.text = "abc"
+    # for c in table.columns:
+    #     c.width = 100
+
+    # s.select()
     # table.fill("red", (0, 0), (1, 2))
     # print(table[0, 0].shape.api.Fill.Transparency)
     # table[0, 0].shape.api.Fill.Transparency = 1

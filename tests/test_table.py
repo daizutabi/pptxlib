@@ -1,8 +1,8 @@
 import pytest
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.presentation import Presentations
-from pptxlib.core.table import Cell, Column, Row, Table
+from pptxlib.app import is_app_available
+from pptxlib.presentation import Presentations
+from pptxlib.table import Cell, Column, Row, Table
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),
@@ -74,7 +74,7 @@ def test_getitem_tuple_slice_int(table: Table):
 
 
 def test_fill(table: Table):
-    table.fill("red", alpha=0.5)
+    table.fill.set(color="red", alpha=0.5)
     assert table[0, 0].shape.fill.color == 255
     assert table[0, 0].shape.fill.alpha == 0.5
 
@@ -118,6 +118,10 @@ def test_cell_repr(table: Table):
     assert repr(table.cell(0, 0)) == "<Cell>"
 
 
+def test_cell_shape_name(table: Table):
+    assert table.cell(0, 0).shape.name == ""
+
+
 def test_borders_row(table: Table):
     b = table.rows[0].borders
     b[0].set(color="red", alpha=0.5)
@@ -155,8 +159,31 @@ def test_borders_cell(table: Table):
 
 
 def test_line_format(table: Table):
-    from pptxlib.core.table import LineFormat
+    from pptxlib.table import LineFormat
 
     lf = table[1, 1].borders["top"]
     assert isinstance(lf, LineFormat)
     assert repr(lf) == "<LineFormat>"
+
+
+def test_reset_style(prs: Presentations):
+    pr = prs.add()
+    slide = pr.slides.add()
+    shapes = slide.shapes
+    table = shapes.add_table(2, 3, 100, 250, 100, 100)
+    table.reset_style()
+    assert table.cell(0, 0).shape.fill.visible is False
+
+
+def test_text(prs: Presentations):
+    pr = prs.add()
+    slide = pr.slides.add()
+    shapes = slide.shapes
+    table = shapes.add_table(2, 5, 100, 250, 100, 100)
+    texts = ["a", "a", "a", "b", "b"]
+    table.rows[0].text(texts, size=12, bold=True, merge=True)
+    assert table.cell(0, 0).text == "a"
+    assert table.cell(0, 1).text == "a"
+    assert table.cell(0, 2).text == "a"
+    assert table.cell(0, 3).text == "b"
+    assert table.cell(0, 4).text == "b"

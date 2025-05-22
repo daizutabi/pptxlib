@@ -1,7 +1,7 @@
 import pytest
 from win32com.client import constants
 
-from pptxlib.core.app import is_app_available
+from pptxlib.app import is_app_available
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),
@@ -11,7 +11,7 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture(scope="module")
 def tlbs():
-    from pptxlib.core.client import iter_typelib_specs
+    from pptxlib.client import iter_typelib_specs
 
     return list(iter_typelib_specs())
 
@@ -30,7 +30,7 @@ def test_iter_typelib_specs(tlbs, clsid):
 
 
 def test_ensure_modules():
-    from pptxlib.core.client import ensure_modules
+    from pptxlib.client import ensure_modules
 
     ensure_modules()
     assert constants.ppLayoutTitleOnly == 11

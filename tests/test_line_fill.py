@@ -1,8 +1,8 @@
 import pytest
 from win32com.client import constants
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.shape import Line, Shape, Shapes
+from pptxlib.app import is_app_available
+from pptxlib.shape import Line, Shape, Shapes
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),
@@ -41,6 +41,11 @@ def test_set_fill(shape: Shape):
     x = shape.fill.set(color="red", alpha=0.2)
     assert x.color == 255
     assert 0.199 < x.alpha <= 0.2
+
+
+def test_set_fill_visible(shape: Shape):
+    x = shape.fill.set(visible=False)
+    assert x.visible is False
 
 
 def test_set_line(shape: Shape):

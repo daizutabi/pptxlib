@@ -9,7 +9,7 @@ from .base import Collection, Element
 from .shape import Line, Shape
 
 if TYPE_CHECKING:
-    from collections.abc import Iterator
+    from collections.abc import Iterable, Iterator
     from typing import Self
 
 
@@ -72,19 +72,54 @@ class Table(Shape):
         for i in range(len(self)):
             yield self[i]
 
-    def fill(
-        self,
-        color: int | str | tuple[int, int, int],
-        alpha: float | None = None,
-    ) -> Self:
-        for row in self:
-            row.fill(color=color, alpha=alpha)
-
-        return self
-
     def minimize_height(self) -> None:
         for row in self.rows:
             row.height = 1
+
+    def reset_style(
+        self,
+        weight: float = 2,
+        weight_inside: float = 1,
+        color: int | str | tuple[int, int, int] = "black",
+        color_inside: int | str | tuple[int, int, int] = "black",
+    ) -> None:
+        api = self.api.Table
+        api.FirstRow = False
+        api.HorizBanding = False
+        self.fill.set(visible=False)
+
+        for row in self.rows:
+            row.borders["bottom"].set(color=color_inside, weight=weight_inside)
+
+        for column in self.columns:
+            column.borders["right"].set(color=color_inside, weight=weight_inside)
+
+        self.rows[0].borders["top"].set(color=color, weight=weight)
+        self.rows[-1].borders["bottom"].set(color=color, weight=weight)
+        self.columns[0].borders["left"].set(color=color, weight=weight)
+        self.columns[-1].borders["right"].set(color=color, weight=weight)
+
+
+def set_text(
+    cells: Iterable[Cell],
+    texts: Iterable[str],
+    *,
+    size: float | None = None,
+    bold: bool = False,
+    merge: bool = False,
+) -> None:
+    texts = list(texts)
+    cells = list(cells)
+
+    prev = 0
+    for k, (cell, text) in enumerate(zip(cells, texts, strict=False)):
+        if not merge or k == 0 or text != texts[k - 1]:
+            cell.text = text
+            cell.shape.font.set(size=size, bold=bold)
+            prev = k
+
+        elif text == texts[k - 1]:
+            cell.merge(cells[prev])
 
 
 @dataclass(repr=False)
@@ -113,15 +148,15 @@ class Axis(Element):
         for i in range(len(self)):
             yield self[i]
 
-    def fill(
+    def text(
         self,
-        color: int | str | tuple[int, int, int],
-        alpha: float | None = None,
-    ) -> Self:
-        for cell in self:
-            cell.shape.fill.set(color=color, alpha=alpha)
-
-        return self
+        texts: Iterable[str],
+        *,
+        size: float | None = None,
+        bold: bool = False,
+        merge: bool = False,
+    ) -> None:
+        set_text(self, texts, size=size, bold=bold, merge=merge)
 
 
 @dataclass(repr=False)
@@ -213,6 +248,9 @@ class Cell(Element):
     @property
     def borders(self) -> Borders:
         return Borders(self.api.Borders, self.parent)
+
+    def merge(self, merge_to: Cell) -> None:
+        self.api.Merge(merge_to.api)
 
 
 @dataclass(repr=False)

@@ -1,8 +1,8 @@
 import pytest
 
-from pptxlib.core.app import App
-from pptxlib.core.presentation import Presentation, Presentations
-from pptxlib.core.slide import Slides
+from pptxlib.app import App
+from pptxlib.presentation import Presentation, Presentations
+from pptxlib.slide import Slides
 
 
 @pytest.fixture(scope="session")

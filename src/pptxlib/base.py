@@ -3,10 +3,14 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
 
+from pywintypes import com_error
+
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from win32com.client import CoClassBaseClass, DispatchBaseClass
+
+    from .app import App
 
 
 @dataclass(repr=False)
@@ -21,7 +25,7 @@ class Base:
 class Element(Base):
     parent: Element
     collection: Collection
-    app: DispatchBaseClass = field(init=False)
+    app: App = field(init=False)
 
     def __post_init__(self) -> None:
         self.app = self.parent.app
@@ -31,14 +35,17 @@ class Element(Base):
 
     @property
     def name(self) -> str:
-        return self.api.Name
+        try:
+            return self.api.Name
+        except com_error:
+            return ""
 
     @name.setter
     def name(self, value: str) -> None:
         self.api.Name = value
 
-    def select(self, *, replace: bool = True) -> None:
-        self.api.Select(replace)
+    def select(self) -> None:
+        self.api.Select()
 
     def delete(self) -> None:
         self.api.Delete()
@@ -51,7 +58,7 @@ E = TypeVar("E", bound=Element)
 class Collection(Base, Generic[E]):
     parent: Element
     type: ClassVar[type[Element]]
-    app: DispatchBaseClass = field(init=False)
+    app: App = field(init=False)
 
     def __post_init__(self) -> None:
         self.app = self.parent.app

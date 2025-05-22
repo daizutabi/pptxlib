@@ -6,11 +6,11 @@ import PIL.Image
 import pytest
 from win32com.client import DispatchBaseClass
 
-from pptxlib.core.app import is_app_available
-from pptxlib.core.base import Collection, Element
-from pptxlib.core.shape import Shape, ShapeRange, Shapes
-from pptxlib.core.slide import Slide
-from pptxlib.core.table import Table
+from pptxlib.app import is_app_available
+from pptxlib.base import Collection, Element
+from pptxlib.shape import Shape, ShapeRange, Shapes
+from pptxlib.slide import Slide
+from pptxlib.table import Table
 
 pytestmark = pytest.mark.skipif(
     not is_app_available(),
@@ -34,7 +34,10 @@ def shape(shapes: Shapes):
 
 
 def test_select(shape: Shape):
-    assert shape.select() is None
+    rng = shape.select()
+    assert isinstance(rng, ShapeRange)
+    assert rng.parent is shape.parent
+    assert rng.collection is shape.collection
 
 
 def test_title(shapes: Shapes, shape: Shape):
@@ -261,3 +264,16 @@ def test_range_svg(rng: ShapeRange):
     text = rng.svg()
     assert "<rect x=" in text
     assert "<path d=" in text
+
+
+def test_select_unselect(shapes: Shapes):
+    s1 = shapes.add("Rectangle", 100, 100, 100, 100)
+    s2 = shapes.add("Oval", 150, 150, 90, 80)
+    s1.select()
+    rng = s2.select(replace=False)
+    rng.app.unselect()
+    rng.fill.set(color="red", alpha=0.5)
+    assert s1.fill.color == 255
+    assert s1.fill.alpha == 0.5
+    assert s2.fill.color == 255
+    assert s2.fill.alpha == 0.5
