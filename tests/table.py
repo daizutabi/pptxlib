@@ -1,21 +1,32 @@
 from __future__ import annotations
 
+from datetime import datetime
+
 from pptxlib.app import App
+from pptxlib.gantt import GanttChart
 
 
 def main():
     app = App()
     app.presentations.close()
     pr = app.presentations.add()
-    slide = pr.slides.add()
+    gantt = GanttChart("week", datetime(2025, 5, 21), datetime(2025, 6, 10))
+    layout = pr.layouts.add(gantt.frame.name)
+    gantt.add_table(layout, 20, 150, bottom=20)
+    slide = pr.slides.add(layout=layout)
+    gantt.slide = slide
+    s1 = gantt.add(datetime(2025, 5, 21), 20)
+    s1.font.set(size=12, color="yellow")
+    s2 = gantt.add(datetime(2025, 5, 26), 30, color="red")
+    s2.font.set(size=12)
+    s1.connect(s2).line.set(color="pink", weight=6)
 
-    table = slide.shapes.add_table(4, 8, 100, 250, 400, 100)
-    # for cell in table.rows[0]:
-    #     cell.shape.font.set(size=10)
-    table.reset_style()
+    # # for cell in table.rows[0]:
+    # #     cell.shape.font.set(size=10)
+    # table.reset_style()
 
-    texts = ["", "a", "a", "a", "b", "b", "c", "c", "c"]
-    table.rows[0].text(texts, size=22, bold=True, merge=True)
+    # texts = ["", "a", "a", "a", "b", "b", "c", "c", "c"]
+    # table.rows[0].text(texts, size=22, bold=True, merge=True)
 
     # print(table.api.Table.Range)
 
