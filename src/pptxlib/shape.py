@@ -320,6 +320,27 @@ class Shape(Element):
         file_name.unlink()
         return text
 
+    def align_center(self) -> Self:
+        text_frame2 = self.api.TextFrame2
+        text_frame2.VerticalAnchor = constants.msoAnchorMiddle
+        paragraph_format = text_frame2.TextRange.ParagraphFormat
+        paragraph_format.Alignment = constants.msoAlignCenter
+        return self
+
+    def margin(
+        self,
+        left: float = 0,
+        top: float = 0,
+        right: float | None = None,
+        bottom: float | None = None,
+    ) -> Self:
+        text_frame2 = self.api.TextFrame2
+        text_frame2.MarginLeft = left
+        text_frame2.MarginTop = top
+        text_frame2.MarginRight = left if right is None else right
+        text_frame2.MarginBottom = top if bottom is None else bottom
+        return self
+
 
 @dataclass(repr=False)
 class Shapes(Collection[Shape]):
