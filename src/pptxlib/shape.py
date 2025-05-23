@@ -327,7 +327,7 @@ class Shape(Element):
         paragraph_format.Alignment = constants.msoAlignCenter
         return self
 
-    def margin(
+    def text_margin(
         self,
         left: float = 0,
         top: float = 0,

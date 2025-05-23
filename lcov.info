@@ -957,8 +957,8 @@ FN:314,321,Shape.svg
 FNDA:1,Shape.svg
 FN:323,328,Shape.align_center
 FNDA:1,Shape.align_center
-FN:330,342,Shape.margin
-FNDA:1,Shape.margin
+FN:330,342,Shape.text_margin
+FNDA:1,Shape.text_margin
 FN:351,352,Shapes.title
 FNDA:1,Shapes.title
 FN:354,370,Shapes.add

@@ -191,7 +191,7 @@ class GanttChart:
             text = str(date.day)
         shape.text = text
         shape.align_center()
-        shape.margin(left=0, top=0, right=0, bottom=0)
+        shape.text_margin(left=0, top=0, right=0, bottom=0)
 
         if color is not None:
             shape.line.set(color=color)
