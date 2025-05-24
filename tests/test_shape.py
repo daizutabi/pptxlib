@@ -6,14 +6,14 @@ import PIL.Image
 import pytest
 from win32com.client import DispatchBaseClass
 
-from pptxlib.app import is_app_available
+from pptxlib.app import is_powerpoint_available
 from pptxlib.base import Collection, Element
 from pptxlib.shape import Shape, ShapeRange, Shapes
 from pptxlib.slide import Slide
 from pptxlib.table import Table
 
 pytestmark = pytest.mark.skipif(
-    not is_app_available(),
+    not is_powerpoint_available(),
     reason="PowerPoint is not available",
 )
 

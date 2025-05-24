@@ -4,12 +4,12 @@ import PIL.Image
 import pytest
 from win32com.client import constants
 
-from pptxlib.app import is_app_available
+from pptxlib.app import is_powerpoint_available
 from pptxlib.presentation import Presentations
 from pptxlib.slide import Slide, Slides
 
 pytestmark = pytest.mark.skipif(
-    not is_app_available(),
+    not is_powerpoint_available(),
     reason="PowerPoint is not available",
 )
 

@@ -80,7 +80,7 @@ class App(Base):
 
 
 @cache
-def is_app_available() -> bool:
+def is_powerpoint_available() -> bool:
     """Check if PowerPoint application is available on the system.
 
     This function attempts to create a PowerPoint application instance to verify
