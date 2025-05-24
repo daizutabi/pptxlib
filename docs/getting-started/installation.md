@@ -28,14 +28,11 @@ pip install pptxlib
 
 ## Verifying Installation
 
-To verify the installation, you can run Python and import the package:
+To verify the installation, you can run Python and
+check if the package is installed and if PowerPoint is available:
 
-```python
-from pptxlib import App
+```python exec="1" source="material-block"
+from pptxlib import is_powerpoint_available
 
-# Check if PowerPoint is available
-if App.is_app_available():
-    print("pptxlib is installed and PowerPoint is available")
-else:
-    print("pptxlib is installed but PowerPoint is not available")
+is_powerpoint_available()
 ```
