@@ -5,16 +5,36 @@ build-backend = "hatchling.build"
 [project]
 name = "pptxlib"
 version = "0.2.2"
-description = "PowerPoint lib"
+description = "A high-level Python library for automating Microsoft PowerPoint operations. Create, modify, and manage PowerPoint presentations programmatically with a simple and intuitive interface."
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "daizutabi", email = "daizutabi@gmail.com" }]
+keywords = [
+  "powerpoint",
+  "pptx",
+  "presentation",
+  "automation",
+  "office",
+  "microsoft",
+  "windows",
+  "com",
+  "win32com",
+]
 classifiers = [
   "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: Microsoft :: Windows",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Topic :: Office/Business",
+  "Topic :: Software Development :: Libraries :: Python Modules",
+  "Topic :: Software Development :: Libraries :: Application Frameworks",
+  "Topic :: Text Processing :: Markup",
+  "Topic :: Text Processing :: Markup :: XML",
+  "Typing :: Typed",
 ]
 requires-python = ">=3.11"
 dependencies = ["pywin32"]
