@@ -7,6 +7,9 @@ repo_name: daizutabi/pptxlib
 edit_uri: edit/main/docs/
 theme:
   name: material
+  font:
+    text: Fira Sans
+    code: Fira Code
   icon:
     repo: fontawesome/brands/github
   palette:
@@ -36,6 +39,8 @@ theme:
     - search.suggest
 plugins:
   - search
+  - mkdocs-nbsync:
+      src_dir: ../notebooks
   - mkapi:
       enabled: true
       search_exclude: false
