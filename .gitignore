@@ -2,5 +2,5 @@
 .ipynb_checkpoints
 .venv/
 __pycache__/
-dist/
+site/
 uv.lock
