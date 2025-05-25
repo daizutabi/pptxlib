@@ -1,73 +1,138 @@
 # Quick Start Guide
 
-This guide will help you get started with pptxlib quickly. We'll create a simple
-presentation with a title slide and a content slide.
+```python .md#_
+from pptxlib import App
+App().presentations.close()
+```
+
+This guide will help you get started with pptxlib quickly.
+We'll create a simple presentation with a title slide
+and a content slide.
+
+## Creating a New App
+
+You can create a new instance of the PowerPoint application
+by calling the [`App`][pptxlib.app.App] class.
+
+```python exec="1" source="material-block"
+from pptxlib import App
+
+app = App()
+app
+```
+
+[`App.presentations`][pptxlib.presentation.Presentations]
+is a collection of presentations.
+
+```python exec="1" source="material-block"
+app.presentations
+```
 
 ## Creating a New Presentation
 
-```python
-from pptxlib import App
+You can create a new presentation by calling the
+[`add`][pptxlib.presentation.Presentations.add] method
+on the [`presentations`][pptxlib.presentation.Presentations] collection.
 
-# Create a new presentation
-with App() as app:
-    # Add a new presentation
-    presentation = app.presentations.add()
+```python exec="1" source="material-block"
+pr = app.presentations.add()
+pr
+```
 
-    # Add a title slide
-    title_slide = presentation.slides.add()
-    title_shape = title_slide.shapes.add_textbox("Welcome to pptxlib")
-    title_shape.text_frame.text = "Welcome to pptxlib"
+[`presentations`][pptxlib.presentation.Presentations]
+attribute can be indexed by an integer
+to access a specific presentation.
 
-    # Add a content slide
-    content_slide = presentation.slides.add()
-    content_shape = content_slide.shapes.add_textbox("Getting Started")
-    content_shape.text_frame.text = "Getting Started"
+```python exec="1" source="material-block"
+app.presentations[0]
+```
 
-    # Save the presentation
-    presentation.save_as("quickstart.pptx")
+## Adding a Title Slide
+
+A title slide is a slide with a title and a subtitle optionally.
+
+You can add a title slide by calling the
+[`add`][pptxlib.slide.Slides.add] method
+on the [`slides`][pptxlib.slide.Slides] collection
+and passing the `layout` parameter
+with the value `"Title"`.
+Then, you can set the title of the slide by setting the
+[`title`][pptxlib.slide.Slide.title] attribute.
+
+```python exec="1" source="material-block"
+slide = pr.slides.add(layout="Title")
+slide.title = "Welcome to pptxlib"
+```
+
+Now, the [`slides`][pptxlib.slide.Slides]
+collection has one slide.
+
+```python exec="1" source="material-block"
+pr.slides
+```
+
+Check the title of the slide.
+
+```python exec="1" source="material-block"
+pr.slides[0].title
+```
+
+## Adding Content Slides
+
+You can add a content slide by calling the
+[`add`][pptxlib.slide.Slides.add] method
+on the [`slides`][pptxlib.slide.Slides] collection
+and passing the `layout` parameter
+with the layout name, for example, `"TitleOnly"`.
+
+```python exec="1" source="material-block"
+slide = pr.slides.add(layout="TitleOnly")
+slide.title = "First Slide"
+```
+
+If you omit the `layout` parameter,
+the layout of the previous slide is used.
+
+```python exec="1" source="material-block"
+slide = pr.slides.add()
+slide.title = "Second Slide"
+```
+
+Now, we have three slides.
+
+```python exec="1" source="material-block"
+pr.slides
+```
+
+## Selecting a Slide
+
+You can select a slide by calling the
+[`select`][pptxlib.base.Element.select] method
+on the slide object.
+
+```python exec="1" source="material-block"
+slide.select()
+```
+
+[`unselect`][pptxlib.app.App.unselect] method is also available.
+
+```python exec="1" source="material-block"
+app.unselect()
 ```
 
 ## Working with Shapes
 
-```python
-from pptxlib import App
+You can add a shape to a slide by calling the
+[`add`][pptxlib.shape.Shapes.add] method
+on the [`shapes`][pptxlib.shape.Shapes] collection.
 
-with App() as app:
-    presentation = app.presentations.add()
-    slide = presentation.slides.add()
-
-    # Add a text box
-    textbox = slide.shapes.add_textbox("Hello, World!")
-
-    # Add a rectangle
-    rectangle = slide.shapes.add_shape("rectangle", 100, 100, 200, 100)
-
-    # Add a table
-    table = slide.shapes.add_table(3, 3, 100, 100, 200, 100)
+```python exec="1" source="material-block"
+shape = slide.shapes.add("Rectangle", 100, 100, 200, 100)
+shape
 ```
 
-## Customizing Text and Colors
+## Quit the App
 
-```python
-from pptxlib import App, Color
-
-with App() as app:
-    presentation = app.presentations.add()
-    slide = presentation.slides.add()
-
-    # Add text with custom formatting
-    textbox = slide.shapes.add_textbox("Formatted Text")
-    textbox.text_frame.text = "Formatted Text"
-    textbox.text_frame.font.size = 24
-    textbox.text_frame.font.color = Color(255, 0, 0)  # Red color
+```python exec="1" source="material-block"
+app.quit()
 ```
-
-## Next Steps
-
-Now that you've learned the basics, you can explore more features:
-
-- [Basic Usage](../user-guide/basic-usage.md)
-- [Working with Presentations](../user-guide/presentations.md)
-- [Managing Slides](../user-guide/slides.md)
-- [Working with Shapes](../user-guide/shapes.md)
-- [Creating Tables](../user-guide/tables.md)
