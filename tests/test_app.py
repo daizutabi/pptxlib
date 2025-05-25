@@ -1,10 +1,10 @@
 import pytest
 
-from pptxlib.app import App, is_app_available
+from pptxlib.app import App, is_powerpoint_available
 from pptxlib.presentation import Presentations
 
 pytestmark = pytest.mark.skipif(
-    not is_app_available(),
+    not is_powerpoint_available(),
     reason="PowerPoint is not available",
 )
 
