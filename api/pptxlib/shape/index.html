@@ -1,0 +1,3239 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Python library for automating Microsoft PowerPoint operations.">
+      
+      
+        <meta name="author" content="daizutabi">
+      
+      
+        <link rel="canonical" href="https://daizutabi.github.io/pptxlib/api/pptxlib/shape/">
+      
+      
+        <link rel="prev" href="../presentation/">
+      
+      
+        <link rel="next" href="../slide/">
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.14">
+    
+    
+      
+        <title>pptxlib.shape - pptxlib</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.342714a4.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.06af60db.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Sans:300,300i,400,400i,700,700i%7CFira+Code:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Fira Sans";--md-code-font:"Fira Code"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../css/mkapi-common.css">
+    
+      <link rel="stylesheet" href="../../../css/mkapi-material.css">
+    
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#pptxlib.shape" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="pptxlib" class="md-header__button md-logo" aria-label="pptxlib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            pptxlib
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              pptxlib.shape
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent="black"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/daizutabi/pptxlib/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    daizutabi/pptxlib
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../getting-started/installation/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Getting Started
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../user-guide/basic-usage.md" class="md-tabs__link">
+          
+  
+  
+    
+  
+  User Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="pptxlib" class="md-nav__button md-logo" aria-label="pptxlib" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    pptxlib
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/daizutabi/pptxlib/" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2024 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8M97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    daizutabi/pptxlib
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Getting Started
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            Getting Started
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/installation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Installation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    User Guide
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            User Guide
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user-guide/basic-usage.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Basic Usage
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user-guide/presentations.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Presentations
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user-guide/slides.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Slides
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user-guide/shapes.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Shapes
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../user-guide/tables.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Tables
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    API Reference
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            API Reference
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+          
+          
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4_1" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    pptxlib
+    
+  </span>
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4_1" id="__nav_4_1_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_4_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4_1">
+            <span class="md-nav__icon md-icon"></span>
+            pptxlib
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../app/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.app
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../base/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.base
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.client
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../color/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.color
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../font/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.font
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../gantt/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.gantt
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../presentation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.presentation
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.shape
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.shape
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Color">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.color" class="md-nav__link">
+    <span class="md-ellipsis">
+      color
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      alpha
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.visible" class="md-nav__link">
+    <span class="md-ellipsis">
+      visible
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.set" class="md-nav__link">
+    <span class="md-ellipsis">
+      set
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.update" class="md-nav__link">
+    <span class="md-ellipsis">
+      update
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fill
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line" class="md-nav__link">
+    <span class="md-ellipsis">
+      Line
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Line">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.weight" class="md-nav__link">
+    <span class="md-ellipsis">
+      weight
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.set" class="md-nav__link">
+    <span class="md-ellipsis">
+      set
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.update" class="md-nav__link">
+    <span class="md-ellipsis">
+      update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.dash_style" class="md-nav__link">
+    <span class="md-ellipsis">
+      dash_style
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.dash" class="md-nav__link">
+    <span class="md-ellipsis">
+      dash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrowhead_style" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrowhead_style
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrowhead_style" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrowhead_style
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrowhead_length" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrowhead_length
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrowhead_length" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrowhead_length
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrowhead_width" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrowhead_width
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrowhead_width" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrowhead_width
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shape
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.left" class="md-nav__link">
+    <span class="md-ellipsis">
+      left
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.top" class="md-nav__link">
+    <span class="md-ellipsis">
+      top
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.width" class="md-nav__link">
+    <span class="md-ellipsis">
+      width
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.height" class="md-nav__link">
+    <span class="md-ellipsis">
+      height
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.text_range" class="md-nav__link">
+    <span class="md-ellipsis">
+      text_range
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.text" class="md-nav__link">
+    <span class="md-ellipsis">
+      text
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.font" class="md-nav__link">
+    <span class="md-ellipsis">
+      font
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.line" class="md-nav__link">
+    <span class="md-ellipsis">
+      line
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.select" class="md-nav__link">
+    <span class="md-ellipsis">
+      select
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      copy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.export" class="md-nav__link">
+    <span class="md-ellipsis">
+      export
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.png" class="md-nav__link">
+    <span class="md-ellipsis">
+      png
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.svg" class="md-nav__link">
+    <span class="md-ellipsis">
+      svg
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.align_center" class="md-nav__link">
+    <span class="md-ellipsis">
+      align_center
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.text_margin" class="md-nav__link">
+    <span class="md-ellipsis">
+      text_margin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shapes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shapes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.title" class="md-nav__link">
+    <span class="md-ellipsis">
+      title
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add" class="md-nav__link">
+    <span class="md-ellipsis">
+      add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_line" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_line
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_label
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_table" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_table
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_picture
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_image" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_image
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_figure" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_figure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_connector" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_connector
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.paste" class="md-nav__link">
+    <span class="md-ellipsis">
+      paste
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.paste_special" class="md-nav__link">
+    <span class="md-ellipsis">
+      paste_special
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.range" class="md-nav__link">
+    <span class="md-ellipsis">
+      range
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.ShapeRange" class="md-nav__link">
+    <span class="md-ellipsis">
+      ShapeRange
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../slide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.slide
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../table/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    pptxlib.table
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color" class="md-nav__link">
+    <span class="md-ellipsis">
+      Color
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Color">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.color" class="md-nav__link">
+    <span class="md-ellipsis">
+      color
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.alpha" class="md-nav__link">
+    <span class="md-ellipsis">
+      alpha
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.visible" class="md-nav__link">
+    <span class="md-ellipsis">
+      visible
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.set" class="md-nav__link">
+    <span class="md-ellipsis">
+      set
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Color.update" class="md-nav__link">
+    <span class="md-ellipsis">
+      update
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      Fill
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line" class="md-nav__link">
+    <span class="md-ellipsis">
+      Line
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Line">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.weight" class="md-nav__link">
+    <span class="md-ellipsis">
+      weight
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.set" class="md-nav__link">
+    <span class="md-ellipsis">
+      set
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.update" class="md-nav__link">
+    <span class="md-ellipsis">
+      update
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.dash_style" class="md-nav__link">
+    <span class="md-ellipsis">
+      dash_style
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.dash" class="md-nav__link">
+    <span class="md-ellipsis">
+      dash
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrowhead_style" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrowhead_style
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrowhead_style" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrowhead_style
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrowhead_length" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrowhead_length
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrowhead_length" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrowhead_length
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrowhead_width" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrowhead_width
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrowhead_width" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrowhead_width
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.begin_arrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      begin_arrow
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Line.end_arrow" class="md-nav__link">
+    <span class="md-ellipsis">
+      end_arrow
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shape
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.left" class="md-nav__link">
+    <span class="md-ellipsis">
+      left
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.top" class="md-nav__link">
+    <span class="md-ellipsis">
+      top
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.width" class="md-nav__link">
+    <span class="md-ellipsis">
+      width
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.height" class="md-nav__link">
+    <span class="md-ellipsis">
+      height
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.text_range" class="md-nav__link">
+    <span class="md-ellipsis">
+      text_range
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.text" class="md-nav__link">
+    <span class="md-ellipsis">
+      text
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.font" class="md-nav__link">
+    <span class="md-ellipsis">
+      font
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.fill" class="md-nav__link">
+    <span class="md-ellipsis">
+      fill
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.line" class="md-nav__link">
+    <span class="md-ellipsis">
+      line
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.select" class="md-nav__link">
+    <span class="md-ellipsis">
+      select
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.copy" class="md-nav__link">
+    <span class="md-ellipsis">
+      copy
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.connect" class="md-nav__link">
+    <span class="md-ellipsis">
+      connect
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.export" class="md-nav__link">
+    <span class="md-ellipsis">
+      export
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.png" class="md-nav__link">
+    <span class="md-ellipsis">
+      png
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.svg" class="md-nav__link">
+    <span class="md-ellipsis">
+      svg
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.align_center" class="md-nav__link">
+    <span class="md-ellipsis">
+      align_center
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shape.text_margin" class="md-nav__link">
+    <span class="md-ellipsis">
+      text_margin
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Shapes
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Shapes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.title" class="md-nav__link">
+    <span class="md-ellipsis">
+      title
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add" class="md-nav__link">
+    <span class="md-ellipsis">
+      add
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_line" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_line
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_label" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_label
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_table" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_table
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_picture" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_picture
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_image" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_image
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_figure" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_figure
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.add_connector" class="md-nav__link">
+    <span class="md-ellipsis">
+      add_connector
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.paste" class="md-nav__link">
+    <span class="md-ellipsis">
+      paste
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.paste_special" class="md-nav__link">
+    <span class="md-ellipsis">
+      paste_special
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pptxlib.shape.Shapes.range" class="md-nav__link">
+    <span class="md-ellipsis">
+      range
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pptxlib.shape.ShapeRange" class="md-nav__link">
+    <span class="md-ellipsis">
+      ShapeRange
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 style="display: none;">pptxlib.shape</h1><p class="mkapi-object mkapi-page-source" id="pptxlib.shape">
+<span class="mkapi-object-link">
+
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">module</span>
+<span class="mkapi-object-name"><a href="./#pptxlib.shape" title="pptxlib.shape">pptxlib.shape</a></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-section">
+<span class="mkapi-object-link">
+<span class="mkapi-section-toggle" title="Toggle classes">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span>
+<span class="mkapi-section-name">Classes</span>
+</p>
+<div class="mkapi-section-content">
+<ul class="mkapi-item-list">
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Fill" title="pptxlib.shape.Fill">Fill</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.ShapeRange" title="pptxlib.shape.ShapeRange">ShapeRange</a></span></p>
+</li>
+</ul>
+</div>
+</div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Color">
+<span class="mkapi-object-link">
+
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Color" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">dataclass</span>
+<span class="mkapi-object-name"><a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">api</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="win32com.client.DispatchBaseClass">DispatchBaseClass</span> | CoClassBaseClass</span><span class="mkapi-paren">)</span></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-bases">Bases :
+<span class="mkapi-base"><a href="../base/#pptxlib.base.Base" title="pptxlib.base.Base">Base</a></span></p>
+<p class="mkapi-section">
+<span class="mkapi-object-link">
+<span class="mkapi-section-toggle" title="Toggle methods">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span>
+<span class="mkapi-section-name">Methods</span>
+</p>
+<div class="mkapi-section-content">
+<ul class="mkapi-item-list">
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Color.set" title="pptxlib.shape.Color.set">set</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Color.update" title="pptxlib.shape.Color.update">update</a></span></p>
+</li>
+</ul>
+</div>
+</div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Color.color">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Color.color" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Color.color" title="pptxlib.shape.Color.color">color</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Color.alpha">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Color.alpha" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Color.alpha" title="pptxlib.shape.Color.alpha">alpha</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">float</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Color.visible">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Color.visible" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Color.visible" title="pptxlib.shape.Color.visible">visible</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">bool</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Color.set">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Color.set" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Color.set" title="pptxlib.shape.Color.set">set</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">color</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | tuple[int, int, int] | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">alpha</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">visible</span><span class="mkapi-colon">: </span><span class="mkapi-ann">bool | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><span class="mkapi-tooltip" title="typing.Self">Self</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Color.update">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Color.update" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Color.update" title="pptxlib.shape.Color.update">update</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">color</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a></span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return">None</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Fill">
+<span class="mkapi-object-link">
+
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Fill" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">dataclass</span>
+<span class="mkapi-object-name"><a href="./#pptxlib.shape.Fill" title="pptxlib.shape.Fill">Fill</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">api</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="win32com.client.DispatchBaseClass">DispatchBaseClass</span> | CoClassBaseClass</span><span class="mkapi-paren">)</span></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-bases">Bases :
+<span class="mkapi-base"><a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a></span></p>
+</div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line">
+<span class="mkapi-object-link">
+
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">dataclass</span>
+<span class="mkapi-object-name"><a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">api</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="win32com.client.DispatchBaseClass">DispatchBaseClass</span> | CoClassBaseClass</span><span class="mkapi-paren">)</span></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-bases">Bases :
+<span class="mkapi-base"><a href="./#pptxlib.shape.Color" title="pptxlib.shape.Color">Color</a></span></p>
+<p class="mkapi-section">
+<span class="mkapi-object-link">
+<span class="mkapi-section-toggle" title="Toggle methods">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span>
+<span class="mkapi-section-name">Methods</span>
+</p>
+<div class="mkapi-section-content">
+<ul class="mkapi-item-list">
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Line.set" title="pptxlib.shape.Line.set">set</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Line.update" title="pptxlib.shape.Line.update">update</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Line.dash" title="pptxlib.shape.Line.dash">dash</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Line.begin_arrow" title="pptxlib.shape.Line.begin_arrow">begin_arrow</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Line.end_arrow" title="pptxlib.shape.Line.end_arrow">end_arrow</a></span></p>
+</li>
+</ul>
+</div>
+</div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.weight">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.weight" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.weight" title="pptxlib.shape.Line.weight">weight</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">float</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.set">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.set" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.set" title="pptxlib.shape.Line.set">set</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">weight</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">color</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | tuple[int, int, int] | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">alpha</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><span class="mkapi-tooltip" title="typing.Self">Self</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.update">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.update" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.update" title="pptxlib.shape.Line.update">update</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">line</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a></span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return">None</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.dash_style">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.dash_style" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.dash_style" title="pptxlib.shape.Line.dash_style">dash_style</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.dash">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.dash" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.dash" title="pptxlib.shape.Line.dash">dash</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">dash_style</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str</span><span class="mkapi-equal"> = </span><span class="mkapi-default">'Dash'</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><span class="mkapi-tooltip" title="typing.Self">Self</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.begin_arrowhead_style">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.begin_arrowhead_style" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.begin_arrowhead_style" title="pptxlib.shape.Line.begin_arrowhead_style">begin_arrowhead_style</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.end_arrowhead_style">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.end_arrowhead_style" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.end_arrowhead_style" title="pptxlib.shape.Line.end_arrowhead_style">end_arrowhead_style</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.begin_arrowhead_length">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.begin_arrowhead_length" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.begin_arrowhead_length" title="pptxlib.shape.Line.begin_arrowhead_length">begin_arrowhead_length</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.end_arrowhead_length">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.end_arrowhead_length" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.end_arrowhead_length" title="pptxlib.shape.Line.end_arrowhead_length">end_arrowhead_length</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.begin_arrowhead_width">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.begin_arrowhead_width" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.begin_arrowhead_width" title="pptxlib.shape.Line.begin_arrowhead_width">begin_arrowhead_width</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.end_arrowhead_width">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.end_arrowhead_width" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.end_arrowhead_width" title="pptxlib.shape.Line.end_arrowhead_width">end_arrowhead_width</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">int</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.begin_arrow">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.begin_arrow" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.begin_arrow" title="pptxlib.shape.Line.begin_arrow">begin_arrow</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">style</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">length</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><span class="mkapi-tooltip" title="typing.Self">Self</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Line.end_arrow">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Line.end_arrow" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Line.end_arrow" title="pptxlib.shape.Line.end_arrow">end_arrow</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">style</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">length</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><span class="mkapi-tooltip" title="typing.Self">Self</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape">
+<span class="mkapi-object-link">
+
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">dataclass</span>
+<span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">api</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="win32com.client.DispatchBaseClass">DispatchBaseClass</span> | CoClassBaseClass</span><span class="mkapi-comma">, </span><span class="mkapi-arg">parent</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="../slide/#pptxlib.slide.Slide" title="pptxlib.slide.Slide">Slide</a></span><span class="mkapi-comma">, </span><span class="mkapi-arg">collection</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a></span><span class="mkapi-paren">)</span></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-bases">Bases :
+<span class="mkapi-base"><a href="../base/#pptxlib.base.Element" title="pptxlib.base.Element">Element</a></span></p>
+<p class="mkapi-section">
+<span class="mkapi-object-link">
+<span class="mkapi-section-toggle" title="Toggle methods">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span>
+<span class="mkapi-section-name">Methods</span>
+</p>
+<div class="mkapi-section-content">
+<ul class="mkapi-item-list">
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.select" title="pptxlib.shape.Shape.select">select</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.copy" title="pptxlib.shape.Shape.copy">copy</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.connect" title="pptxlib.shape.Shape.connect">connect</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.export" title="pptxlib.shape.Shape.export">export</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.png" title="pptxlib.shape.Shape.png">png</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.svg" title="pptxlib.shape.Shape.svg">svg</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.align_center" title="pptxlib.shape.Shape.align_center">align_center</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shape.text_margin" title="pptxlib.shape.Shape.text_margin">text_margin</a></span></p>
+</li>
+</ul>
+</div>
+</div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.left">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.left" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.left" title="pptxlib.shape.Shape.left">left</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">float</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.top">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.top" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.top" title="pptxlib.shape.Shape.top">top</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">float</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.width">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.width" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.width" title="pptxlib.shape.Shape.width">width</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">float</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.height">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.height" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.height" title="pptxlib.shape.Shape.height">height</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">float</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.text_range">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.text_range" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.text_range" title="pptxlib.shape.Shape.text_range">text_range</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return"><span class="mkapi-tooltip" title="win32com.client.DispatchBaseClass">DispatchBaseClass</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.text">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.text" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.text" title="pptxlib.shape.Shape.text">text</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return">str</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.font">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.font" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.font" title="pptxlib.shape.Shape.font">font</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return"><a href="../font/#pptxlib.font.Font" title="pptxlib.font.Font">Font</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.fill">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.fill" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.fill" title="pptxlib.shape.Shape.fill">fill</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return"><a href="./#pptxlib.shape.Fill" title="pptxlib.shape.Fill">Fill</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.line">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.line" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.line" title="pptxlib.shape.Shape.line">line</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return"><a href="./#pptxlib.shape.Line" title="pptxlib.shape.Line">Line</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.select">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.select" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.select" title="pptxlib.shape.Shape.select">select</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-star">*</span><span class="mkapi-comma">, </span><span class="mkapi-arg">replace</span><span class="mkapi-colon">: </span><span class="mkapi-ann">bool</span><span class="mkapi-equal"> = </span><span class="mkapi-default">True</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.ShapeRange" title="pptxlib.shape.ShapeRange">ShapeRange</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.copy">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.copy" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.copy" title="pptxlib.shape.Shape.copy">copy</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return">None</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.connect">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.connect" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.connect" title="pptxlib.shape.Shape.connect">connect</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">shape</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span><span class="mkapi-comma">, </span><span class="mkapi-arg">direction</span><span class="mkapi-colon">: </span><span class="mkapi-ann">str</span><span class="mkapi-equal"> = </span><span class="mkapi-default">'horizontal'</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.export">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.export" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.export" title="pptxlib.shape.Shape.export">export</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">file_name</span><span class="mkapi-colon">: </span><span class="mkapi-ann">str | <span class="mkapi-tooltip" title="pathlib._local.Path">Path</span></span><span class="mkapi-comma">, </span><span class="mkapi-arg">fmt</span><span class="mkapi-colon">: </span><span class="mkapi-ann">str | int | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return">None</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.png">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.png" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.png" title="pptxlib.shape.Shape.png">png</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return">bytes</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.svg">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.svg" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.svg" title="pptxlib.shape.Shape.svg">svg</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return">str</span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.align_center">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.align_center" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.align_center" title="pptxlib.shape.Shape.align_center">align_center</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><span class="mkapi-tooltip" title="typing.Self">Self</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shape.text_margin">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shape.text_margin" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shape.text_margin" title="pptxlib.shape.Shape.text_margin">text_margin</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">right</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">bottom</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><span class="mkapi-tooltip" title="typing.Self">Self</span></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes">
+<span class="mkapi-object-link">
+
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">dataclass</span>
+<span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">api</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="win32com.client.DispatchBaseClass">DispatchBaseClass</span> | CoClassBaseClass</span><span class="mkapi-comma">, </span><span class="mkapi-arg">parent</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="../slide/#pptxlib.slide.Slide" title="pptxlib.slide.Slide">Slide</a></span><span class="mkapi-paren">)</span></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-bases">Bases :
+<span class="mkapi-base"><a href="../base/#pptxlib.base.Collection" title="pptxlib.base.Collection">Collection</a>[<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a>]</span></p>
+<p class="mkapi-section">
+<span class="mkapi-object-link">
+<span class="mkapi-section-toggle" title="Toggle methods">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span>
+<span class="mkapi-section-name">Methods</span>
+</p>
+<div class="mkapi-section-content">
+<ul class="mkapi-item-list">
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add" title="pptxlib.shape.Shapes.add">add</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add_line" title="pptxlib.shape.Shapes.add_line">add_line</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add_label" title="pptxlib.shape.Shapes.add_label">add_label</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add_table" title="pptxlib.shape.Shapes.add_table">add_table</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add_picture" title="pptxlib.shape.Shapes.add_picture">add_picture</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add_image" title="pptxlib.shape.Shapes.add_image">add_image</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add_figure" title="pptxlib.shape.Shapes.add_figure">add_figure</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.add_connector" title="pptxlib.shape.Shapes.add_connector">add_connector</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.paste" title="pptxlib.shape.Shapes.paste">paste</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.paste_special" title="pptxlib.shape.Shapes.paste_special">paste_special</a></span></p>
+</li>
+<li>
+<p><span class="mkapi-item-name"><a href="./#pptxlib.shape.Shapes.range" title="pptxlib.shape.Shapes.range">range</a></span></p>
+</li>
+</ul>
+</div>
+</div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.title">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.title" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">property</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.title" title="pptxlib.shape.Shapes.title">title</a></span><span class="mkapi-signature"><span class="mkapi-colon">: </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add" title="pptxlib.shape.Shapes.add">add</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">kind</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str</span><span class="mkapi-comma">, </span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">text</span><span class="mkapi-colon">: </span><span class="mkapi-ann">str</span><span class="mkapi-equal"> = </span><span class="mkapi-default">''</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add_line">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add_line" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add_line" title="pptxlib.shape.Shapes.add_line">add_line</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">begin_x</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">begin_y</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">end_x</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">end_y</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add_label">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add_label" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add_label" title="pptxlib.shape.Shapes.add_label">add_label</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">text</span><span class="mkapi-colon">: </span><span class="mkapi-ann">str</span><span class="mkapi-comma">, </span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">72</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">72</span><span class="mkapi-comma">, </span><span class="mkapi-star">*</span><span class="mkapi-comma">, </span><span class="mkapi-arg">auto_size</span><span class="mkapi-colon">: </span><span class="mkapi-ann">bool</span><span class="mkapi-equal"> = </span><span class="mkapi-default">True</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add_table">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add_table" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add_table" title="pptxlib.shape.Shapes.add_table">add_table</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">num_rows</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int</span><span class="mkapi-comma">, </span><span class="mkapi-arg">num_columns</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int</span><span class="mkapi-comma">, </span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">100</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">100</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">100</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">100</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="../table/#pptxlib.table.Table" title="pptxlib.table.Table">Table</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add_picture">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add_picture" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add_picture" title="pptxlib.shape.Shapes.add_picture">add_picture</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">file_name</span><span class="mkapi-colon">: </span><span class="mkapi-ann">str | <span class="mkapi-tooltip" title="pathlib._local.Path">Path</span></span><span class="mkapi-comma">, </span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">-1</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">-1</span><span class="mkapi-comma">, </span><span class="mkapi-arg">scale</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add_image">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add_image" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add_image" title="pptxlib.shape.Shapes.add_image">add_image</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">image</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="PIL.Image.Image">Image</span></span><span class="mkapi-comma">, </span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">-1</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">-1</span><span class="mkapi-comma">, </span><span class="mkapi-arg">scale</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add_figure">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add_figure" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add_figure" title="pptxlib.shape.Shapes.add_figure">add_figure</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">fig</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="matplotlib.figure.Figure">Figure</span></span><span class="mkapi-comma">, </span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">-1</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float</span><span class="mkapi-equal"> = </span><span class="mkapi-default">-1</span><span class="mkapi-comma">, </span><span class="mkapi-arg">scale</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">dpi</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | <span class="mkapi-tooltip" title="typing.Literal">Literal</span>['figure']</span><span class="mkapi-equal"> = </span><span class="mkapi-default">'figure'</span><span class="mkapi-comma">, </span><span class="mkapi-arg">transparent</span><span class="mkapi-colon">: </span><span class="mkapi-ann">bool | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.add_connector">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.add_connector" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.add_connector" title="pptxlib.shape.Shapes.add_connector">add_connector</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">shape1</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span><span class="mkapi-comma">, </span><span class="mkapi-arg">shape2</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span><span class="mkapi-comma">, </span><span class="mkapi-arg">direction</span><span class="mkapi-colon">: </span><span class="mkapi-ann">str</span><span class="mkapi-equal"> = </span><span class="mkapi-default">'horizontal'</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.paste">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.paste" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.paste" title="pptxlib.shape.Shapes.paste">paste</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.paste_special">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.paste_special" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.paste_special" title="pptxlib.shape.Shapes.paste_special">paste_special</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">data_type</span><span class="mkapi-colon">: </span><span class="mkapi-ann">int | str</span><span class="mkapi-equal"> = </span><span class="mkapi-default">0</span><span class="mkapi-comma">, </span><span class="mkapi-arg">left</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">top</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">width</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-comma">, </span><span class="mkapi-arg">height</span><span class="mkapi-colon">: </span><span class="mkapi-ann">float | None</span><span class="mkapi-equal"> = </span><span class="mkapi-default">None</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-section">
+<span class="mkapi-object-link">
+<span class="mkapi-section-toggle" title="Toggle parameters">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span>
+<span class="mkapi-section-name">Parameters</span>
+</p>
+<div class="mkapi-section-content">
+<ul class="mkapi-item-list">
+<li>
+<p><span class="mkapi-item-name">data_type</span> : 
+<span class="mkapi-item-type">int</span> <span class="mkapi-dash">&mdash;</span>
+0: ppPasteDefault
+1: ppPasteBitmap
+2: ppPasteEnhancedMetafile
+4: ppPasteGIF
+8: ppPasteHTML
+5: ppPasteJPG
+3: ppPasteMetafilePicture
+10: ppPasteOLEObject
+6: ppPastePNG
+9: ppPasteRTF
+11: ppPasteShape
+7: ppPasteText</p>
+</li>
+</ul>
+</div>
+</div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.Shapes.range">
+<span class="mkapi-object-link">
+<span class="mkapi-parent-toggle" title="Toggle class names">
+<i class="fa-solid fa-square-plus"></i>
+</span>
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.Shapes.range" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">method</span>
+<span class="mkapi-object-parent">
+<a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a><span class="mkapi-dot">.</span></span><span class="mkapi-object-name"><a href="./#pptxlib.shape.Shapes.range" title="pptxlib.shape.Shapes.range">range</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">shapes</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="collections.abc.Iterable">Iterable</span>[<a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a>]</span><span class="mkapi-paren">)</span><span class="mkapi-arrow"> → </span><span class="mkapi-return"><a href="./#pptxlib.shape.ShapeRange" title="pptxlib.shape.ShapeRange">ShapeRange</a></span></span>
+</p>
+<div class="mkapi-document"></div>
+<p class="mkapi-object mkapi-page-source" id="pptxlib.shape.ShapeRange">
+<span class="mkapi-object-link">
+
+
+<a href="../../../src/pptxlib/shape/#pptxlib.shape.ShapeRange" title="Go to source">source</a>
+<span class="mkapi-document-toggle" title="Toggle all docs">
+<i class="fa-regular fa-square-minus"></i>
+</span>
+</span><span class="mkapi-object-kind">dataclass</span>
+<span class="mkapi-object-name"><a href="./#pptxlib.shape.ShapeRange" title="pptxlib.shape.ShapeRange">ShapeRange</a></span><span class="mkapi-signature"><span class="mkapi-paren">(</span><span class="mkapi-arg">api</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><span class="mkapi-tooltip" title="win32com.client.DispatchBaseClass">DispatchBaseClass</span> | CoClassBaseClass</span><span class="mkapi-comma">, </span><span class="mkapi-arg">parent</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="../slide/#pptxlib.slide.Slide" title="pptxlib.slide.Slide">Slide</a></span><span class="mkapi-comma">, </span><span class="mkapi-arg">collection</span><span class="mkapi-colon">: </span><span class="mkapi-ann"><a href="./#pptxlib.shape.Shapes" title="pptxlib.shape.Shapes">Shapes</a></span><span class="mkapi-paren">)</span></span>
+</p>
+<div class="mkapi-document">
+<p class="mkapi-bases">Bases :
+<span class="mkapi-base"><a href="./#pptxlib.shape.Shape" title="pptxlib.shape.Shape">Shape</a></span></p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../presentation/" class="md-footer__link md-footer__link--prev" aria-label="Previous: pptxlib.presentation">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                pptxlib.presentation
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../slide/" class="md-footer__link md-footer__link--next" aria-label="Next: pptxlib.slide">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                pptxlib.slide
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../../..", "features": ["content.code.copy", "content.tooltips", "navigation.expand", "navigation.footer", "navigation.indexes", "navigation.sections", "navigation.tabs", "navigation.top", "navigation.tracking", "search.highlight", "search.suggest"], "search": "../../../assets/javascripts/workers/search.d50fe291.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.13a4f30d.min.js"></script>
+      
+        <script src="../../../javascript/mkapi.js"></script>
+      
+    
+  </body>
+</html>
