@@ -22,11 +22,10 @@ manage PowerPoint presentations programmatically.
 ```python
 from pptxlib import App
 
-# Create a new presentation
-with App() as app:
-    presentation = app.presentations.add()
-    slide = presentation.slides.add()
-    shape = slide.shapes.add_textbox("Hello, World!")
+app = App()
+presentation = app.presentations.add()
+slide = presentation.slides.add()
+shape = slide.shapes.add("Rectangle", 100, 100, 200, 100)
 ```
 
 ## Installation
@@ -37,6 +36,6 @@ pip install pptxlib
 
 ## Requirements
 
-- Python 3.11 or higher
-- Microsoft PowerPoint
 - Windows operating system
+- Microsoft PowerPoint
+- Python 3.11 or higher
