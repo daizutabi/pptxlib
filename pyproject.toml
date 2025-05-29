@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "pptxlib"
-version = "0.2.3"
+version = "0.2.4"
 description = "Automate Microsoft PowerPoint operations. Create, modify, and manage PowerPoint presentations programmatically with a simple and intuitive interface"
 readme = "README.md"
 license = { file = "LICENSE" }
