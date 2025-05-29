@@ -10,10 +10,11 @@ def main():
     app = App()
     app.presentations.close()
     pr = app.presentations.add()
+    slide = pr.slides.add(layout="Blank")
     gantt = GanttChart("week", datetime(2025, 5, 21), datetime(2025, 6, 10))
-    layout = pr.layouts.add(gantt.frame.name)
-    gantt.add_table(layout, 20, 150, bottom=20)
-    slide = pr.slides.add(layout=layout)
+    layout = pr.layouts.add(gantt.frame.name, slide)
+    gantt.add_table(layout, 20, 50, bottom=20)
+    slide.layout = layout
     gantt.slide = slide
     s1 = gantt.add(datetime(2025, 5, 21), 20)
     s1.font.set(size=12, color="yellow")
