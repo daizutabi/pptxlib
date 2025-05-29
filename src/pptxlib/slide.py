@@ -126,8 +126,13 @@ class Layouts(Collection[Layout]):
     parent: Presentation
     type: ClassVar[type[Element]] = Layout
 
-    def add(self, name: str) -> Layout:
-        api = self.api.Add(self.api.Count + 1)
+    def add(self, name: str, slide: Slide | None = None) -> Layout:
+        if slide:
+            slide.api.CustomLayout.Copy()
+            api = self.api.Paste()
+        else:
+            api = self.api.Add(self.api.Count + 1)
+
         api.Name = name
         return Layout(api, self.parent, self)
 

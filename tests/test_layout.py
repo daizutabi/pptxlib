@@ -32,6 +32,13 @@ def test_layouts_add(layouts: Layouts):
     assert layout.name == "def"
 
 
+def test_layouts_add_slide(layouts: Layouts, pr: Presentation):
+    slide = pr.slides.add(layout="TitleOnly")
+    slide.title = "abc"
+    layout = layouts.add("def", slide)
+    assert layout.name == "def"
+
+
 def test_layouts_get(layouts: Layouts, layout: Layout):
     x = layouts.get("abc")
     assert x
