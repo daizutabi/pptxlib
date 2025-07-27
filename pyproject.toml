@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["uv_build"]
+build-backend = "uv_build"
 
 [project]
 name = "pptxlib"
@@ -95,8 +95,10 @@ ignore = [
   "DTZ001",
   "EM101",
   "ERA001",
-  "PLR",
+  "FBT001",
   "PGH003",
+  "PLC0415",
+  "PLR",
   "TRY003",
 ]
 
@@ -118,6 +120,8 @@ ignore = [
 
 [tool.pyright]
 include = ["src", "tests"]
+reportIncompatibleVariableOverride = false
+reportIncompatibleMethodOverride = false
 strictDictionaryInference = true
 strictListInference = true
 strictSetInference = true
