@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from pptxlib.app import App
-from pptxlib.gantt import GanttChart
+from pptxlib.contrib.gantt import GanttChart
 
 
 def main():

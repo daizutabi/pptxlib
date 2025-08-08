@@ -39,6 +39,20 @@ shape = slide.shapes.add("Rectangle", 100, 100, 200, 100)
 pip install pptxlib
 ```
 
+Optional extras:
+
+- For image support (Pillow):
+
+```bash
+pip install "pptxlib[images]"
+```
+
+- For Matplotlib figure export:
+
+```bash
+pip install "pptxlib[figures]"
+```
+
 ## Requirements
 
 - Windows operating system

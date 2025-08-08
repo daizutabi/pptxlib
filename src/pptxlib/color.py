@@ -34,7 +34,7 @@ def rgb(
         return color + green * 256 + blue * 256 * 256  # type: ignore
 
     if isinstance(color, str):
-        color = cnames.get(color, color)
+        color = cnames.get(color.lower(), color)
 
         if not isinstance(color, str) or not color.startswith("#") or len(color) != 7:
             raise ValueError("Invalid color format. Expected #xxxxxx.")
