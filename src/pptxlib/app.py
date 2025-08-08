@@ -11,10 +11,10 @@ from functools import cache
 from typing import TYPE_CHECKING, Self
 
 import win32com.client
-from pywintypes import com_error
 
 from .base import Base
 from .client import ensure_modules
+from .compat import com_error
 from .presentation import Presentations
 
 if TYPE_CHECKING:

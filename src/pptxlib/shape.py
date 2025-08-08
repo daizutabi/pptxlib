@@ -228,28 +228,30 @@ class Shape(Element):
         return self.api.Height
 
     @left.setter
-    def left(self, value: float | Literal["center"]) -> float:
+    def left(self, value: float | Literal["center"]) -> None:
         slide = self.parent
 
         if value == "center":
-            value = (slide.width - self.width) / 2
+            v = (slide.width - self.width) / 2
         elif value < 0:
-            value = slide.width - self.width + value
+            v = slide.width - self.width + value
+        else:
+            v = value
 
-        self.api.Left = value
-        return value
+        self.api.Left = v
 
     @top.setter
-    def top(self, value: float | Literal["center"]) -> float:
+    def top(self, value: float | Literal["center"]) -> None:
         slide = self.parent
 
         if value == "center":
-            value = (slide.height - self.height) / 2
+            v = (slide.height - self.height) / 2
         elif value < 0:
-            value = slide.height - self.height + value
+            v = slide.height - self.height + value
+        else:
+            v = value
 
-        self.api.Top = value
-        return value
+        self.api.Top = v
 
     @width.setter
     def width(self, value: float) -> None:
