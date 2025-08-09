@@ -4,7 +4,7 @@ from __future__ import annotations
 # triggering static checker issues and allowing non-Windows envs.
 try:  # pragma: no cover - environment-dependent
     import pywintypes as _pywintypes  # type: ignore
-except ImportError:
+except ImportError:  # pragma: no cover - environment-dependent
     _pywintypes = None  # type: ignore
 
 if _pywintypes is not None:  # pragma: no cover
