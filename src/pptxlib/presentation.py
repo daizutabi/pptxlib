@@ -58,8 +58,9 @@ class Presentations(Collection[Presentation]):
     parent: App
     type: ClassVar[type[Element]] = Presentation
 
-    def add(self) -> Presentation:
-        api = self.api.Add()
+    def add(self, *, with_window: bool = True) -> Presentation:
+        # When WithWindow is False, PowerPoint won't show a window for the presentation
+        api = self.api.Add(WithWindow=with_window)
         return Presentation(api, self.parent, self)
 
     def close(self) -> None:

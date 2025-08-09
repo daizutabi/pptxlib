@@ -69,7 +69,7 @@ def test_name_day():
 
 @pytest.fixture(scope="module")
 def gantt(prs: Presentations):
-    pr = prs.add()
+    pr = prs.add(with_window=False)
     gantt = GanttChart("week", datetime(2025, 5, 21), datetime(2025, 6, 10))
     slide = pr.slides.add()
     gantt.add_table(slide, 20, 150)
