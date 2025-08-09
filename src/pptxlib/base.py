@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, ClassVar, Generic, TypeVar
 
-from pywintypes import com_error
+from .compat import com_error
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

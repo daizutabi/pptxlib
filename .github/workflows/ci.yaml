@@ -34,7 +34,9 @@ jobs:
       - name: Install the project
         run: uv sync
       - name: Ruff check
-        run: uv run ruff check .
+        run: uvx ruff check
+      - name: Type check (ty)
+        run: uvx ty check
       - name: Upload local coverage (lcov.info) if present
         if: hashFiles('lcov.info') != ''
         uses: codecov/codecov-action@v4
