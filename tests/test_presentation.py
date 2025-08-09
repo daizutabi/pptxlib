@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 
 from pptxlib.app import is_powerpoint_available
@@ -51,3 +53,15 @@ def test_name(pr: Presentation):
     pr.name = "abc"
     assert pr.name == "abc"
     pr.name = name
+
+
+def test_save(prs: Presentations, tmp_path: Path):
+    pr = prs.add()
+    pr.slides.add()
+    file_name = tmp_path / "test.pptx"
+    pr.save(file_name)
+    assert file_name.exists()
+    pr.close()
+    pr = prs.open(file_name)
+    pr.save()
+    assert file_name.exists()
