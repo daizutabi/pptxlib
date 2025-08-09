@@ -39,7 +39,7 @@ DA:76,1
 DA:78,1
 DA:80,1
 DA:82,1
-DA:88,0
+DA:88,1
 DA:91,1
 DA:92,1
 DA:101,1
@@ -47,7 +47,7 @@ DA:102,1
 DA:103,1
 DA:107,1
 LF:37
-LH:36
+LH:37
 FN:41,45,App.__post_init__
 FNDA:1,App.__post_init__
 FN:48,54,App.presentations
@@ -61,11 +61,11 @@ FNDA:1,App.__exit__
 FN:78,80,App.unselect
 FNDA:1,App.unselect
 FN:82,88,App.minimize
-FNDA:0,App.minimize
+FNDA:1,App.minimize
 FN:92,107,is_powerpoint_available
 FNDA:1,is_powerpoint_available
 FNF:8
-FNH:7
+FNH:8
 end_of_record
 SF:src\pptxlib\base.py
 DA:1,1

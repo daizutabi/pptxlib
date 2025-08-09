@@ -9,6 +9,7 @@ from pptxlib.slide import Slides
 def app():
     with App() as app:
         yield app
+        app.minimize()
 
 
 @pytest.fixture(scope="session")
