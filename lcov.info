@@ -943,8 +943,8 @@ FN:257,258,Shape.width
 FNDA:1,Shape.width
 FN:261,262,Shape.height
 FNDA:1,Shape.height
-FN:265,266,Shape.text_range
-FNDA:1,Shape.text_range
+FN:265,266,Shape._text_range
+FNDA:1,Shape._text_range
 FN:269,270,Shape.text
 FNDA:1,Shape.text
 FN:273,274,Shape.text
@@ -1138,8 +1138,8 @@ FN:129,137,Layouts.add
 FNDA:1,Layouts.add
 FN:139,144,Layouts.get
 FNDA:1,Layouts.get
-FN:146,158,Layouts.get_api
-FNDA:1,Layouts.get_api
+FN:146,158,Layouts._get_api
+FNDA:1,Layouts._get_api
 FN:160,164,Layouts.copy_from
 FNDA:1,Layouts.copy_from
 FNF:16

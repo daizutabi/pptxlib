@@ -262,20 +262,20 @@ class Shape(Element):
         self.api.Height = value
 
     @property
-    def text_range(self) -> DispatchBaseClass:
+    def _text_range(self) -> DispatchBaseClass:
         return self.api.TextFrame.TextRange
 
     @property
     def text(self) -> str:
-        return self.text_range.Text
+        return self._text_range.Text
 
     @text.setter
     def text(self, text: str) -> None:
-        self.text_range.Text = text
+        self._text_range.Text = text
 
     @property
     def font(self) -> Font:
-        return Font(self.text_range.Font)
+        return Font(self._text_range.Font)
 
     @property
     def fill(self) -> Fill:
