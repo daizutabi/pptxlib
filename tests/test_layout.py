@@ -47,23 +47,23 @@ def test_layouts_get(layouts: Layouts, layout: Layout):
 
 
 def test_get_api_int(layouts: Layouts):
-    assert layouts.get_api(100) == 100
+    assert layouts._get_api(100) == 100
 
 
 def test_get_api_none(layouts: Layouts):
-    assert layouts.get_api(None) == 11
+    assert layouts._get_api(None) == 11
 
 
 def test_get_api_layout_name(layouts: Layouts, layout: Layout):
-    assert layouts.get_api("TitleOnly") == 11
+    assert layouts._get_api("TitleOnly") == 11
 
 
 def test_get_api_layout(layouts: Layouts, layout: Layout):
-    assert layouts.get_api(layout).Name == "abc"  # type: ignore
+    assert layouts._get_api(layout).Name == "abc"  # type: ignore
 
 
 def test_get_api_name(layouts: Layouts, layout: Layout):
-    assert layouts.get_api("abc").Name == "abc"  # type: ignore
+    assert layouts._get_api("abc").Name == "abc"  # type: ignore
 
 
 def test_copy_from(layouts: Layouts, pr: Presentation):

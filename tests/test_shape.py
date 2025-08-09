@@ -51,7 +51,7 @@ def test_shape(shape: Shape):
 
 
 def test_text_range(shape: Shape):
-    assert isinstance(shape.text_range, DispatchBaseClass)
+    assert isinstance(shape._text_range, DispatchBaseClass)
 
 
 def test_text(shape: Shape):
