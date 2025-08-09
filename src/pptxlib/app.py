@@ -92,7 +92,7 @@ def is_powerpoint_available() -> bool:
     try:
         with App():
             pass
-    except com_error:  # no cov
+    except com_error:  # pragma: no cover
         return False
 
     return True
