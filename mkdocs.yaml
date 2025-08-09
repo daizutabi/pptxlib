@@ -39,8 +39,7 @@ theme:
     - search.suggest
 plugins:
   - search
-  - mkdocs-nbsync:
-      src_dir: ../notebooks
+  - mkdocs-nbsync
   - mkapi:
       enabled: true
       search_exclude: false
