@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
+from pathlib import Path
 from typing import TYPE_CHECKING, ClassVar
 
 from .base import Collection, Element
@@ -22,6 +23,15 @@ class Presentation(Element):
 
     def delete(self) -> None:
         self.close()
+
+    def save(self, file_name: str | Path | None = None) -> None:
+        if file_name is None:
+            self.api.Save()
+            return
+
+        file_name = Path(file_name) if isinstance(file_name, str) else file_name
+        file_name = str(file_name.absolute())
+        self.api.SaveAs(FileName=file_name)
 
     @property
     def slides(self) -> Slides:
@@ -61,6 +71,29 @@ class Presentations(Collection[Presentation]):
     def add(self, *, with_window: bool = True) -> Presentation:
         # When WithWindow is False, PowerPoint won't show a window for the presentation
         api = self.api.Add(WithWindow=with_window)
+        return Presentation(api, self.parent, self)
+
+    def open(
+        self,
+        file_name: str | Path,
+        *,
+        with_window: bool = True,
+        read_only: bool = False,
+    ) -> Presentation:
+        """Open an existing presentation.
+
+        PowerPoint Open signature:
+        (FileName, ReadOnly=False, Untitled=False, WithWindow=True).
+        Named arguments are used when available.
+        """
+        file_name = Path(file_name) if isinstance(file_name, str) else file_name
+        file_name = str(file_name.absolute())
+
+        api = self.api.Open(
+            FileName=file_name,
+            ReadOnly=read_only,
+            WithWindow=with_window,
+        )
         return Presentation(api, self.parent, self)
 
     def close(self) -> None:
