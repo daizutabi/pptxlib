@@ -64,7 +64,7 @@ class Slide(Element):
 
     @layout.setter
     def layout(self, layout: int | str | Layout) -> None:
-        layout_ = self.parent.layouts._get_api(layout)
+        layout_ = self.parent.layouts._get_api(layout)  # noqa: SLF001
         if isinstance(layout_, int):
             self.api.Layout = layout_
         else:
@@ -106,7 +106,7 @@ class Slides(Collection[Slide]):
         if layout is None and index:
             layout_ = self[index - 1].api.CustomLayout
         else:
-            layout_ = self.parent.layouts._get_api(layout)
+            layout_ = self.parent.layouts._get_api(layout)  # noqa: SLF001
 
         if isinstance(layout_, int):
             api = self.api.Add(index + 1, layout_)
