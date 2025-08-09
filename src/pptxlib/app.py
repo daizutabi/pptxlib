@@ -11,6 +11,7 @@ from functools import cache
 from typing import TYPE_CHECKING, Self
 
 import win32com.client
+from win32com.client import constants
 
 from .base import Base
 from .client import ensure_modules
@@ -77,6 +78,14 @@ class App(Base):
     def unselect(self) -> None:
         """Unselect any selected objects in the active window."""
         self.api.ActiveWindow.Selection.Unselect()
+
+    def minimize(self) -> None:
+        """Minimize the PowerPoint main window.
+
+        Note: PowerPoint does not allow hiding the application window via
+        `Application.Visible = False`. Use this method to keep the UI out of the way.
+        """
+        self.api.WindowState = constants.ppWindowMinimized
 
 
 @cache

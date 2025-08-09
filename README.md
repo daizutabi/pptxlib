@@ -28,8 +28,11 @@ manage PowerPoint presentations programmatically.
 from pptxlib import App
 
 app = App()
-presentation = app.presentations.add()
-slide = presentation.slides.add()
+# Optional: keep the window minimized (PowerPoint doesn't allow hiding the UI)
+app.minimize()
+# Or create a presentation without opening a window
+prs = app.presentations.add(with_window=False)
+slide = prs.slides.add()
 shape = slide.shapes.add("Rectangle", 100, 100, 200, 100)
 ```
 

@@ -12,7 +12,7 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.fixture(scope="module")
 def table(prs: Presentations):
-    pr = prs.add()
+    pr = prs.add(with_window=False)
     slide = pr.slides.add()
     shapes = slide.shapes
     table = shapes.add_table(2, 3, 100, 250, 100, 100)
@@ -176,7 +176,7 @@ def test_reset_style(prs: Presentations):
 
 
 def test_text(prs: Presentations):
-    pr = prs.add()
+    pr = prs.add(with_window=False)
     slide = pr.slides.add()
     shapes = slide.shapes
     table = shapes.add_table(2, 5, 100, 250, 100, 100)
