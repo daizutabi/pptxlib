@@ -89,3 +89,27 @@ def test_name_day():
 
     gantt = GanttFrame(datetime(2025, 4, 1), datetime(2025, 9, 10), kind="day")
     assert gantt.name == "2025/04/01-2025/09/10-day"
+
+
+@pytest.mark.parametrize("date", ["2025/05/21", "2025-5-21", "2025.5.21"])
+def test_strptime(date: str):
+    from pptxlib.contrib.gantt import strptime
+
+    d = strptime(date)
+    assert d.year == 2025
+    assert d.month == 5
+    assert d.day == 21
+
+
+def test_strptime_invalid_separator():
+    from pptxlib.contrib.gantt import strptime
+
+    with pytest.raises(ValueError):
+        strptime("2025!05!21")
+
+
+def test_strptime_invalid_count():
+    from pptxlib.contrib.gantt import strptime
+
+    with pytest.raises(ValueError):
+        strptime("2025/05/21/x")

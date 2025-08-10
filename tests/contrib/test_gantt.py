@@ -39,27 +39,3 @@ def test_add_str(gantt: GanttChart):
     s1 = gantt.add("2025/05/21", 40, color="red")
     assert 183 < s1.left < 184
     assert 227 < s1.top < 229
-
-
-@pytest.mark.parametrize("date", ["2025/05/21", "2025-5-21", "2025.5.21"])
-def test_strptime(date: str):
-    from pptxlib.contrib.gantt import strptime
-
-    d = strptime(date)
-    assert d.year == 2025
-    assert d.month == 5
-    assert d.day == 21
-
-
-def test_strptime_invalid_separator():
-    from pptxlib.contrib.gantt import strptime
-
-    with pytest.raises(ValueError):
-        strptime("2025!05!21")
-
-
-def test_strptime_invalid_count():
-    from pptxlib.contrib.gantt import strptime
-
-    with pytest.raises(ValueError):
-        strptime("2025/05/21/x")
