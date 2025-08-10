@@ -91,7 +91,7 @@ def test_name_day():
     assert gantt.name == "2025/04/01-2025/09/10-day"
 
 
-@pytest.mark.parametrize("date", ["2025/05/21", "2025-5-21", "2025.5.21"])
+@pytest.mark.parametrize("date", ["2025/05/21", "2025-5-21", "2025.5.21 1:1:1"])
 def test_strptime(date: str):
     from pptxlib.contrib.gantt import strptime
 

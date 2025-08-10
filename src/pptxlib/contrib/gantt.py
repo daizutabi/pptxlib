@@ -208,6 +208,8 @@ class GanttChart:
 
 
 def strptime(date: str) -> datetime:
+    date = date.split(maxsplit=1)[0]
+
     for sep in ["/", "-", "."]:
         if sep in date:
             break
