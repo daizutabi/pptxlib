@@ -11,7 +11,7 @@ def main():
     app.presentations.close()
     prs = app.presentations.add()
     slide = prs.slides.add(layout="Blank")
-    gantt = GanttChart("week", datetime(2025, 5, 21), datetime(2025, 6, 10))
+    gantt = GanttChart(datetime(2025, 5, 21), datetime(2025, 6, 10), kind="week")
     layout = prs.layouts.add(gantt.frame.name, slide)
     gantt.add_table(layout, 20, 50, bottom=20)
     slide.layout = layout
