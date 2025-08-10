@@ -22,10 +22,6 @@ def main():
     s2.font.set(size=12)
     s1.connect(s2).line.set(color="pink", weight=6)
 
-    s3 = gantt.add("2025/05/21", 40)
-    print(s1.left)
-    print(s3.left)
-
     # # for cell in table.rows[0]:
     # #     cell.shape.font.set(size=10)
     # table.reset_style()
