@@ -25,14 +25,3 @@ An alternative way to install pptxlib is using pip:
 ```bash
 pip install pptxlib
 ```
-
-## Verifying Installation
-
-To verify the installation, you can run Python and
-check if the package is installed and if PowerPoint is available:
-
-```python exec="1" source="material-block"
-from pptxlib import is_powerpoint_available
-
-is_powerpoint_available()
-```

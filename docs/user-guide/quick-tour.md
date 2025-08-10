@@ -7,6 +7,14 @@ A five-minute tour to experience pptxlib quickly.
 - Windows with Microsoft PowerPoint installed
 - Python 3.11+
 
+## 1. Create a PowerPoint application instance
+
+```python exec="1" source="1"
+from pptxlib import App
+app = App()
+app
+```
+
 ## 1. Create a single-slide presentation with the smallest script
 
 ```python
@@ -46,11 +54,3 @@ with Presentation() as p:
     t.font = Font(name="Segoe UI", size=28, bold=True, color=Color.rgb(0, 90, 158))
     p.save("styled.pptx")
 ```
-
-## 4. Notebooks integration (mkdocs-nbsync)
-
-You can reference a saved plot in `notebooks/example.ipynb` from Markdown like this:
-
-![Sample figure](../notebooks/example.ipynb){#my-figure}
-
-> Build the docs with `mkdocs serve` or `mkdocs build`.
