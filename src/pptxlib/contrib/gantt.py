@@ -173,7 +173,7 @@ class GanttChart:
 
     def add(
         self,
-        date: datetime,
+        date: datetime | str,
         offset: float,
         width: float = 20,
         height: float | None = None,
@@ -183,6 +183,9 @@ class GanttChart:
     ) -> Shape:
         if height is None:
             height = width
+        if isinstance(date, str):
+            date = strptime(date)
+
         left = self.x(date) - width / 2
         top = self.y(offset) - height / 2
         shape = self.slide.shapes.add(kind, left, top, width, height)
@@ -198,3 +201,18 @@ class GanttChart:
             shape.fill.set(color=color)
 
         return shape
+
+
+def strptime(date: str) -> datetime:
+    for sep in ["/", "-", "."]:
+        if sep in date:
+            break
+    else:
+        msg = "Date string must contain '/', '-', or '.' as separator."
+        raise ValueError(msg)
+
+    if date.count(sep) != 2:
+        raise ValueError("Date string must contain exactly two separators.")
+
+    year, month, day = date.split(sep)
+    return datetime(int(year), int(month), int(day))
