@@ -92,9 +92,13 @@ class GanttChart:
     def __init__(
         self,
         kind: str,
-        start: datetime,
-        end: datetime,
+        start: datetime | str,
+        end: datetime | str,
     ) -> None:
+        if isinstance(start, str):
+            start = strptime(start)
+        if isinstance(end, str):
+            end = strptime(end)
         self.frame = GanttFrame(kind, start, end)
 
     def add_table(
