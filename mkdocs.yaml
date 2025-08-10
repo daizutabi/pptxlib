@@ -58,11 +58,18 @@ nav:
   - Getting Started:
       - Installation: getting-started/installation.md
       - Quick Start: getting-started/quickstart.md
-  # - User Guide:
-  #     - Basic Usage: user-guide/basic-usage.md
-  #     - Presentations: user-guide/presentations.md
-  #     - Slides: user-guide/slides.md
-  #     - Shapes: user-guide/shapes.md
-  #     - Tables: user-guide/tables.md
+  - User Guide:
+      - Overview: user-guide/index.md
+      - Quick Tour: user-guide/quick-tour.md
+      - Essentials: user-guide/essentials.md
+      - Basics: user-guide/basics.md
+      - Slides: user-guide/slides.md
+      - Shapes: user-guide/shapes.md
+      - Tables: user-guide/tables.md
+      - Styling (Fonts & Colors): user-guide/styling.md
+      - Automation: user-guide/automation.md
+      - Recipes: user-guide/recipes.md
+      - Troubleshooting: user-guide/troubleshooting.md
+      - FAQ: user-guide/faq.md
   - API Reference:
       - $api/pptxlib.***
