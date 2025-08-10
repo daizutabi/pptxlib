@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from pptxlib.table import Table
 
 
-def date_index(kind: str, start: datetime, end: datetime) -> list[datetime]:
+def date_index(start: datetime, end: datetime, kind: str = "week") -> list[datetime]:
     if kind in ["month", "monthly"]:
         start = datetime(start.year, start.month, 1)
         end = datetime(end.year, end.month, 1)
@@ -53,8 +53,8 @@ class GanttFrame:
     date_index: list[datetime]
     columns: list[list[str]]
 
-    def __init__(self, kind: str, start: datetime, end: datetime) -> None:
-        self.date_index = date_index(kind, start, end)
+    def __init__(self, start: datetime, end: datetime, kind: str = "week") -> None:
+        self.date_index = date_index(start, end, kind=kind)
 
         years = [fiscal_year(date) for date in self.date_index]
         months = [str(date.month) for date in self.date_index]
@@ -91,15 +91,15 @@ class GanttChart:
 
     def __init__(
         self,
-        kind: str,
         start: datetime | str,
         end: datetime | str,
+        kind: str = "week",
     ) -> None:
         if isinstance(start, str):
             start = strptime(start)
         if isinstance(end, str):
             end = strptime(end)
-        self.frame = GanttFrame(kind, start, end)
+        self.frame = GanttFrame(start, end, kind=kind)
 
     def add_table(
         self,

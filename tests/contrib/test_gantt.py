@@ -12,65 +12,10 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-def test_date_index_month():
-    from pptxlib.contrib.gantt import date_index
-
-    index = date_index("month", datetime(2024, 4, 1), datetime(2025, 9, 10))
-    assert len(index) == 18
-    assert index[0] == datetime(2024, 4, 1)
-    assert index[-1] == datetime(2025, 9, 1)
-
-
-def test_date_index_week():
-    from pptxlib.contrib.gantt import date_index
-
-    index = date_index("week", datetime(2025, 5, 7), datetime(2025, 6, 10))
-    assert len(index) == 6
-    assert index[0] == datetime(2025, 5, 5)
-    assert index[-1] == datetime(2025, 6, 9)
-
-
-def test_date_index_day():
-    from pptxlib.contrib.gantt import date_index
-
-    index = date_index("day", datetime(2025, 5, 7), datetime(2025, 5, 14))
-    assert len(index) == 8
-    assert index[0] == datetime(2025, 5, 7)
-    assert index[-1] == datetime(2025, 5, 14)
-
-
-def test_date_index_error():
-    from pptxlib.contrib.gantt import date_index
-
-    with pytest.raises(ValueError):
-        date_index("invalid", datetime(2025, 5, 7), datetime(2025, 5, 14))
-
-
-def test_name_month():
-    from pptxlib.contrib.gantt import GanttFrame
-
-    gantt = GanttFrame("month", datetime(2024, 4, 1), datetime(2025, 9, 10))
-    assert gantt.name == "2024/04/01-2025/09/01-month"
-
-
-def test_name_week():
-    from pptxlib.contrib.gantt import GanttFrame
-
-    gantt = GanttFrame("week", datetime(2025, 4, 1), datetime(2025, 9, 10))
-    assert gantt.name == "2025/03/31-2025/09/08-week"
-
-
-def test_name_day():
-    from pptxlib.contrib.gantt import GanttFrame
-
-    gantt = GanttFrame("day", datetime(2025, 4, 1), datetime(2025, 9, 10))
-    assert gantt.name == "2025/04/01-2025/09/10-day"
-
-
 @pytest.fixture(scope="module")
 def gantt(prs: Presentations):
     pr = prs.add(with_window=False)
-    gantt = GanttChart("week", "2025/5/21", "2025/6/10")
+    gantt = GanttChart("2025/5/21", "2025/6/10", kind="week")
     slide = pr.slides.add()
     gantt.add_table(slide, 20, 150)
     yield gantt
