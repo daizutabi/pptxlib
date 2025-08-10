@@ -1,6 +1,7 @@
 # User Guide
 
-This guide groups practical usage of pptxlib by goals to help you automate and edit PowerPoint presentations effectively.
+This guide groups practical usage of pptxlib by goals
+to help you automate and edit PowerPoint presentations effectively.
 
 - Essential operations you can use immediately
 - Managing slides and layouts
