@@ -9,10 +9,10 @@ from pptxlib.contrib.gantt import GanttChart
 def main():
     app = App()
     app.presentations.close()
-    pr = app.presentations.add()
-    slide = pr.slides.add(layout="Blank")
+    prs = app.presentations.add()
+    slide = prs.slides.add(layout="Blank")
     gantt = GanttChart("week", datetime(2025, 5, 21), datetime(2025, 6, 10))
-    layout = pr.layouts.add(gantt.frame.name, slide)
+    layout = prs.layouts.add(gantt.frame.name, slide)
     gantt.add_table(layout, 20, 50, bottom=20)
     slide.layout = layout
     gantt.slide = slide
@@ -21,6 +21,10 @@ def main():
     s2 = gantt.add(datetime(2025, 5, 26), 30, color="red")
     s2.font.set(size=12)
     s1.connect(s2).line.set(color="pink", weight=6)
+
+    s3 = gantt.add("2025/05/21", 40)
+    print(s1.left)
+    print(s3.left)
 
     # # for cell in table.rows[0]:
     # #     cell.shape.font.set(size=10)
