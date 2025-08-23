@@ -90,11 +90,11 @@ class Line(Color):
         alpha: float | None = None,
     ) -> Self:
         if color is not None:
-            self.color = color
+            self.color = color  # pyright: ignore[reportUnannotatedClassAttribute]
         if weight is not None:
             self.weight = weight
         if alpha is not None:
-            self.alpha = alpha
+            self.alpha = alpha  # pyright: ignore[reportUnannotatedClassAttribute]
 
         return self
 

@@ -31,7 +31,7 @@ def rgb(
         return color
 
     if all(isinstance(x, int) for x in [color, green, blue]):
-        return color + green * 256 + blue * 256 * 256  # type: ignore
+        return color + green * 256 + blue * 256 * 256  # pyright: ignore[reportOptionalOperand, reportOperatorIssue]
 
     if isinstance(color, str):
         color = cnames.get(color.lower(), color)
