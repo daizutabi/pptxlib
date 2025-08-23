@@ -37,6 +37,8 @@ jobs:
         run: uvx ruff check
       - name: Type check (ty)
         run: uvx ty check
+      - name: Type check (basedpyright)
+        run: uvx basedpyright src
       - name: Upload local coverage (lcov.info) if present
         if: hashFiles('lcov.info') != ''
         uses: codecov/codecov-action@v4

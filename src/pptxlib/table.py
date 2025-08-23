@@ -301,7 +301,7 @@ class Borders(Collection[LineFormat]):
             return super().__getitem__(index)
 
         index = getattr(constants, "ppBorder" + index[0].upper() + index[1:])
-        return LineFormat(self.api(index), self.parent, self)  # type: ignore
+        return LineFormat(self.api(index), self.parent, self)  # pyright: ignore[reportCallIssue]
 
 
 @dataclass(repr=False)

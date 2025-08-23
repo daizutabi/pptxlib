@@ -41,7 +41,7 @@ class App(Base):
     def __post_init__(self) -> None:
         """Initialize the PowerPoint application instance."""
         ensure_modules()
-        self.api = win32com.client.Dispatch("PowerPoint.Application")  # type: ignore
+        self.api = win32com.client.Dispatch("PowerPoint.Application")  # pyright: ignore[reportAttributeAccessIssue]
         self.app = self
 
     @property
@@ -65,7 +65,7 @@ class App(Base):
         """
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback) -> None:  # noqa: ANN001
+    def __exit__(self, exc_type, exc_value, traceback) -> None:  # noqa: ANN001  # pyright: ignore[reportUnknownParameterType, reportMissingParameterType]
         """Context manager exit point.
 
         Args:

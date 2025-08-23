@@ -64,7 +64,7 @@ class Slide(Element):
 
     @layout.setter
     def layout(self, layout: int | str | Layout) -> None:
-        layout_ = self.parent.layouts._get_api(layout)  # noqa: SLF001
+        layout_ = self.parent.layouts._get_api(layout)  # pyright: ignore[reportPrivateUsage]  # noqa: SLF001
         if isinstance(layout_, int):
             self.api.Layout = layout_
         else:
@@ -106,7 +106,7 @@ class Slides(Collection[Slide]):
         if layout is None and index:
             layout_ = self[index - 1].api.CustomLayout
         else:
-            layout_ = self.parent.layouts._get_api(layout)  # noqa: SLF001
+            layout_ = self.parent.layouts._get_api(layout)  # noqa: SLF001  # pyright: ignore[reportPrivateUsage]
 
         if isinstance(layout_, int):
             api = self.api.Add(index + 1, layout_)
@@ -148,11 +148,11 @@ class Layouts(Collection[Layout]):
             return layout
 
         if isinstance(layout, Layout):
-            return layout.api  # type: ignore
+            return layout.api  # pyright: ignore[reportReturnType]
 
         if isinstance(layout, str):
             if layout_ := self.get(layout):
-                return layout_.api  # type: ignore
+                return layout_.api  # pyright: ignore[reportReturnType]
             return getattr(constants, f"ppLayout{layout}")
 
         return constants.ppLayoutTitleOnly

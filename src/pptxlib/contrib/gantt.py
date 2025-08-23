@@ -86,8 +86,8 @@ class GanttFrame:
 
 class GanttChart:
     frame: GanttFrame
-    slide: Slide
-    table: Table
+    slide: Slide  # pyright: ignore[reportUninitializedInstanceVariable]
+    table: Table  # pyright: ignore[reportUninitializedInstanceVariable]
 
     def __init__(
         self,

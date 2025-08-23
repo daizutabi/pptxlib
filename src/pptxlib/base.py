@@ -24,7 +24,7 @@ class Base:
 @dataclass(repr=False)
 class Element(Base):
     parent: Element
-    collection: Collection
+    collection: Collection[Element]
     app: App = field(init=False)
 
     def __post_init__(self) -> None:
@@ -73,7 +73,7 @@ class Collection(Base, Generic[E]):
         if index < 0:
             index = len(self) + index
 
-        return self.type(self.api(index + 1), self.parent, self)  # type: ignore
+        return self.type(self.api(index + 1), self.parent, self)  # pyright: ignore[reportReturnType, reportCallIssue, reportArgumentType]
 
     def __iter__(self) -> Iterator[E]:
         yield from [self[index] for index in range(len(self))]  # list due to deletion

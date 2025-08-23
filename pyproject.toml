@@ -116,10 +116,17 @@ ignore = [
 ]
 "src/pptxlib/testing/*" = ["ANN", "T"]
 
-[tool.pyright]
+[tool.basedpyright]
 include = ["src", "tests"]
-reportIncompatibleVariableOverride = false
+reportAny = false
+reportExplicitAny = false
+reportImplicitOverride = false
+reportImportCycles = false
 reportIncompatibleMethodOverride = false
-strictDictionaryInference = true
-strictListInference = true
-strictSetInference = true
+reportIncompatibleVariableOverride = false
+reportPropertyTypeMismatch = false
+reportUnknownArgumentType = false
+reportUnknownMemberType =  false
+reportUnknownVariableType = false
+reportUnnecessaryIsInstance = false
+reportUnusedCallResult = false

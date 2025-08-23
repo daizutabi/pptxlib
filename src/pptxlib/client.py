@@ -3,12 +3,15 @@ from __future__ import annotations
 import re
 from typing import TYPE_CHECKING
 
-from win32com.client import gencache, selecttlb  # type: ignore
+from win32com.client import gencache, selecttlb
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
 
     from win32com.client.selecttlb import TypelibSpec
+
+# pyright: reportAttributeAccessIssue=false
+# pyright: reportMissingTypeStubs=false
 
 
 def iter_typelib_specs() -> Iterator[TypelibSpec]:
