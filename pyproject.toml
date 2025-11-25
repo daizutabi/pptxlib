@@ -39,22 +39,26 @@ classifiers = [
 requires-python = ">=3.11"
 dependencies = ["pywin32", "python-dateutil>=2.8.2"]
 
-[project.optional-dependencies]
-images = ["pillow>=11"]
-figures = ["matplotlib>=3.10"]
-
 [project.urls]
 Documentation = "https://github.com/daizutabi/pptxlib"
 Source = "https://github.com/daizutabi/pptxlib"
 Issues = "https://github.com/daizutabi/pptxlib/issues"
 
 [dependency-groups]
-dev = ["matplotlib>=3.10", "pillow>=11", "pytest-clarity>=1", "pytest-cov>=6"]
+dev = [
+  "matplotlib>=3.10",
+  "pillow>=12",
+  "pytest>=9.0.1",
+  "pytest-clarity>=1",
+  "pytest-cov>=7",
+]
+images = ["pillow>=11"]
+figures = ["matplotlib>=3.10"]
 docs = [
-  "ipykernel>=6",
-  "mkapi>=4.4",
-  "mkdocs-material>=9",
-  "mkdocs-nbsync>=0.1",
+  "ipykernel>=7.1.0",
+  "mkapi>=4.5",
+  "mkdocs-material>=9.7",
+  "mkdocs-nbsync>=0.2.2",
   "nbconvert>=7",
 ]
 
@@ -126,7 +130,7 @@ reportIncompatibleMethodOverride = false
 reportIncompatibleVariableOverride = false
 reportPropertyTypeMismatch = false
 reportUnknownArgumentType = false
-reportUnknownMemberType =  false
+reportUnknownMemberType = false
 reportUnknownVariableType = false
 reportUnnecessaryIsInstance = false
 reportUnusedCallResult = false
